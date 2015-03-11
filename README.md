@@ -21,6 +21,7 @@ Features
 (convenience method to convert to canvas included).
 - Access to original (uncompressed) channel bitmaps
 - Corrects display gamma for 32-bits data
+- Access to meta and header data
 - Validates and error checks
 - Support raw and RLE compressed channel bitmaps
 - Cross-Origin support
