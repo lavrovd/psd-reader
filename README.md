@@ -17,31 +17,16 @@ Features
 - Asynchronous decoding (no UI-blocking when reading large files)
 - Reads greyscale, indexed, RGB, CMYK, multi-channel and Lab including alpha-channel
 - Any supported depth 1/8/16/32 bits
-- Converts all formats to RGBA so it can be used directly with canvas
-(convenience method to convert to canvas included).
-- Access to original (uncompressed) channel bitmaps
+- Support uncompressed and RLE compressed image data
+- Converts all formats to RGBA so it can be used directly with canvas (convenience method to convert to canvas included).
+- Access to individual channel bitmaps
 - Corrects display gamma for 32-bits data
 - Access to meta and header data
 - Validates and error checks
-- Support raw and RLE compressed channel bitmaps
 - Cross-Origin support
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 
-**[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)**
-
-
-Limitations
------------
-
-- The original Photoshop PSD file must be saved in *compatibility mode* (the typical save mode)
-- Does not apply ICC to color data (you get the raw channel bitmaps - affects CMYK/L*ab files in particular).
-
-
-Known Issues
-------------
-
-- Duotone doesn't parse yet (lack of documentation)
-- LAB to RGB is incorrect (currently uses D65/2°. Should use D50/10° as well as ICC).
+##[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)
 
 
 Install
@@ -91,6 +76,20 @@ It's possible to use an already existing ArrayBuffer loaded from a
 different source (ie. FileReader API, XHR):
 
     var psd = new PsdReader({buffer: myArrayBuffer, onLoad: myCallback});
+
+
+Limitations
+-----------
+
+- The original Photoshop PSD file must be saved in *compatibility mode* (the typical save mode)
+- Does not apply ICC to color data (you get the raw channel bitmaps - affects CMYK/L*ab files in particular).
+
+
+Known Issues
+------------
+
+- Duotone doesn't parse yet (lack of official documentation on the format)
+- LAB to RGB produce incorrect colors (currently uses D65/2°. Should use D50/10° as well as ICC).
 
 
 License
