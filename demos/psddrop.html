@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>PSD drop</title>
+	<link rel="stylesheet" href="css/drop.css" type="text/css">
+</head>
+<body>
+
+	<canvas></canvas>
+
+	<div id="container" class="pre">
+		Drop a Photoshop PSD file here
+	</div>
+
+<script src="../psd-reader.min.js"></script>
+<script>
+
+	  // Setup the dnd listeners.
+	  var dropZone = document.getElementById("container");
+
+	  dropZone.addEventListener('dragover', handleDragOver, false);
+	  dropZone.addEventListener('drop', handleFileSelect, false);
+
+	  function handleFileSelect(e) {
+		  e.stopPropagation();
+		  e.preventDefault();
+
+		  var file = e.dataTransfer.files[0],
+		      fr = new FileReader();
+
+		  fr.onload = function(e) {
+
+			  var psd = new PsdReader({buffer: e.target.result, onload: show, onerror: error});
+
+			  function show() {
+				  var img = this.toCanvas(),
+				      canvas = document.querySelector("canvas"),
+				      cont = document.getElementById("container"),
+				      ctx = canvas.getContext("2d"),
+					  w = window.innerWidth,
+					  h = window.innerHeight;
+
+				  cont.innerHTML = "";
+				  cont.className = "";
+
+				  canvas.width = w;
+				  canvas.height = h;
+				  ctx.fillRect(0, 0, w, h);
+
+				  ctx.translate(w * 0.5, h * 0.5);
+
+				  // fits the canvas?
+				  if (img.width < w && img.height < h) {
+					  ctx.drawImage(img, -img.width * 0.5, -img.height * 0.5);
+				  }
+				  else {
+					  var fx = w / img.width,
+					      fy = h / img.height,
+					      r = Math.min(fx, fy),
+					      iw = img.width * r,
+					      ih = img.height * r;
+
+					  ctx.drawImage(img, -iw * 0.5, -ih * 0.5, iw, ih);
+				  }
+			  }
+
+		  };
+
+		  fr.readAsArrayBuffer(file);
+
+		  function error(err) {
+			  alert(err.message)
+		  }
+	  }
+
+	  function handleDragOver(e) {
+		  e.stopPropagation();
+		  e.preventDefault();
+		  e.dataTransfer.dropEffect = 'copy';
+		  //return false;
+	  }
+
+</script>
+</body>
+</html>

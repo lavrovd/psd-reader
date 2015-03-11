@@ -1,6 +1,9 @@
 Change log for psd-reader
 -------------------------
 
+0.2.1 BETA
+FIX: Global error handler wasn't set until after parser was invoked
+
 0.2.0 BETA
 CHG: !IMPORTANT: toCanvas() is now *synchronous returning the canvas element* instead of using a callback.
 IMP: Better error checking when creating canvas

@@ -1,0 +1,41 @@
+html,
+body {
+	width  : 100%;
+	height : 100%;
+	margin : 0;
+	}
+
+body {
+	background : #444;
+	color      : #fff;
+	}
+
+/**
+ *	Container
+*/
+canvas {
+	position: fixed;
+	left:0;
+	top:0;
+	z-index:-1;
+	}
+#container {
+	height:100%;
+	font:44px sans-serif;
+	text-align: center;
+	padding-top:50px;
+	}
+#container.pre {
+	border:12px dashed #aaa;
+	border-radius:20px;
+	}
+/**
+ *	Common box sizer
+*/
+#container {
+	-webkit-box-sizing : border-box;
+	-moz-box-sizing    : border-box;
+	-ms-box-sizing     : border-box;
+	-o-box-sizing      : border-box;
+	box-sizing         : border-box;
+	}

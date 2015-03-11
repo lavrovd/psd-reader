@@ -28,6 +28,8 @@ Features
 
 ##[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)
 
+##[PSD file drop demo](https://epistemex.github.io/psd-reader/psddrop.html)
+
 
 Install
 -------

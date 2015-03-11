@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.2.0 BETA
+	psd-reader version 0.2.1 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -81,6 +81,8 @@ function PsdReader(options) {
 		return
 	}
 
+	this._err = function(msg, src) {error(msg, src)};
+
 	try {
 
 		// invoke loader or parser
@@ -102,8 +104,6 @@ function PsdReader(options) {
 	catch(err) {
 		error(err.message, "core");
 	}
-
-	this._err = function(msg, src) {error(msg, src)};
 
 	// common error handler
 	function error(msg, src) {
