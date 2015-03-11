@@ -24,6 +24,7 @@ Features
 - Validates and error checks
 - Support raw and RLE compressed channel bitmaps
 - Cross-Origin support
+- Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 
 **[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)**
 
