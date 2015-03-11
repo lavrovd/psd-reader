@@ -1,6 +1,15 @@
 Change log for psd-reader
 -------------------------
 
+0.2.0 BETA
+CHG: !IMPORTANT: toCanvas() is now *synchronous returning the canvas element* instead of using a callback.
+IMP: Better error checking when creating canvas
+IMP: Minor internal improvements
+FIX: If error in fetch it would never be called properly
+FIX: Wrong error text with invalid data chunk/mode
+REM: Removed unused check block
+REM: Unused info properties
+
 0.1.0 BETA
 NEW: Initial release
 

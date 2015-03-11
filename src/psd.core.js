@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.1.0 BETA
+	psd-reader version 0.2.0 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -85,22 +85,22 @@ function PsdReader(options) {
 
 		// invoke loader or parser
 		if (config.url) {
-			this.fetch(config.url, function(buffer) {
+			this._fetch(config.url, function(buffer) {
 					me.buffer = buffer;
 					me.view = new DataView(buffer);
-					me.parser(me.buffer);
+					me._parser(me.buffer);
 				},
 				function(msg) {
-					error(msg, "fetch")
+					error(msg, "_fetch")
 				})
 		}
 		else {
-			this.parser(this.buffer);
+			this._parser(this.buffer);
 		}
 
 	}
 	catch(err) {
-		console.error(err);
+		error(err.message, "core");
 	}
 
 	this._err = function(msg, src) {error(msg, src)};
@@ -122,23 +122,24 @@ function PsdReader(options) {
 
 PsdReader.prototype = {
 
-	fetch: function(url, callback, error) {
+	_fetch: function(url, callback, error) {
 
 		try {
-			var xhr = new XMLHttpRequest();
+			var xhr = new XMLHttpRequest(),
+				me = this;
 			xhr.open("GET", url);
 			xhr.responseType = "arraybuffer";
-			xhr.onerror = function() {error("Network error.")};
+			xhr.onerror = function() {me._err("Network error.", "fetch/onerror")};
 			xhr.onload = function() {
 				if (xhr.status === 200) callback(xhr.response);
-				else error("Loading error: " + xhr.statusText);
+				else me.error("Loading error: " + xhr.statusText, "fetch/onload");
 			};
 			xhr.send();
 		}
-		catch(err) {error(err.message)}
+		catch(err) {this.error(err.message, "fetch/catch")}
 	}
-
 };
+
 PsdReader._blockSize = 2048 * 1024;
 PsdReader._delay = 7;
 

@@ -1,11 +1,11 @@
 {
   "name": "pds-reader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/epistemex/pds-reader",
   "authors": [
     "epistemex <github@epistemex.com>"
   ],
-  "description": "Photoshop PSD file bitmap and channel(s) extractor, converts to RGBA.",
+  "description": "Fast and light Photoshop PSD file reader. Converts to RGBA.",
   "main": "pds-reader.min.js",
   "keywords": [
     ""

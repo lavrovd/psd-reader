@@ -596,7 +596,7 @@ ctx.putImageData(idata, x, y);          // update canvas</code></pre>
         <dl>
             
 <dt>
-    <h4 class="name" id="toCanvas"><span class="type-signature"></span>toCanvas<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toCanvas"><span class="type-signature"></span>toCanvas<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLCanvasElement|null}</span></h4>
     
     
 </dt>
@@ -604,15 +604,14 @@ ctx.putImageData(idata, x, y);          // update canvas</code></pre>
     
     
     <div class="description">
-        <p>Converts already loaded and parsed PSD file to canvas. The canvas is
-passed to the callback function when finished as part of the event.</p>
-<p>To access it:</p>
+        <p>Converts already loaded and parsed PSD file to canvas. A canvas element
+is returned with the bitmap at the original size, or null if no RGBA
+was being produced.</p>
+<p>Example usage:</p>
 <pre class="prettyprint source"><code>function callback(e) {
-    var canvas = e ? e.canvas : null;
-    // or get the context:
-    var context = e ? e.context : null;
+    var canvas = psd.toCanvas();
     ...
-}</code></pre><p>If there was no bitmap to convert, e will be null.</p>
+}</code></pre>
     </div>
     
 
@@ -620,55 +619,6 @@ passed to the callback function when finished as part of the event.</p>
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>callback function to receive the result containing the canvas</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
     
     
     
@@ -712,6 +662,28 @@ passed to the callback function when finished as part of the event.</p>
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HTMLCanvasElement</span>
+|
+
+<span class="param-type">null</span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>

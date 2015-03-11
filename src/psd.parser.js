@@ -1,19 +1,16 @@
 
-PsdReader.prototype.parser = function(buffer) {
+PsdReader.prototype._parser = function(buffer) {
 
 	var me = this,
 		view = new DataView(buffer),
 		pos = 0,
 		magic = getFourCC(),
 		version = getUint16(),
-		reserved, i,
-		channels,
-		compression, compDesc,
+		reserved, i, channels, compression,
 		width, height, depth, mode, modeDesc,
 		colChunk, iresChunk, layersChunk,
 		startTime = performance ? performance.now() : Date.now(),
 		info = {
-			maxCompatibility: true,
 			width           : 0,
 			height          : 0,
 			channels        : 0,
@@ -25,8 +22,6 @@ PsdReader.prototype.parser = function(buffer) {
 			compressionDesc : "",
 			channelSize     : 0,
 			chunks          : [],
-			resources       : [],
-			layers          : [],
 			bitmaps         : []
 		};
 
@@ -91,15 +86,8 @@ PsdReader.prototype.parser = function(buffer) {
 	pos += colChunk;
 
 	if ((mode === 2 || mode === 8) && colChunk === 0) {
-		this._err("Invalid size for PSD file.", "parser");
+		this._err("Invalid data for this mode.", "parser");
 		return
-	}
-
-	if (mode === 3) {
-		// indexed color table (currently no proper documentation on order/format...)
-	}
-	else if (mode === 8) {
-		// duo tone data (currently no documentation)
 	}
 
 	// Image Resource section
@@ -115,10 +103,9 @@ PsdReader.prototype.parser = function(buffer) {
 	// Image Data section
 	addChunk("ImageData", view.buffer.byteLength - pos);
 	compression = getUint16();
-	compDesc = ["Uncompressed", "RLE", "ZIP (no prediction)", "ZIP"][compression];
 
 	info.compression = compression;
-	info.compressionDesc = compDesc;
+	info.compressionDesc = ["Uncompressed", "RLE", "ZIP", "ZIP"][compression];
 
 	switch(compression) {
 		case 0:	// _raw

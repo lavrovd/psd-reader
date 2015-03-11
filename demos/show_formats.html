@@ -55,43 +55,41 @@ var files = [
 		var psd = new PsdReader({url:"gfx/" + url, onload: onload, onerror: error});
 
 		function onload() {
-			psd.toCanvas(function(e) {
-				if (!e) {
-					var canvas = document.createElement("canvas"),
-					    ctx = canvas.getContext("2d");
-					canvas.width = psd.info.width;
-					canvas.height = psd.info.height;
-					ctx.fillRect(0, 0, canvas.width, canvas.height);
-					ctx.moveTo(0, 0);
-					ctx.lineTo(canvas.width, canvas.height);
-					ctx.moveTo(0, canvas.height);
-					ctx.lineTo(canvas.width, 0);
-					ctx.lineWidth = 2;
-					ctx.strokeStyle = "red";
-					ctx.stroke();
-					e = {canvas: canvas}
-				}
+			var canvas = psd.toCanvas();
+			if (!canvas) {
+				canvas = document.createElement("canvas");
+				var ctx = canvas.getContext("2d");
+				canvas.width = psd.info.width;
+				canvas.height = psd.info.height;
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+				ctx.moveTo(0, 0);
+				ctx.lineTo(canvas.width, canvas.height);
+				ctx.moveTo(0, canvas.height);
+				ctx.lineTo(canvas.width, 0);
+				ctx.lineWidth = 2;
+				ctx.strokeStyle = "red";
+				ctx.stroke();
+			}
 
-				var div = document.createElement("div"),
-				    p = document.createElement("p"),
-					info = document.createElement("div");
+			var div = document.createElement("div"),
+			    p = document.createElement("p"),
+				info = document.createElement("div");
 
-				info.innerHTML = "Width   : " + psd.info.width +
-						"<br>Height  : " + psd.info.height +
-						"<br>Depth   : " + psd.info.depth +
-						"<br>Mode    : " + psd.info.colorDesc +
-						"<br>Compr.  : " + psd.info.compressionDesc +
-						"<br>Channels: " + psd.info.channels;
+			info.innerHTML = "Width   : " + psd.info.width +
+					"<br>Height  : " + psd.info.height +
+					"<br>Depth   : " + psd.info.depth +
+					"<br>Mode    : " + psd.info.colorDesc +
+					"<br>Compr.  : " + psd.info.compressionDesc +
+					"<br>Channels: " + psd.info.channels;
 
-				p.innerHTML = url.substring(url.indexOf("_") + 1, url.indexOf(".psd"));
-				div.appendChild(p);
-				div.appendChild(e.canvas);
-				div.appendChild(info);
-				div.className = "psd";
+			p.innerHTML = url.substring(url.indexOf("_") + 1, url.indexOf(".psd"));
+			div.appendChild(p);
+			div.appendChild(canvas);
+			div.appendChild(info);
+			div.className = "psd";
 
-				document.body.appendChild(div);
-				next();
-			})
+			document.body.appendChild(div);
+			next();
 		}
 	}
 

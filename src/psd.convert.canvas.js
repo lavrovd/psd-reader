@@ -1,37 +1,36 @@
 /**
- * Converts already loaded and parsed PSD file to canvas. The canvas is
- * passed to the callback function when finished as part of the event.
+ * Converts already loaded and parsed PSD file to canvas. A canvas element
+ * is returned with the bitmap at the original size, or null if no RGBA
+ * was being produced.
  *
- * To access it:
+ * Example usage:
  *
  *     function callback(e) {
- *         var canvas = e ? e.canvas : null;
- *         // or get the context:
- *         var context = e ? e.context : null;
+ *         var canvas = psd.toCanvas();
  *         ...
  *     }
  *
- * If there was no bitmap to convert, e will be null.
- *
- * @param {function} callback - callback function to receive the result containing the canvas
+ * @returns {HTMLCanvasElement|null}
  */
-PsdReader.prototype.toCanvas = function(callback) {
+PsdReader.prototype.toCanvas = function() {
 
-	if (!this.rgba) {
-		callback(null);
-		return
-	}
+	if (!this.rgba) return null;
 
 	var canvas = document.createElement("canvas"),
 		ctx = canvas.getContext("2d"),
 		idata;
 
-	canvas.width = this.info.width;
-	canvas.height = this.info.height;
+	try {
+		canvas.width = this.info.width;
+		canvas.height = this.info.height;
 
-	idata = ctx.createImageData(canvas.width, canvas.height);
-	idata.data.set(this.rgba);
-	ctx.putImageData(idata, 0, 0);
+		idata = ctx.createImageData(canvas.width, canvas.height);
+		idata.data.set(this.rgba);
+		ctx.putImageData(idata, 0, 0);
+	}
+	catch(err) {
+		this._err("Could not create canvas", "toCanvas");
+	}
 
-	callback({canvas: canvas, context: ctx, timeStamp: Date.now()});
+	return canvas;
 };

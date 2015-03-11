@@ -69,12 +69,11 @@ In your callback you can access the RGBA data:
         var bitmap = this.rgba;
     }
 
-If you want a canvas version, you can do:
+If you want a canvas version, a single call will do it:
 
     function myCallback(e) {
-        psd.toCanvas(function(e) {
-            document.body.appendChild(e.canvas)
-        });
+        var canvas = psd.toCanvas();
+        ...
     }
 
 
