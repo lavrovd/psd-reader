@@ -13,7 +13,7 @@ It does not have the goal of parsing layers, masks, resources and so forth
 Features
 --------
 
-- Fast!
+- Fast and lightweight!
 - Asynchronous decoding (no UI-blocking when reading large files)
 - Reads greyscale, indexed, RGB, CMYK, multi-channel and Lab.
 - Any supported depth 1/8/16/32 bits
