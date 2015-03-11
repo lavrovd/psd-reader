@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Parse all Photoshop PSD formats</title>
+	<style>
+		body {background:#aaa;}
+		.psd {background:#ddd;display:inline-block;width:180px;margin:0 4px 4px 0;padding:4px}
+		.psd > p {font:bold 14px sans-serif;padding:4px;margin:0;box-sizing: border-box}
+		.psd > div {margin:4px;font:12px monospace;white-space: pre}
+	</style>
+</head>
+<body>
+
+<script src="psd-reader.min.js"></script>
+<script>
+
+var files = [
+	    "epistemex_RGB8.psd",
+	    "epistemex_RGB16.psd",
+	    "epistemex_RGB32.psd",
+	    "epistemex_RGBA8.psd",
+	    "epistemex_RGBA16.psd",
+	    "epistemex_RGBA32.psd",
+		"epistemex_Bitmap.psd",
+	    "epistemex_CMYK8.psd",
+	    "epistemex_CMYK16.psd",
+		"epistemex_CMYKA8.psd",
+	    "epistemex_CMYKA16.psd",
+	    "epistemex_DUO8.psd",
+		"epistemex_G8.psd",
+	    "epistemex_G16.psd",
+	    "epistemex_G32.psd",
+		"epistemex_GA8.psd",
+	    "epistemex_GA16.psd",
+	    "epistemex_GA32.psd",
+		"epistemex_Indexed256.psd",
+	    "epistemex_LAB8.psd",
+	    "epistemex_LAB16.psd",
+		"epistemex_LABA8.psd",
+	    "epistemex_LABA16.psd",
+	    "epistemex_MultiChannel.psd"
+	],
+	count = files.length, i = 0;
+
+	function next() {
+		if (i < count) LoadPSD(files[i++]);
+	}
+	next();
+
+	function LoadPSD(url) {
+		var psd = new PsdReader({url:"gfx/" + url, onload: onload, onerror: error});
+
+		function onload() {
+			psd.toCanvas(function(e) {
+				if (!e) {
+					var canvas = document.createElement("canvas"),
+					    ctx = canvas.getContext("2d");
+					canvas.width = psd.info.width;
+					canvas.height = psd.info.height;
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+					ctx.moveTo(0, 0);
+					ctx.lineTo(canvas.width, canvas.height);
+					ctx.moveTo(0, canvas.height);
+					ctx.lineTo(canvas.width, 0);
+					ctx.lineWidth = 2;
+					ctx.strokeStyle = "red";
+					ctx.stroke();
+					e = {canvas: canvas}
+				}
+
+				var div = document.createElement("div"),
+				    p = document.createElement("p"),
+					info = document.createElement("div");
+
+				info.innerHTML = "Width   : " + psd.info.width +
+						"<br>Height  : " + psd.info.height +
+						"<br>Depth   : " + psd.info.depth +
+						"<br>Mode    : " + psd.info.colorDesc +
+						"<br>Compr.  : " + psd.info.compressionDesc +
+						"<br>Channels: " + psd.info.channels;
+
+				p.innerHTML = url.substring(url.indexOf("_") + 1, url.indexOf(".psd"));
+				div.appendChild(p);
+				div.appendChild(e.canvas);
+				div.appendChild(info);
+				div.className = "psd";
+
+				document.body.appendChild(div);
+				next();
+			})
+		}
+	}
+
+	function error(e) {console.log(e)}
+
+</script>
+</body>
+</html>
