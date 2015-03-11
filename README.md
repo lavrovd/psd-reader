@@ -26,9 +26,10 @@ Features
 - Cross-Origin support
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 
-##[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)
+##➜ [Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)<br>
+**TIP:** After the first load, hit F5 to reload using the browser cache for the images.
 
-##[PSD file drop demo](https://epistemex.github.io/psd-reader/psddrop.html)
+##➜ [PSD file drop demo](https://epistemex.github.io/psd-reader/psddrop.html)
 
 
 Install
