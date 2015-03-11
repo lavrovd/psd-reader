@@ -25,7 +25,7 @@ Features
 - Support raw and RLE compressed channel bitmaps
 - Cross-Origin support
 
-**[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)]**
+**[Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)**
 
 
 Limitations
