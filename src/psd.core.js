@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.3.0 BETA
+	psd-reader version 0.3.1 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -21,6 +21,7 @@
  * @param {boolean} [options.crossOrigin] - set to true to request cross-origin use of an external psd file
  * @param {number} [options.gamma=1] - use this gamma for conversion. Note: give inverse value, ie. 1/2.2 etc. 1 = no processing
  * @param {number} [options.gamma32] - use this gamma for 32-bits conversion. Defaults to guessed system value (1/1.8 for Mac, 1/2.2 for others)
+ * @param {Array} [options.duotone=[255,255,255]] - color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].
  * @constructor
  */
 function PsdReader(options) {
@@ -39,7 +40,8 @@ function PsdReader(options) {
 			onError    : options.onError || options.onerror,
 			onLoad     : options.onLoad || options.onload,
 			gamma	   : +options.gamma || 1,
-			gamma32	   : +options.gamma32 || PsdReader.guessGamma()
+			gamma32	   : +options.gamma32 || PsdReader.guessGamma(),
+			duotone	   : options.duotone || [255, 255, 255]
 		};
 
 	this._cfg = config;

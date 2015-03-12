@@ -37,7 +37,8 @@ PsdReader.prototype._toRGBA = function(cb) {
 			b = info.bitmaps[2];
 			break;
 		case 8:		// Duotone
-			cb(null);
+			this._duotone(bmp);
+			cb(bmp);
 			return;
 		case 9:		// Lab
 			this._lab(bmp);
