@@ -1,6 +1,9 @@
 Change log for psd-reader
 -------------------------
 
+0.3.1 BETA
+FIX: A take on DuoTone. Reads in the data as grey (w/support for alpha) and uses new option "duotone" with RGB array color to mix it with.
+
 0.3.0 BETA
 ADD: Gamma support through two new options: "gamma" and "gamma32" (see docs)
 ADD: Added new property "indexes" for info object showing number of indexed colors

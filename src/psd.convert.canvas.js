@@ -14,6 +14,8 @@
  */
 PsdReader.prototype.toCanvas = function() {
 
+	//todo add options for scale, HQ scale, ..
+
 	if (!this.rgba) return null;
 
 	var canvas = document.createElement("canvas"),

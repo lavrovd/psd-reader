@@ -27,7 +27,12 @@
 
 		  fr.onload = function(e) {
 
-			  var psd = new PsdReader({buffer: e.target.result, onload: show, onerror: error});
+			  new PsdReader({
+				  buffer: e.target.result,
+				  onload: show,
+				  onerror: error,
+				  duotone: [255, 255, 255]  // mix color for duotone formats
+			  });
 
 			  function show() {
 

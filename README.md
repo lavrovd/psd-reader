@@ -15,12 +15,12 @@ Features
 
 - Fast and lightweight!
 - Asynchronous and block-based decoding (no UI-blocking when reading large files)
-- Reads greyscale, indexed, RGB, CMYK, multi-channel and Lab including alpha-channel
-- Any supported depth 1/8/16/32 bits
+- Reads greyscale, indexed, RGB, CMYK, DuoTone, multi-channel and Lab
+- Any supported depth 1/8/16/32 bits including alpha-channel
 - Support uncompressed and RLE compressed image data
 - Converts all formats to RGBA so it can be used directly with canvas (convenience method to convert to canvas included).
-- Optional gamma correction (with separate gamma values for 32-bits and others, auto-corrects 32-bits files).
-- Access to individual channel bitmaps
+- Optional gamma correction (with separate gamma values for 32-bits and one for all others - auto-corrects 32-bits files).
+- Access to original individual channel bitmaps
 - Access to meta and header data
 - Validates and error checks
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
