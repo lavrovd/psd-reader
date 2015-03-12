@@ -10,23 +10,9 @@ PsdReader.prototype._parser = function(buffer) {
 		width, height, depth, mode, modeDesc,
 		colChunk, iresChunk, layersChunk,
 		startTime = performance ? performance.now() : Date.now(),
-		info = {
-			width           : 0,
-			height          : 0,
-			channels        : 0,
-			depth           : 0,
-			byteWidth       : 0,
-			colorMode       : 0,
-			colorDesc       : "",
-			compression     : 0,
-			compressionDesc : "",
-			channelSize     : 0,
-			chunks          : [],
-			bitmaps         : []
-		};
+		info = this.info;
 
-	this.info = info;
-	this.rgba = null;
+	this.findResource = findResource;
 
 	// check magic header keyword
 	if (magic !== "8BPS" && version !== 1) {
@@ -69,6 +55,7 @@ PsdReader.prototype._parser = function(buffer) {
 	modeDesc = ["Bitmap", "Greyscale", "Indexed", "RGB", "CMYK", "HSL", "HSB",
 				"Multichannel", "Duotone", "Lab", "Greyscale16", "RGB48","LAB48",
 				"CMYK64","DeepMultichannel","Duotone16"][mode];
+
 
 	// store as public info object
 	info.channels = channels;
@@ -122,11 +109,64 @@ PsdReader.prototype._parser = function(buffer) {
 
 	function convert() {me._toRGBA(cbLoad)}
 	function cbLoad(bmp) {
+
+		me._gamma(bmp);
 		me.rgba = bmp;
+
 		if (me.onload) me.onload({
 			timeStamp: Date.now(),
 			elapsed: (performance ? performance.now() : Date.now()) - startTime
 		})
+	}
+
+	// temp: find a resource of a certain ID,
+	// returns abs. position in buffer to start of data
+	function findResource(id) {
+
+		/* todo This do a brute-force scan of resource chunks.
+			will be rewritten to use chunk mode, stepping from
+			chunk to chunk, map position, size, type and name.
+			Then have findResource looking up that array instead.
+			Currently only used for indexed mode transparency index
+			which is ok, and it's fast with short chunks, but if we
+			need to access more chunks (ICC etc.) we should fix this..
+		 */
+
+		var chunk = info.chunks[2],
+			u16, p = 0, l, v, idLSB;
+
+		if (!chunk.length) return null;
+
+		idLSB = ((id & 0xff00)>>>8) | ((id & 0xff)<<8);					// reverse byte-order of id
+		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>>1);	// reads little-endian
+		l = u16.length;
+
+		// - scan first for: 0x3842 (MSB) (first part of 8BIM header), always evenly aligned
+		// - when found check that next is 0x494D (MSB) (..IM).
+		// - then check next for resource ID (use global view for that)
+
+		while(p < l) {
+			v = u16[p++];
+			if (v === 0x4238) {
+				v = u16[p++];
+				if (v === 0x4d49) {
+					// we got a 8BIM header, check id
+					v = u16[p++];
+					if (v === idLSB) {
+						pos = u16.byteOffset + (p<<1);
+						return {
+							offset: pos,
+							id: id,
+							name: getString2(),
+							len: getUint32(),
+							pos: pos
+						}
+					}
+				}
+			}
+		}
+
+		return null
 	}
 
 	/*
@@ -140,8 +180,8 @@ PsdReader.prototype._parser = function(buffer) {
 		})
 	}
 
-	/*function getUint8() {return view.getUint8(pos++)}*/
-	/*function getInt8() {return view.getInt8(pos++)}*/
+	function getUint8() {return view.getUint8(pos++)}
+	/*function getInt8() {return view.getInt8(pos++)}*/	// these are left on purpose for a refactor later
 
 	function getUint16() {
 		var v = view.getUint16(pos);
@@ -173,19 +213,18 @@ PsdReader.prototype._parser = function(buffer) {
 		return chars
 	}
 
-	/*function getString2(max) {
+	function getString2(max) {
 
 		var str = "", ch = -1, i = 0;
+		max = max || 255;
 
 		while(i++ < max && ch) {
 			ch = getUint8();
-			if (!ch) str += String.fromCharCode(ch);
+			if (ch > 0) str += String.fromCharCode(ch);
 		}
-
 		if (!str.length || str.length % 2 === 0) pos++;
-
 		return str
-	}*/
+	}
 
 	function getFourCC(lsb) {
 		var v = getUint32(),

@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.2.1 BETA
+	psd-reader version 0.3.0 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -19,6 +19,8 @@
  * @param {function} [options.onLoad] - callback function when image has been loaded and parsed to RGBA. Optionally use `onload`
  * @param {function} [options.onError] - callback function to handle errors. Optionally use `onerror`
  * @param {boolean} [options.crossOrigin] - set to true to request cross-origin use of an external psd file
+ * @param {number} [options.gamma=1] - use this gamma for conversion. Note: give inverse value, ie. 1/2.2 etc. 1 = no processing
+ * @param {number} [options.gamma32] - use this gamma for 32-bits conversion. Defaults to guessed system value (1/1.8 for Mac, 1/2.2 for others)
  * @constructor
  */
 function PsdReader(options) {
@@ -35,8 +37,12 @@ function PsdReader(options) {
 			buffer     : options.buffer || null,
 			crossOrigin: typeof options.crossOrigin == "boolean" ? !!options.crossOrigin : null,
 			onError    : options.onError || options.onerror,
-			onLoad     : options.onLoad || options.onload
+			onLoad     : options.onLoad || options.onload,
+			gamma	   : +options.gamma || 1,
+			gamma32	   : +options.gamma32 || PsdReader.guessGamma()
 		};
+
+	this._cfg = config;
 
 	this.onload = config.onLoad ? config.onLoad.bind(this) : null;
 	this.onerror = config.onError ? config.onError.bind(this) : null;
@@ -67,9 +73,40 @@ function PsdReader(options) {
 	 * as width, height, depth, byteWidth, channels, bitmaps array,
 	 * pseudo chunks (buffer position and length), compression method
 	 * and color mode.
-	 * @type {{}}
+	 *
+	 * The following properties are public:
+	 *
+	 * 	{number} width - width of bitmap in pixels
+	 * 	{number} height - height of bitmap in pixels
+	 *	{number} channels - number of channels (red is one channel, alpha another etc.)
+	 *	{number} depth - color depth (1/8/16/32 are valid values, indexed will have depth 8)
+	 *	{number} indexes - number of actual indexes used with indexed files
+	 *	{number} byteWidth - byte step to iterate a decompressed buffer
+	 *	{number} colorMode - color mode value [0,15]
+	 *	{string} colorDesc - textual description of color mode
+	 *	{number} compression - compression type used (0,1,2,3 are valid values, although 2,3 are very rare, if any)
+	 *	{string} compressionDesc - textual description of compression type
+	 *	{number} channelSize - number of bytes per channel
+	 *	{array} chunks - list of main "chunks". Should total 5.
+	 *	{array} bitmaps - array with bitmap data (always uncompressed) in original order.
+	 *
+	 * @type {object}
 	 */
-	this.info = {};
+	this.info = {
+		width           : 0,	/** @type {number} width of bitmap */
+		height          : 0,
+		channels        : 0,
+		depth           : 0,
+		indexes			: 0,
+		byteWidth       : 0,
+		colorMode       : 0,
+		colorDesc       : "",
+		compression     : 0,
+		compressionDesc : "",
+		channelSize     : 0,
+		chunks          : [],
+		bitmaps         : []
+	};
 
 	// check that we have a data source
 	if ((!config.url || typeof config.url !== "string" || (config.url && !config.url.length)) && !this.buffer) {
@@ -140,8 +177,18 @@ PsdReader.prototype = {
 	}
 };
 
-PsdReader._blockSize = 2048 * 1024;
-PsdReader._delay = 7;
+/**
+ * Guess system display gamma. Gives only an approximation. Can be used
+ * if display gamma is unknown. Will return (inverse) 1/1.8 for Mac,
+ * 1/2.2 for all others.
+ * @return {number}
+ */
+PsdReader.guessGamma = function() {
+	return 1 / ((navigator.userAgent.indexOf("Mac OS") > -1) ? 1.8 : 2.2)
+};
+
+PsdReader._blockSize = 2048 * 1024;		// async block size
+PsdReader._delay = 7;					// async delay in milliseconds
 
 /*
 Uint8Array.prototype.fill = Uint8Array.prototype.fill || function(value, start, end) {

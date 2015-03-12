@@ -1,6 +1,12 @@
 Change log for psd-reader
 -------------------------
 
+0.3.0 BETA
+ADD: Gamma support through two new options: "gamma" and "gamma32" (see docs)
+ADD: Added new property "indexes" for info object showing number of indexed colors
+FIX: Transparency for indexed color mode now supported (added resource scanner, not optimized, trigger only for indexed).
+CHG: Internal refactoring and optimizations
+
 0.2.1 BETA
 FIX: Global error handler wasn't set until after parser was invoked
 
