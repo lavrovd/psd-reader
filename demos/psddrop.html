@@ -6,13 +6,9 @@
 	<link rel="stylesheet" href="css/drop.css" type="text/css">
 </head>
 <body>
-
 	<canvas></canvas>
-
-	<div id="container" class="pre">
-		Drop a Photoshop PSD file here
-	</div>
-
+	<div id="info"></div>
+	<div id="container" class="pre">Drop a Photoshop PSD file here</div>
 <script src="../psd-reader.min.js"></script>
 <script>
 
@@ -34,6 +30,7 @@
 			  var psd = new PsdReader({buffer: e.target.result, onload: show, onerror: error});
 
 			  function show() {
+
 				  var img = this.toCanvas(),
 				      canvas = document.querySelector("canvas"),
 				      cont = document.getElementById("container"),
@@ -48,10 +45,11 @@
 				  canvas.height = h;
 				  ctx.fillRect(0, 0, w, h);
 
-				  ctx.translate(w * 0.5, h * 0.5);
+				  ctx.setTransform(1,0,0,1,w * 0.5, h * 0.5);
 
 				  // fits the canvas?
 				  if (img.width < w && img.height < h) {
+					  checker(-img.width * 0.5, -img.height * 0.5, img.width, img.height);
 					  ctx.drawImage(img, -img.width * 0.5, -img.height * 0.5);
 				  }
 				  else {
@@ -61,7 +59,47 @@
 					      iw = img.width * r,
 					      ih = img.height * r;
 
+					  checker(-iw * 0.5, -ih * 0.5, iw, ih);
 					  ctx.drawImage(img, -iw * 0.5, -ih * 0.5, iw, ih);
+				  }
+
+				  // show some details
+				  var info = document.getElementById("info"),
+				      txt = "", i = this.info;
+
+				  add("<b>" + file.name + "</b><br>");
+				  add("Size      : " + i.width + " x " + i.height);
+				  add("Colors    : " + i.colorDesc + "/" + i.depth + (i.indexes ? " (" + i.indexes + ")" : ""));
+				  add("Channels  : " + i.channels);
+				  add("Compressed? " + (i.compression ? "No" : "Yes (RLE)"));
+
+				  info.innerHTML = txt;
+				  info.style.display = "block";
+
+				  function add(t) {txt += t + "<br>"}
+
+				  // create checker pattern to show transparency
+				  function checker(clx, cly, clw, clh) {
+
+					  var cx = 16, cy = 16, x, y, toggle = true;
+
+					  ctx.save();
+					  ctx.beginPath();
+					  ctx.rect(clx, cly, clw, clh);
+					  ctx.clip();
+					  ctx.beginPath();
+					  ctx.setTransform(1,0,0,1,0,0);
+
+					  for(y = 0; y < h; y += cy) {
+						  for(x = toggle ? cx : 0; x < w; x += cx<<1) {
+							  ctx.rect(x, y, cx, cy);
+						  }
+						  toggle = !toggle;
+					  }
+
+					  ctx.fillStyle = "#090909";
+					  ctx.fill();
+					  ctx.restore();
 				  }
 			  }
 

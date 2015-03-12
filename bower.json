@@ -5,7 +5,7 @@
   "authors": [
     "epistemex <github@epistemex.com>"
   ],
-  "description": "Fast and light Photoshop PSD file reader. Converts to RGBA.",
+  "description": "Fast and light Photoshop PSD file to RGBA for JavaScript",
   "main": "pds-reader.min.js",
   "keywords": [
     ""
