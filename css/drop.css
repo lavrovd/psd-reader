@@ -19,6 +19,21 @@ canvas {
 	top:0;
 	z-index:-1;
 	}
+#info {
+	position:absolute;
+	display:none;
+	left:7px;
+	top:7px;
+	border:1px solid rgba(255,255,255,0.5);
+	background:rgba(100,100,100,0.67);
+	border-radius:6px;
+	padding:12px;
+	color:#fff;
+	line-height: 16px;
+	font:14px monospace;
+	white-space: pre;
+	}
+#info>b {color: #ffdf5e}
 #container {
 	height:100%;
 	font:44px sans-serif;
