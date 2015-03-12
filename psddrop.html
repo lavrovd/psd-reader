@@ -6,13 +6,9 @@
 	<link rel="stylesheet" href="css/drop.css" type="text/css">
 </head>
 <body>
-
 	<canvas></canvas>
-
-	<div id="container" class="pre">
-		Drop a Photoshop PSD file here
-	</div>
-
+	<div id="info"></div>
+	<div id="container" class="pre">Drop a Photoshop PSD file here</div>
 <script src="psd-reader.min.js"></script>
 <script>
 
@@ -31,7 +27,7 @@
 
 		  fr.onload = function(e) {
 
-			  var psd = new PsdReader({buffer: e.target.result, onload: show, onerror: error});
+			  new PsdReader({buffer: e.target.result, onload: show, onerror: error});
 
 			  function show() {
 
