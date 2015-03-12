@@ -85,6 +85,8 @@ Limitations
 
 - The original Photoshop PSD file must be saved in *compatibility mode* (the typical save mode)
 - Does not apply ICC to color data (you get the raw channel bitmaps - affects CMYK/L*ab files in particular).
+- DuoTone is included for preview only. This targets printing more than screen and there is currently
+only support for mixing a custom color with the tone data in 2-color mode.
 
 
 Known Issues
