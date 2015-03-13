@@ -10,9 +10,6 @@ body {
 	color      : #fff;
 	}
 
-/**
- *	Container
-*/
 canvas {
 	position: fixed;
 	left:0;
@@ -53,4 +50,15 @@ canvas {
 	-ms-box-sizing     : border-box;
 	-o-box-sizing      : border-box;
 	box-sizing         : border-box;
+	}
+a {
+	display:block;
+	position:fixed;
+	right:24px;
+	bottom:24px;
+	color:#22a;
+	font:bold 18px sans-serif;
+	background:rgba(255, 255, 255, 0.75);
+	padding:10px 16px;
+	border-radius: 6px
 	}
