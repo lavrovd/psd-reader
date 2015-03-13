@@ -8,12 +8,32 @@
 		.psd {background:#ddd;display:inline-block;width:180px;margin:0 4px 4px 0;padding:4px}
 		.psd > p {font:bold 14px sans-serif;padding:4px;margin:0;box-sizing: border-box}
 		.psd > div {margin:4px;font:12px monospace;white-space: pre}
-		a {display:block;position:fixed;right:24px;bottom:24px;color:#22a;font:bold 18px sans-serif;background:rgba(255,255,255,0.75);padding:10px 16px;border-radius:6px}
+		#loader {
+			position:fixed;
+			left:0;
+			top:0;
+			width:100%;
+			height:7px;
+			padding:10px 0;
+			box-sizing: border-box;
+			z-index:1000;
+			}
+		#loader>div {
+			margin:0;
+			box-sizing: border-box;
+			border:#99f;
+			background:#77f;
+			width:0;
+			padding:4px 0;
+			font:10px sans-serif;
+			color:#fff;
+			}
 	</style>
 </head>
 <body>
 
-<a href="https://github.com/epistemex/psd-reader">Download at GitHub</a>
+<div id="loader"><div id="prog">Loading files...</div></div>
+<div id="files"></div>
 
 <script src="psd-reader.min.js"></script>
 <script>
@@ -46,40 +66,63 @@ var files = [
 	    "epistemex_LABA16.psd",
 	    "epistemex_MultiChannel.psd"
 	],
-	count = files.length, i = 0;
+    psds = [],
+	count = files.length, i = 0, loaded = 0,
+    filesDiv = document.getElementById("files"),
+    progCont = document.getElementById("loader"),
+    prog = document.getElementById("prog");
 
+	// load files in bulks to avoid errors with XML requests
 	function next() {
-		if (i < count) LoadPSD(files[i++]);
-		if (i < count) LoadPSD(files[i++]);
-		if (i < count) LoadPSD(files[i++]);
-		if (i < count) LoadPSD(files[i++]);
-		if (i < count) LoadPSD(files[i++]);
-		if (i < count) LoadPSD(files[i++]);
+		if (i < count) psds.push(new LoadPSD(files[i++]));
+		if (i < count) psds.push(new LoadPSD(files[i++]));
+		if (i < count) psds.push(new LoadPSD(files[i++]));
+		if (i < count) psds.push(new LoadPSD(files[i++]));
+		if (i < count) psds.push(new LoadPSD(files[i++]));
+		if (i < count) psds.push(new LoadPSD(files[i++]));
+		prog.style.width = (i / count * 100) + "%";
 	}
-	next();
+	next(); // invoke first bulk
+
+	/*
+	This is called whe the buffer has been loaded, but before parsing.
+	Since we use passive mode in this demo, we have to invoke parsing
+	manually.
+	 */
+	function onready() {
+		loaded++;
+		if (loaded === count) {                 // start parsing when all files has loaded
+			var t = 0, len = psds.length;
+			progCont.style.display = "none";
+			while(t < len) psds[t++].parse();
+		}
+		else if (loaded === i) {                // bulk loaded? load next bulk
+			next();
+		}
+	}
 
 	function LoadPSD(url) {
-		var psd = new PsdReader({url:"gfx/" + url, onload: onload, onerror: error});
+
+		var psd = new PsdReader({
+			    url:"gfx/" + url,
+			    passive: true,                  // use passive mode so we get loaded in order
+			    onload: onload,
+				onready: onready,               // to keep track of loads before manual parsing
+			    onerror: error
+		    }),
+		    div = document.createElement("div");
+
+		div.className = "psd";
+		filesDiv.appendChild(div);
+
+		this.parse = function() {               // expose this instance's parse method
+			psd.parse();
+		};
 
 		function onload() {
-			var canvas = psd.toCanvas();
-			if (!canvas) {
-				canvas = document.createElement("canvas");
-				var ctx = canvas.getContext("2d");
-				canvas.width = psd.info.width;
-				canvas.height = psd.info.height;
-				ctx.fillRect(0, 0, canvas.width, canvas.height);
-				ctx.moveTo(0, 0);
-				ctx.lineTo(canvas.width, canvas.height);
-				ctx.moveTo(0, canvas.height);
-				ctx.lineTo(canvas.width, 0);
-				ctx.lineWidth = 2;
-				ctx.strokeStyle = "red";
-				ctx.stroke();
-			}
+			var canvas = psd.toCanvas();        // convert to canvas, build rest of the tile:
 
-			var div = document.createElement("div"),
-			    p = document.createElement("p"),
+			var p = document.createElement("p"),
 				info = document.createElement("div");
 
 			info.innerHTML = "Width   : " + psd.info.width +
@@ -94,10 +137,7 @@ var files = [
 			div.appendChild(p);
 			div.appendChild(canvas);
 			div.appendChild(info);
-			div.className = "psd";
 
-			document.body.appendChild(div);
-			next();
 		}
 	}
 
