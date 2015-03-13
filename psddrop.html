@@ -9,6 +9,7 @@
 	<canvas></canvas>
 	<div id="info"></div>
 	<div id="container" class="pre">Drop a Photoshop PSD file here</div>
+	<a href="https://github.com/epistemex/psd-reader">Download at GitHub</a>
 <script src="psd-reader.min.js"></script>
 <script>
 
@@ -27,7 +28,12 @@
 
 		  fr.onload = function(e) {
 
-			  new PsdReader({buffer: e.target.result, onload: show, onerror: error});
+			  new PsdReader({
+				  buffer: e.target.result,
+				  onload: show,
+				  onerror: error,
+				  duotone: [255, 255, 255]  // mix color for duotone formats
+			  });
 
 			  function show() {
 
