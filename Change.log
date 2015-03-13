@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.4.0 BETA
+ADD: Scaling option for toCanvas, with optional high-quality mode.
+ADD: Support of passive mode for options - load data but don't parse until new parse() method is invoked (use onReady event for urls)
+
 0.3.1 BETA
 FIX: A take on DuoTone. Reads in the data as grey (w/support for alpha) and uses new option "duotone" with RGB array color to mix it with.
 

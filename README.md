@@ -18,11 +18,14 @@ Features
 - Reads greyscale, indexed, RGB, CMYK, DuoTone, multi-channel and Lab
 - Any supported depth 1/8/16/32 bits including alpha-channel
 - Support uncompressed and RLE compressed image data
-- Converts all formats to RGBA so it can be used directly with canvas (convenience method to convert to canvas included).
-- Optional gamma correction (with separate gamma values for 32-bits and one for all others - auto-corrects 32-bits files).
+- Converts all formats to RGBA so it can be used directly with canvas
+- Canvas support with dedicated method supporting scaling and high-quality down-sampling
+- Optional gamma correction (with separate gamma values for 32-bits and one for all others)
+- Auto-corrects display gamma for 32-bits files
 - Access to original individual channel bitmaps
 - Access to meta and header data
 - Validates and error checks
+- Passive load mode for file data allowing parsing to be invoked manually later
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 - It's an original implementation, created from scratch.
 
@@ -89,8 +92,8 @@ Limitations
 only support for mixing a custom color with the tone data in 2-color mode.
 
 
-Known Issues
-------------
+Issues
+------
 
 See the [issue tracker](https://github.com/epistemex/psd-reader/issues) for details.
 

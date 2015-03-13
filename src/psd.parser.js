@@ -12,6 +12,8 @@ PsdReader.prototype._parser = function(buffer) {
 		startTime = performance ? performance.now() : Date.now(),
 		info = this.info;
 
+	me._isParsing = true;
+
 	this.findResource = findResource;
 
 	// check magic header keyword
@@ -112,6 +114,8 @@ PsdReader.prototype._parser = function(buffer) {
 
 		me._gamma(bmp);
 		me.rgba = bmp;
+		me.isParsed = true;
+		this._isParsing = false;
 
 		if (me.onload) me.onload({
 			timeStamp: Date.now(),

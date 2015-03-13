@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.3.1 BETA
+	psd-reader version 0.4.0 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -22,6 +22,7 @@
  * @param {number} [options.gamma=1] - use this gamma for conversion. Note: give inverse value, ie. 1/2.2 etc. 1 = no processing
  * @param {number} [options.gamma32] - use this gamma for 32-bits conversion. Defaults to guessed system value (1/1.8 for Mac, 1/2.2 for others)
  * @param {Array} [options.duotone=[255,255,255]] - color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].
+ * @param {boolean} [options.passive] - load data but don't parse and decode. use parse() to invoke manually.
  * @constructor
  */
 function PsdReader(options) {
@@ -39,14 +40,43 @@ function PsdReader(options) {
 			crossOrigin: typeof options.crossOrigin == "boolean" ? !!options.crossOrigin : null,
 			onError    : options.onError || options.onerror,
 			onLoad     : options.onLoad || options.onload,
+			onReady    : options.onReady || options.onready,
 			gamma	   : +options.gamma || 1,
 			gamma32	   : +options.gamma32 || PsdReader.guessGamma(),
-			duotone	   : options.duotone || [255, 255, 255]
+			duotone	   : options.duotone || [255, 255, 255],
+			passive	   : !!options.passive
 		};
 
 	this._cfg = config;
 
+	/**
+	 * Indicate if a file has been parsed. Useful with passive mode.
+	 * @type {boolean}
+	 */
+	this.isParsed = false;
+
+	this._isParsing = false;
+
+	/**
+	 * onready handler points to a function that will be called once
+	 * the file has been loaded or given, but before parsed. Use this
+	 * with passive mode when an file is loaded asynchronously.
+	 * @type {function|null}
+	 */
+	this.onready = config.onReady ? config.onReady.bind(this) : null;
+
+	/**
+	 * onload handler points to a function that will be called once
+	 * the file has been parsed.
+	 * @type {function|null}
+	 */
 	this.onload = config.onLoad ? config.onLoad.bind(this) : null;
+
+	/**
+	 * onerror handler points to a function that will be called if any
+	 * errors occurs. If not specified the error will be thrown instead.
+	 * @type {function|null}
+	 */
 	this.onerror = config.onError ? config.onError.bind(this) : null;
 
 	/**
@@ -123,20 +153,21 @@ function PsdReader(options) {
 	this._err = function(msg, src) {error(msg, src)};
 
 	try {
-
 		// invoke loader or parser
 		if (config.url) {
 			this._fetch(config.url, function(buffer) {
 					me.buffer = buffer;
 					me.view = new DataView(buffer);
-					me._parser(me.buffer);
+					if (me.onready) me.onready({timeStamp: Date.now()});
+					if (!me._cfg.passive) me._parser(me.buffer);
 				},
 				function(msg) {
 					error(msg, "_fetch")
 				})
 		}
 		else {
-			this._parser(this.buffer);
+			if (me.onready) me.onready({timeStamp: Date.now()});
+			if (!this._cfg.passive) this._parser(this.buffer);
 		}
 
 	}
@@ -146,6 +177,8 @@ function PsdReader(options) {
 
 	// common error handler
 	function error(msg, src) {
+		me._isParsing = false;
+
 		if (me.onerror) setTimeout(_err.bind(me), 1);
 		else throw new TypeError(msg);
 
@@ -160,6 +193,11 @@ function PsdReader(options) {
 }
 
 PsdReader.prototype = {
+
+	parse: function() {
+		if (!this.isParsed && !this._isParsing)
+			this._parser(this.buffer);
+	},
 
 	_fetch: function(url, callback, error) {
 
