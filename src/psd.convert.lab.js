@@ -1,11 +1,12 @@
 
 PsdReader.prototype._lab = function(bmp) {
 
-	var L = this.info.bitmaps[0],
-		a = this.info.bitmaps[1],
-		b = this.info.bitmaps[2],
+	var	bmps = this.info.bitmaps,
+		L = bmps[0],
+		a = bmps[1],
+		b = bmps[2],
+		alpha = bmps[3] || null,
 		bw = this.info.byteWidth,
-		alpha = this.info.bitmaps[3] || null,
 		hasAlpha = !!alpha,
 		len = bmp.length,
 		col, i = 0, p = 0;
@@ -18,10 +19,9 @@ PsdReader.prototype._lab = function(bmp) {
 		bmp[i++] = hasAlpha ? alpha[p] : 255;
 	}
 
-	//todo may have to do ICC.....
-
 	function lab2rgb(L, a, b) {
 
+		// todo values from the buffer may have to be scaled/offset ... check buffer content
 		L /= 2.55;
 		a = 128 - a;
 		b = 128 - b;
@@ -34,20 +34,23 @@ PsdReader.prototype._lab = function(bmp) {
 			z3 = Math.pow(z, 3),
 			R, G, B;
 
+		// todo - here...
 		y = (y3 > 0.008856 ? y3 : (y - 16 / 116) / 7.787);
 		x = (x3 > 0.008856 ? x3 : (x - 16 / 116) / 7.787) * 0.950456;
 		z = (z3 > 0.008856 ? z3 : (z - 16 / 116) / 7.787) * 1.088754;
 
+		// double check values in this matrix
 		R = x *  3.2406 + y * -1.5372 + z * -0.4986;
 		G = x * -0.9689 + y *  1.8758 + z *  0.0415;
 		B = x *  0.0557 + y * -0.2040 + z *  1.0570;
 
+		// double check
 		R = R > 0.0031308 ? 1.055 * Math.pow(R, 1 / 2.4) - 0.055 : 12.92 * R;
 		G = G > 0.0031308 ? 1.055 * Math.pow(G, 1 / 2.4) - 0.055 : 12.92 * G;
 		B = B > 0.0031308 ? 1.055 * Math.pow(B, 1 / 2.4) - 0.055 : 12.92 * B;
 
 		return [
-			(B * 255 + 0.5)|0,	//todo ..it's an experiment
+			(B * 255 + 0.5)|0,	//todo ..it's an experiment (the track from Jaws plays in the background...)
 			(G * 255 + 0.5)|0,
 			(R * 255 + 0.5)|0
 		]

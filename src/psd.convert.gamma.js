@@ -11,12 +11,10 @@ PsdReader.prototype._gamma = function(bmp) {
 
 	var gamma = this._cfg.gamma,
 		depth = this.info.depth,
-		len, i, lut;
+		len = bmp.length, i = 0, lut;
 
 	if (gamma && gamma !== 1 && depth < 32) {
 		lut = this.getGammaLUT(gamma);
-		len = bmp.length;
-		i = 0;
 
 		while(i < len) {
 			bmp[i] = lut[bmp[i++]];

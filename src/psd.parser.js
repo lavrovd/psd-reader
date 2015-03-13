@@ -18,13 +18,13 @@ PsdReader.prototype._parser = function(buffer) {
 
 	// check magic header keyword
 	if (magic !== "8BPS" && version !== 1) {
-		this._err("Not PSD file.", "parser");
+		me._err("Not PSD file.", "parser");
 		return
 	}
 
 	// check reserved space
 	for(reserved = getChars(6), i = 0; i < 6; i++) if (reserved[i]) {
-		this._err("Not a valid PSD file.", "parser");
+		me._err("Not a valid PSD file.", "parser");
 		return
 	}
 
@@ -32,26 +32,26 @@ PsdReader.prototype._parser = function(buffer) {
 
 	channels = getUint16();
 	if (channels < 1 || channels > 56) {
-		this._err("Invalid channel count.", "parser");
+		me._err("Invalid channel count.", "parser");
 		return
 	}
 
 	height = getUint32();		// note: height comes before width
 	width = getUint32();
 	if (width < 1 || width > 30000 || height < 1 || height > 30000) {
-		this._err("Invalid size.", "parser");
+		me._err("Invalid size.", "parser");
 		return
 	}
 
 	depth = getUint16();
 	if ([1,8,16,32].indexOf(depth) < 0) {
-		this._err("Invalid depth.", "parser");
+		me._err("Invalid depth.", "parser");
 		return
 	}
 
 	mode = getUint16();
 	if (mode < 0 || mode > 15) {
-		this._err("Invalid color mode.", "parser");
+		me._err("Invalid color mode.", "parser");
 		return
 	}
 	modeDesc = ["Bitmap", "Greyscale", "Indexed", "RGB", "CMYK", "HSL", "HSB",
@@ -75,7 +75,7 @@ PsdReader.prototype._parser = function(buffer) {
 	pos += colChunk;
 
 	if ((mode === 2 || mode === 8) && colChunk === 0) {
-		this._err("Invalid data for this mode.", "parser");
+		me._err("Invalid data for mode.", "parser");
 		return
 	}
 
@@ -98,14 +98,14 @@ PsdReader.prototype._parser = function(buffer) {
 
 	switch(compression) {
 		case 0:	// _raw
-			this._raw(view, pos, info, convert);
+			me._raw(view, pos, info, convert);
 			break;
 		case 1:	// rle
-			this._rle(view, pos, info, convert);
+			me._rle(view, pos, info, convert);
 			break;
 		case 2:	// zip no-prediction - possibly LZ77 stream.. no test files to be found...
 		case 3:	// zip
-			console.warn("If you come across this, consider sending us a specimen of this file for analysis.");
+			console.warn("Not supported.");
 			break;
 	}
 
@@ -115,7 +115,7 @@ PsdReader.prototype._parser = function(buffer) {
 		me._gamma(bmp);
 		me.rgba = bmp;
 		me.isParsed = true;
-		this._isParsing = false;
+		me._isParsing = false;
 
 		if (me.onload) me.onload({
 			timeStamp: Date.now(),
@@ -185,7 +185,6 @@ PsdReader.prototype._parser = function(buffer) {
 	}
 
 	function getUint8() {return view.getUint8(pos++)}
-	/*function getInt8() {return view.getInt8(pos++)}*/	// these are left on purpose for a refactor later
 
 	function getUint16() {
 		var v = view.getUint16(pos);
@@ -193,23 +192,11 @@ PsdReader.prototype._parser = function(buffer) {
 		return v>>>0;
 	}
 
-	/*function getInt16() {
-		var v = view.getInt16(pos);
-		pos += 2;
-		return v;
-	}*/
-
 	function getUint32() {
 		var v = view.getUint32(pos);
 		pos += 4;
 		return v>>>0;
 	}
-
-	/*function getInt32() {
-		var v = view.getInt32(pos);
-		pos += 4;
-		return v;
-	}*/
 
 	function getChars(len) {
 		var chars = new Uint8Array(buffer, pos, len);
@@ -219,24 +206,24 @@ PsdReader.prototype._parser = function(buffer) {
 
 	function getString2(max) {
 
-		var str = "", ch = -1, i = 0;
+		var str = "", ch = -1, i = 0, l;
 		max = max || 255;
 
 		while(i++ < max && ch) {
 			ch = getUint8();
 			if (ch > 0) str += String.fromCharCode(ch);
 		}
-		if (!str.length || str.length % 2 === 0) pos++;
+
+		l = str.length;
+		if (!l || l % 2 === 0) pos++;
+
 		return str
 	}
 
-	function getFourCC(lsb) {
+	function getFourCC() {
 		var v = getUint32(),
 			c = String.fromCharCode;
 
-		return	lsb ?
-				  c((v & 0xff)>>>0) + c((v & 0xff00)>>>8) + c((v & 0xff0000)>>>16) + c((v & 0xff000000)>>>24)
-				  :
-				  c((v & 0xff000000)>>>24) + c((v & 0xff0000)>>>16) + c((v & 0xff00)>>>8) + c((v & 0xff)>>>0);
+		return c((v & 0xff000000)>>>24) + c((v & 0xff0000)>>>16) + c((v & 0xff00)>>>8) + c((v & 0xff)>>>0)
 	}
 };

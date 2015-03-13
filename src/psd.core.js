@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.0 BETA
+	psd-reader version 0.4.1 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -18,7 +18,6 @@
  * @param {ArrayBuffer} [options.buffer] - ArrayBuffer containing data for a PSD file (if not buffer is provided, an URL must be)
  * @param {function} [options.onLoad] - callback function when image has been loaded and parsed to RGBA. Optionally use `onload`
  * @param {function} [options.onError] - callback function to handle errors. Optionally use `onerror`
- * @param {boolean} [options.crossOrigin] - set to true to request cross-origin use of an external psd file
  * @param {number} [options.gamma=1] - use this gamma for conversion. Note: give inverse value, ie. 1/2.2 etc. 1 = no processing
  * @param {number} [options.gamma32] - use this gamma for 32-bits conversion. Defaults to guessed system value (1/1.8 for Mac, 1/2.2 for others)
  * @param {Array} [options.duotone=[255,255,255]] - color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].
@@ -27,17 +26,12 @@
  */
 function PsdReader(options) {
 
-	if (typeof options === "string") {
-		options = {url: options}
-	}
-	else
-		options = options || {};
+	options = options || {};
 
 	var me = this,
 		config = {
 			url        : options.url || "",
 			buffer     : options.buffer || null,
-			crossOrigin: typeof options.crossOrigin == "boolean" ? !!options.crossOrigin : null,
 			onError    : options.onError || options.onerror,
 			onLoad     : options.onLoad || options.onload,
 			onReady    : options.onReady || options.onready,
@@ -47,6 +41,11 @@ function PsdReader(options) {
 			passive	   : !!options.passive
 		};
 
+	/**
+	 * Expose public reference for prototyped methods.
+	 * @type {*}
+	 * @private
+	 */
 	this._cfg = config;
 
 	/**
@@ -55,6 +54,11 @@ function PsdReader(options) {
 	 */
 	this.isParsed = false;
 
+	/**
+	 * To lock parse() while waiting for server response when using ajax.
+	 * @type {boolean}
+	 * @private
+	 */
 	this._isParsing = false;
 
 	/**
@@ -63,28 +67,30 @@ function PsdReader(options) {
 	 * with passive mode when an file is loaded asynchronously.
 	 * @type {function|null}
 	 */
-	this.onready = config.onReady ? config.onReady.bind(this) : null;
+	this.onready = config.onReady ? config.onReady.bind(me) : null;
 
 	/**
 	 * onload handler points to a function that will be called once
 	 * the file has been parsed.
 	 * @type {function|null}
 	 */
-	this.onload = config.onLoad ? config.onLoad.bind(this) : null;
+	this.onload = config.onLoad ? config.onLoad.bind(me) : null;
 
 	/**
 	 * onerror handler points to a function that will be called if any
 	 * errors occurs. If not specified the error will be thrown instead.
 	 * @type {function|null}
 	 */
-	this.onerror = config.onError ? config.onError.bind(this) : null;
+	this.onerror = config.onError ? config.onError.bind(me) : null;
 
 	/**
 	 * Contains the original ArrayBuffer provided as option, or loaded
 	 * through XHR.
 	 * @type {ArrayBuffer|null}
 	 */
-	this.buffer = config.buffer ? ArrayBuffer.isView(config.buffer) ? config.buffer.buffer : config.buffer : null;
+	this.buffer = config.buffer ?
+				  	(ArrayBuffer.isView(config.buffer) ? config.buffer.buffer : config.buffer)
+					: null;
 
 	/**
 	 * Holds the converted PSD as a 8-bit RGBA bitmap compatible with
@@ -119,13 +125,13 @@ function PsdReader(options) {
 	 *	{number} compression - compression type used (0,1,2,3 are valid values, although 2,3 are very rare, if any)
 	 *	{string} compressionDesc - textual description of compression type
 	 *	{number} channelSize - number of bytes per channel
-	 *	{array} chunks - list of main "chunks". Should total 5.
-	 *	{array} bitmaps - array with bitmap data (always uncompressed) in original order.
+	 *	{array}  chunks - list of main "chunks". Should total 5.
+	 *	{array}  bitmaps - array with bitmap data (always uncompressed) in original order.
 	 *
 	 * @type {object}
 	 */
 	this.info = {
-		width           : 0,	/** @type {number} width of bitmap */
+		width           : 0,
 		height          : 0,
 		channels        : 0,
 		depth           : 0,
@@ -141,35 +147,36 @@ function PsdReader(options) {
 	};
 
 	// check that we have a data source
-	if ((!config.url || typeof config.url !== "string" || (config.url && !config.url.length)) && !this.buffer) {
-		error("No data buffer or URL is specified.", "core");
+	if ((!config.url || typeof config.url !== "string" || (config.url && !config.url.length)) && !me.buffer) {
+		error("Buffer or URL not specified.", "core");
 		return
 	}
-	else if (config.url && this.buffer) {
-		error("Both URL and a data buffer is specified.", "core");
+	else if (config.url && me.buffer) {
+		error("Both URL and buffer specified.", "core");
 		return
 	}
 
-	this._err = function(msg, src) {error(msg, src)};
+	/**
+	 * Expose reference to common error handler
+	 * @private
+	 */
+	this._err = error;
 
 	try {
 		// invoke loader or parser
 		if (config.url) {
-			this._fetch(config.url, function(buffer) {
+			me._fetch(config.url, function(buffer) {
 					me.buffer = buffer;
 					me.view = new DataView(buffer);
 					if (me.onready) me.onready({timeStamp: Date.now()});
 					if (!me._cfg.passive) me._parser(me.buffer);
 				},
-				function(msg) {
-					error(msg, "_fetch")
-				})
+				error); 	// won't provide source
 		}
 		else {
 			if (me.onready) me.onready({timeStamp: Date.now()});
-			if (!this._cfg.passive) this._parser(this.buffer);
+			if (!me._cfg.passive) me._parser(me.buffer);
 		}
-
 	}
 	catch(err) {
 		error(err.message, "core");
@@ -195,8 +202,9 @@ function PsdReader(options) {
 PsdReader.prototype = {
 
 	parse: function() {
-		if (!this.isParsed && !this._isParsing)
-			this._parser(this.buffer);
+		var me = this;
+		if (!me.isParsed && !me._isParsing)
+			me._parser(me.buffer);
 	},
 
 	_fetch: function(url, callback, error) {

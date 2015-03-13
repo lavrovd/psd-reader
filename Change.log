@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.4.1 BETA
+REM: removing crossOrigin option (was a little too caught up in how CORS works with Image...).
+CHG: Internal changes/code trimming/optimizations/minimize tricks
+
 0.4.0 BETA
 ADD: Scaling option for toCanvas, with optional high-quality mode.
 ADD: Support of passive mode for options - load data but don't parse until new parse() method is invoked (use onReady event for urls)

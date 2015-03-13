@@ -21,15 +21,17 @@ PsdReader.prototype.toCanvas = function(options) {
 
 	options = options || {};
 
-	var canvas = document.createElement("canvas"),
+	var me = this,
+		canvas = document.createElement("canvas"),
 		ctx = canvas.getContext("2d"),
 		tcanvas, tctx, steps,
 		idata,
 		scale = options.scale || 1,
 		hq = !!options.hq,
-		w = this.info.width, h = this.info.height, ow, oh,
+		w = me.info.width, h = me.info.height, ow, oh,
 		sw = (w * scale + 0.5)|0,
-		sh = (h * scale + 0.5)|0;
+		sh = (h * scale + 0.5)| 0,
+		errMsg = "Could not create canvas";
 
 	// convert RGBA full size to canvas (we can do a manual Lanczo resampling here later).
 	try {
@@ -37,11 +39,11 @@ PsdReader.prototype.toCanvas = function(options) {
 		canvas.height = h;
 
 		idata = ctx.createImageData(w, h);
-		idata.data.set(this.rgba);
+		idata.data.set(me.rgba);
 		ctx.putImageData(idata, 0, 0);
 	}
 	catch(err) {
-		this._err("Could not create canvas", "toCanvas");
+		me._err(errMsg, "toCanvas");
 	}
 
 	try {
@@ -80,7 +82,7 @@ PsdReader.prototype.toCanvas = function(options) {
 		}
 	}
 	catch(err) {
-		this._err("Could not create canvas", "toCanvas/scale");
+		me._err(errMsg, "toCanvas/s");
 	}
 
 	return canvas;

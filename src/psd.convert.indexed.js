@@ -1,15 +1,16 @@
 
 PsdReader.prototype._indexed = function(src, dst) {
 
-	var len = src.length,
-		tbl = this.getIndexTable(),
-		getCol = this.indexToInt,
+	var me = this,
+		len = src.length,
+		tbl = me.getIndexTable(),
+		getCol = me.indexToInt,
 		u32 = new Uint32Array(dst.buffer),
 		i = 0, index, col, max = -1, tIndex = -1, view,
-		tRes = this.findResource(1047);	// id 1047 = transparency for index
+		tRes = me.findResource(1047);	// id 1047 = transparency for index
 
 	if (tRes) {
-		view = new DataView(this.buffer, tRes.pos, 2);
+		view = new DataView(me.buffer, tRes.pos, 2);
 		tIndex = view.getInt16(0);
 	}
 
@@ -21,5 +22,5 @@ PsdReader.prototype._indexed = function(src, dst) {
 		if (index > max) max = index;
 	}
 
-	this.info.indexes = ++max;
+	me.info.indexes = ++max;
 };

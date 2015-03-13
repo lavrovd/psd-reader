@@ -304,43 +304,6 @@ asynchronous nature.</p>
 
         <tr>
             
-                <td class="name"><code>crossOrigin</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>set to true to request cross-origin use of an external psd file</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
                 <td class="name"><code>gamma</code></td>
             
 
@@ -450,6 +413,43 @@ asynchronous nature.</p>
             
 
             <td class="description last"><p>color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>passive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>load data but don't parse and decode. use parse() to invoke manually.</p></td>
         </tr>
 
 	
@@ -617,8 +617,8 @@ and color mode.</p>
 {number} compression - compression type used (0,1,2,3 are valid values, although 2,3 are very rare, if any)
 {string} compressionDesc - textual description of compression type
 {number} channelSize - number of bytes per channel
-{array} chunks - list of main &quot;chunks&quot;. Should total 5.
-{array} bitmaps - array with bitmap data (always uncompressed) in original order.</code></pre>
+{array}  chunks - list of main &quot;chunks&quot;. Should total 5.
+{array}  bitmaps - array with bitmap data (always uncompressed) in original order.</code></pre>
     </div>
     
 
@@ -628,6 +628,263 @@ and color mode.</p>
             <li>
                 
 <span class="param-type">object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="isParsed">
+    <h4><span class="type-signature"></span>isParsed<span class="type-signature"> :boolean</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Indicate if a file has been parsed. Useful with passive mode.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">boolean</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="onerror">
+    <h4><span class="type-signature"></span>onerror<span class="type-signature"> :function|null</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>onerror handler points to a function that will be called if any
+errors occurs. If not specified the error will be thrown instead.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">null</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="onload">
+    <h4><span class="type-signature"></span>onload<span class="type-signature"> :function|null</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>onload handler points to a function that will be called once
+the file has been parsed.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">null</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="onready">
+    <h4><span class="type-signature"></span>onready<span class="type-signature"> :function|null</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>onready handler points to a function that will be called once
+the file has been loaded or given, but before parsed. Use this
+with passive mode when an file is loaded asynchronously.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">null</span>
 
 
             </li>
@@ -1504,7 +1761,7 @@ was being produced.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha10</a>
-		on Thu Mar 12th 2015 using the <a
+		on Fri Mar 13th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
