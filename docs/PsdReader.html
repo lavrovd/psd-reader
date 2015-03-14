@@ -1099,8 +1099,8 @@ if display gamma is unknown. Will return (inverse) 1/1.8 for Mac,
     
     
     <div class="description">
-        <p>Convers a 32-bit floating point value to integer. It reads the value
-from the given channel (which is of type DataView) at position pos.</p>
+        <p>Converts a 32-bit floating point value to integer. It reads the value
+from the given channel at position pos.</p>
     </div>
     
 
@@ -1477,7 +1477,7 @@ but hold first the reds, greens then blue.</p>
         
             
 <dt>
-    <h4 class="name" id="indexToInt"><span class="type-signature"></span>indexToInt<span class="signature">(tbl, index)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="indexToInt"><span class="type-signature"></span>indexToInt<span class="signature">(tbl, index, <span class="optional">alpha</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
     
 </dt>
@@ -1509,7 +1509,11 @@ directly on an Uin32Array view for a canvas buffer.</p>
 		<th>Type</th>
 
 		
+		<th>Argument</th>
+		
 
+		
+		<th>Default</th>
 		
 
 		<th class="last">Description</th>
@@ -1534,7 +1538,19 @@ directly on an Uin32Array view for a canvas buffer.</p>
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>the table holding the color indexes</p></td>
@@ -1557,10 +1573,61 @@ directly on an Uin32Array view for a canvas buffer.</p>
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>value from [0, 255]. Max depends on how many indexes the image contains.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>alpha</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>if true ANDs out the alpha.</p></td>
         </tr>
 
 	
@@ -1640,7 +1707,84 @@ directly on an Uin32Array view for a canvas buffer.</p>
         
             
 <dt>
-    <h4 class="name" id="toCanvas"><span class="type-signature"></span>toCanvas<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLCanvasElement|null}</span></h4>
+    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Method to invoke parsing of the loaded file when created in
+passive mode (see options). If already parsed, or is loading,
+the method fails silently.</p>
+<p>Important to note is that the onready event can be used to know
+when data can be parsed. When data has been parsed, the onload
+event will be called as normal.</p>
+<p>Active mode:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader(url: &quot;...&quot;, onload: onload);
+function onload(e) { ...done... }</code></pre><p>Passive mode:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader(url: &quot;...&quot;, passive: true, onready: onready, onload: onload);
+function onready() { psd.parse();   // can be parsed here}
+function onload(e) { ...done... }</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toCanvas"><span class="type-signature"></span>toCanvas<span class="signature">(<span class="optional">options</span>)</span><span class="type-signature"> &rarr; {HTMLCanvasElement|null}</span></h4>
     
     
 </dt>
@@ -1652,10 +1796,11 @@ directly on an Uin32Array view for a canvas buffer.</p>
 is returned with the bitmap at the original size, or null if no RGBA
 was being produced.</p>
 <p>Example usage:</p>
-<pre class="prettyprint source"><code>function callback(e) {
+<pre class="prettyprint source"><code>function callback() {
     var canvas = psd.toCanvas();
     ...
-}</code></pre>
+}</code></pre><p>If a canvas could not be created an error is thrown (memory, size etc.).
+If the instance wasn't able to decode the PSD file, a null is returned.</p>
     </div>
     
 
@@ -1663,6 +1808,173 @@ was being produced.</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>options</p>
+                <h6>Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+		<th>Default</th>
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>scale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Scale factor for both x and y directions, 1 = 100%. If result of size is fraction, the size will be rounded to nearest integer number.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>hq</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>High-quality down-sample. Use if you need large images scaled down to small sizes.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+            </td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
     
     
     
@@ -1761,7 +2073,7 @@ was being produced.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha10</a>
-		on Fri Mar 13th 2015 using the <a
+		on Sat Mar 14th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

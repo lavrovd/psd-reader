@@ -6,12 +6,11 @@ PsdReader.prototype._indexed = function(src, dst) {
 		tbl = me.getIndexTable(),
 		getCol = me.indexToInt,
 		u32 = new Uint32Array(dst.buffer),
-		i = 0, index, col, max = -1, tIndex = -1, view,
+		i = 0, index, col, max = -1, tIndex = -1,
 		tRes = me.findResource(1047);	// id 1047 = transparency for index
 
 	if (tRes) {
-		view = new DataView(me.buffer, tRes.pos, 2);
-		tIndex = view.getInt16(0);
+		tIndex = new DataView(me.buffer, tRes.pos, 2).getInt16(0);
 	}
 
 	while(i < len) {
@@ -21,5 +20,5 @@ PsdReader.prototype._indexed = function(src, dst) {
 		if (index > max) max = index;
 	}
 
-	me.info.indexes = ++max;
+	me.info.indexes = ++max;	// same info as in res id 1046
 };

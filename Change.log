@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.4.6 BETA
+ADD: Check in toCanvas to prevent HQ mode to be used when target size is larger than original.
+CHG: Internal - merged util module into core
+
 0.4.5 BETA
 FIX: L*ab colors now shows correctly
 CHG: Internal changes

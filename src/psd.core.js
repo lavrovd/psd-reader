@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.5 BETA
+	psd-reader version 0.4.6 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -201,27 +201,112 @@ function PsdReader(options) {
 
 PsdReader.prototype = {
 
+	/**
+	 * Method to invoke parsing of the loaded file when created in
+	 * passive mode (see options). If already parsed, or is loading,
+	 * the method fails silently.
+	 *
+	 * Important to note is that the onready event can be used to know
+	 * when data can be parsed. When data has been parsed, the onload
+	 * event will be called as normal.
+	 *
+	 * Active mode:
+	 *
+	 *     var psd = new PsdReader(url: "...", onload: onload);
+	 *     function onload(e) { ...done... }
+	 *
+	 * Passive mode:
+	 *
+	 *     var psd = new PsdReader(url: "...", passive: true, onready: onready, onload: onload);
+	 *     function onready() { psd.parse();   // can be parsed here}
+	 *     function onload(e) { ...done... }
+	 *
+	 */
 	parse: function() {
 		var me = this;
 		if (!me.isParsed && !me._isParsing)
 			me._parser(me.buffer);
 	},
 
+	/**
+	 * Returns the indexed color table if present, or null. The number of
+	 * entries is always 256. The indexed color values are not interleaved,
+	 * but hold first the reds, greens then blue.
+	 * @return {Uint8Array|null}
+	 */
+	getIndexTable: function() {
+		var ci = this.info.chunks[1];
+		return ci.length ? new Uint8Array(this.buffer, ci.pos, ci.length) : null
+	},
+
+	/**
+	 * Convert a color index (when indexed mode) to little-endian unsigned
+	 * 32-bit integer including full opaque for alpha channel. Can be set
+	 * directly on an Uin32Array view for a canvas buffer.
+	 * @param {Uint8Array} tbl - the table holding the color indexes
+	 * @param {number} index - value from [0, 255]. Max depends on how many indexes the image contains.
+	 * @param {boolean} [alpha=false] - if true ANDs out the alpha.
+	 * @return {number} unsigned 32-bit integer in little-endian format (ABGR).
+	 */
+	indexToInt: function(tbl, index, alpha) {
+		var v = 0xff000000 + (tbl[index + 512]<<16) + (tbl[index + 256]<<8) + tbl[index];
+		return alpha ? v & 0xffffff : v;
+	},
+
+	/**
+	 * Create a gamma look-up table (LUT) based on the provided inverse gamma.
+	 *
+	 * @param {number} gamma - inverse gamma (ie. 1/2.2, 1/1.8 etc.)
+	 * @return {Uint8ClampedArray}
+	 */
+	getGammaLUT: function(gamma) {
+		for(var lut = new Uint8ClampedArray(256), i = 0; i < 256; i++)
+			lut[i] = (Math.pow(i / 255, gamma) * 255 + 0.5)|0;
+		return lut
+	},
+
+	/**
+	 * Converts a 32-bit floating point value to integer. It reads the value
+	 * from the given channel at position pos.
+	 * @param {DataView} channel - channel to read from
+	 * @param {number} pos - position to read from
+	 * @return {number} converted integer value in the range [0, 255]
+	 */
+	floatToComp: function(channel, pos) {
+		return (channel.getFloat32(pos) * 255 + 0.5)|0
+	},
+
+	/**
+	 * Load a file as ArrayBuffer through HTTPXML request.
+	 * @param {string} url - valid URL to PSD file
+	 * @param {function} callback - callback function invoked when loaded
+	 * @param {function} error - callback function invoked in case of any error
+	 * @private
+	 */
 	_fetch: function(url, callback, error) {
 
+		var me = this, xhr = new XMLHttpRequest();
 		try {
-			var xhr = new XMLHttpRequest(),
-				me = this;
 			xhr.open("GET", url);
 			xhr.responseType = "arraybuffer";
-			xhr.onerror = function() {me._err("Network error.", "fetch/onerror")};
+			xhr.onerror = function() {me._err("Network error", "fetch/err")};
 			xhr.onload = function() {
 				if (xhr.status === 200) callback(xhr.response);
-				else me.error("Loading error: " + xhr.statusText, "fetch/onload");
+				else me.error("Loading error: " + xhr.statusText, "fetch/load");
 			};
 			xhr.send();
 		}
-		catch(err) {this.error(err.message, "fetch/catch")}
+		catch(err) {me.error(err.message, "fetch/c")}
+	},
+
+	/**
+	 * Converts a Uint8Array/view region to DataView for the same region.
+	 * @param {*} bmp - a view representing a region of a ArrayBuffer
+	 * @return {DataView}
+	 * @private
+	 */
+	_chanToDV: function(bmp) {
+		return new DataView(bmp.buffer, bmp.byteOffset, bmp.byteLength);
 	}
 };
 
@@ -237,12 +322,3 @@ PsdReader.guessGamma = function() {
 
 PsdReader._blockSize = 2048 * 1024;		// async block size
 PsdReader._delay = 7;					// async delay in milliseconds
-
-/*
-Uint8Array.prototype.fill = Uint8Array.prototype.fill || function(value, start, end) {
-	start = start || 0;
-	end = end || this.length;
-	var len = end-start;
-	if (len > 0) while(len--) this[start++] = value;
-};
-*/

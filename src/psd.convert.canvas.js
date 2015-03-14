@@ -5,15 +5,18 @@
  *
  * Example usage:
  *
- *     function callback(e) {
+ *     function callback() {
  *         var canvas = psd.toCanvas();
  *         ...
  *     }
  *
- * @params {object} [options] - options
- * @params {number} [options.scale] - Scale factor for both x and y directions, 1 = 100%. If result of size is fraction, the size will be rounded to nearest integer number.
- * @params {boolean} [options.hq] - High-quality down-sample. Use if you need large images scaled down to small sizes.
- * @returns {HTMLCanvasElement|null}
+ * If a canvas could not be created an error is thrown (memory, size etc.).
+ * If the instance wasn't able to decode the PSD file, a null is returned.
+ *
+ * @param {object} [options] - options
+ * @param {number} [options.scale] - Scale factor for both x and y directions, 1 = 100%. If result of size is fraction, the size will be rounded to nearest integer number.
+ * @param {boolean} [options.hq=false] - High-quality down-sample. Use if you need large images scaled down to small sizes.
+ * @return {HTMLCanvasElement|null}
  */
 PsdReader.prototype.toCanvas = function(options) {
 
@@ -24,16 +27,15 @@ PsdReader.prototype.toCanvas = function(options) {
 	var me = this,
 		canvas = document.createElement("canvas"),
 		ctx = canvas.getContext("2d"),
-		tcanvas, tctx, steps,
-		idata,
+		idata, tcanvas, tctx, steps,
 		scale = options.scale || 1,
 		hq = !!options.hq,
 		w = me.info.width, h = me.info.height, ow, oh,
 		sw = (w * scale + 0.5)|0,
-		sh = (h * scale + 0.5)| 0,
+		sh = (h * scale + 0.5)|0,
 		errMsg = "Could not create canvas";
 
-	// convert RGBA full size to canvas (we can do a manual Lanczo resampling here later).
+	// convert RGBA full size to canvas
 	try {
 		canvas.width = w;
 		canvas.height = h;
@@ -47,11 +49,12 @@ PsdReader.prototype.toCanvas = function(options) {
 	}
 
 	try {
-		if (scale !== 1) {
+		if (scale !== 1) {  // we can do a manual Lanczo resampling here later.
 			tcanvas = document.createElement("canvas");
 			tctx = tcanvas.getContext("2d");
 
-			if (hq) {
+			if (hq && sw < w && sh < h) {
+				//todo need to be async/block-based...
 				w = tcanvas.width = Math.ceil(w * 0.5);
 				h = tcanvas.height = Math.ceil(h * 0.5);
 				tctx.drawImage(canvas, 0, 0, w, h);

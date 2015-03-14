@@ -136,12 +136,11 @@ PsdReader.prototype._parser = function(buffer) {
 			need to access more chunks (ICC etc.) we should fix this..
 		 */
 
-		var chunk = info.chunks[2],
-			u16, p = 0, l, v, idLSB;
+		var chunk = info.chunks[2], u16, p = 0, l, v, idLSB;
 
 		if (!chunk.length) return null;
 
-		idLSB = ((id & 0xff00)>>>8) | ((id & 0xff)<<8);					// reverse byte-order of id, because:
+		idLSB = (id>>>8) | ((id & 0xff)<<8);							// reverse byte-order of id, because:
 		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>>1);	// reads data as LSB
 		l = u16.length;
 
@@ -157,10 +156,10 @@ PsdReader.prototype._parser = function(buffer) {
 					// we got a 8BIM header, check id
 					v = u16[p++];
 					if (v === idLSB) {
-						pos = u16.byteOffset + (p<<1) - 4;	// fixed, forgot prev. header
+						pos = u16.byteOffset + (p<<1);
 						return {
 							id: id,
-							name: getString2(),
+							name: getString2(512),
 							len: getUint32(),
 							pos: pos
 						}
@@ -203,10 +202,16 @@ PsdReader.prototype._parser = function(buffer) {
 		return chars
 	}
 
+	/**
+	 * Parse string from pos. pos will end on even boundary.
+	 * If 0-length pos will be moved 2 byte positions
+	 * @param {number} max - max number of bytes to scan for 0-termination
+	 * @return {string}
+	 * @private
+	 */
 	function getString2(max) {
 
 		var str = "", ch = -1, i = 0, l;
-		max = max || 255;
 
 		while(i++ < max && ch) {
 			ch = getUint8();
@@ -220,9 +225,7 @@ PsdReader.prototype._parser = function(buffer) {
 	}
 
 	function getFourCC() {
-		var v = getUint32(),
-			c = String.fromCharCode;
-
+		var v = getUint32(), c = String.fromCharCode;
 		return c((v & 0xff000000)>>>24) + c((v & 0xff0000)>>>16) + c((v & 0xff00)>>>8) + c((v & 0xff)>>>0)
 	}
 };
