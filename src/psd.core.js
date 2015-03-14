@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.6 BETA
+	psd-reader version 0.4.7 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -38,7 +38,8 @@ function PsdReader(options) {
 			gamma	   : +options.gamma || 1,
 			gamma32	   : +options.gamma32 || PsdReader.guessGamma(),
 			duotone	   : options.duotone || [255, 255, 255],
-			passive	   : !!options.passive
+			passive	   : !!options.passive,
+			ignoreAlpha: !!options.ignoreAlpha
 		};
 
 	/**

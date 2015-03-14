@@ -15,7 +15,7 @@ PsdReader.prototype._rgba = function(bmps, dst, isGrey) {
 	b = bmps[2];
 	a = bmps[4] || bmps[(isGrey ? 1 : 3)];
 
-	hasAlpha = !!a;
+	hasAlpha = !!a && !me._cfg.ignoreAlpha;
 
 	if (info.depth === 32) {
 

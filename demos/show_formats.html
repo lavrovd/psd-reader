@@ -34,7 +34,7 @@
 			bottom:24px;
 			color:#22a;
 			font:bold 18px sans-serif;
-			background:rgba(255, 255, 255, 0.75);
+			background:rgba(255, 255, 255, 0.7);
 			padding:10px 16px;
 			border-radius: 6px
 			}
@@ -123,7 +123,6 @@ var files = [
 		    }),
 		    div = document.createElement("div");
 
-		div.className = "psd";
 		filesDiv.appendChild(div);
 
 		this.parse = function() {               // expose this instance's parse method
@@ -131,10 +130,11 @@ var files = [
 		};
 
 		function onload() {
-			var canvas = psd.toCanvas();        // convert to canvas, build rest of the tile:
-
-			var p = document.createElement("p"),
+			var canvas = psd.toCanvas(),        // convert to canvas, build rest of the tile:
+				p = document.createElement("p"),
 				info = document.createElement("div");
+
+			div.className = "psd";
 
 			info.innerHTML = "Width   : " + psd.info.width +
 					"<br>Height  : " + psd.info.height +

@@ -72,8 +72,8 @@
 
 
     <section class="readme-section">
-        <article><h1>﻿psd-reader</h1><p>Read Adobe&reg; Photoshop&reg; PSD files so they can be shown in the web browser.</p>
-<p>That's it! :-)</p>
+        <article><h1>﻿psd-reader</h1><p>Read Adobe&reg; Photoshop&reg; PSD files to show them in the web browser.</p>
+<p>Extract additional information and meta data.</p>
 <h2>Features</h2><ul>
 <li>Fast and lightweight</li>
 <li>Asynchronous and block-based decoding (no UI-blocking when reading large files)</li>
@@ -105,7 +105,9 @@
 <li>Download <a href="https://github.com/epistemex/psd-reader/archive/master.zip">zip archive</a> and extract.</li>
 <li>Right-click and download <a href="https://raw.githubusercontent.com/epistemex/psd-reader/master/psd-reader.min.js">psd-reader.min.js</a></li>
 </ul>
-<h2>Usage</h2><p>It's simple to use, create a new instance, provide an URL and callback:</p>
+<h2>Documentation</h2><p>The sources are fully documented.</p>
+<p><strong>➜ <a href="https://epistemex.github.io/psd-reader/docs/">You can also view the docs online</a></strong></p>
+<h2>Usage</h2><p>It's simple to use, create a new instance, pass in an URL (or buffer) and a callback:</p>
 <pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;path/to.psd&quot;, onLoad: myCallback});</code></pre><p>In your callback you can access the RGBA data:</p>
 <pre class="prettyprint source"><code>function myCallback(e) {
     var bitmap = this.rgba;

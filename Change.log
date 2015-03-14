@@ -1,6 +1,11 @@
 Change log for psd-reader
 -------------------------
 
+0.4.7 BETA
+ADD: Option to ignore alpha channel
+CHG: Optimized Lab conversion speed
+CHG: Lab range for ab increased to full signed byte
+
 0.4.6 BETA
 ADD: Check in toCanvas to prevent HQ mode to be used when target size is larger than original.
 CHG: Internal - merged util module into core
