@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>psd-reader Index</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top ">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">psd-reader</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="PsdReader.html">PsdReader</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+		<div class="span8">
+			
+				<div id="main">
+					
+
+
+	
+	<span class="page-title">Index</span>
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+    <section class="readme-section">
+        <article><h1>﻿psd-reader</h1><p>Read Adobe&reg; Photoshop&reg; PSD files so they can be shown in the web browser.</p>
+<p>That's it! :-)</p>
+<h2>Features</h2><ul>
+<li>Fast and lightweight</li>
+<li>Asynchronous and block-based decoding (no UI-blocking when reading large files)</li>
+<li>Reads greyscale, bitmap, indexed, RGB, CMYK, DuoTone, multi-channel and L*ab</li>
+<li>Support alpha channel as well as transparency for indexed mode</li>
+<li>All color depths (1/8/16/32 bits) are supported</li>
+<li>Support uncompressed and RLE compressed image data</li>
+<li>Converts all formats to RGBA so it can be used directly with canvas</li>
+<li>Canvas support with dedicated method supporting scaling and high-quality down-sampling</li>
+<li>Optional gamma correction (with separate gamma values for 32-bits and one for all others)</li>
+<li>Auto-corrects display gamma for 32-bit mode</li>
+<li>Access to the original channel bitmaps</li>
+<li>Access to meta and header data</li>
+<li>Validates and performs error checks</li>
+<li>Passive load mode allowing parsing to be invoked manually later</li>
+<li>Event driven (onready, onload, onerror).</li>
+<li>Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).</li>
+<li>It's an original implementation created from scratch.</li>
+<li>Fully documented (see docs folder)</li>
+</ul>
+<h2>Demos</h2><p><strong>➜ <a href="https://epistemex.github.io/psd-reader/">Acid-testing various color modes, format and combinations</a></strong></p>
+<p><strong>➜ <a href="https://epistemex.github.io/psd-reader/psddrop.html">Drop your own PSD files into the browser</a></strong></p>
+<p><strong>➜ <a href="https://epistemex.github.io/psd-reader/demo_gamma.html">Gamma correction</a></strong></p>
+<h2>Install</h2><p><strong>psd-reader</strong> can be installed in various ways:</p>
+<ul>
+<li>Bower: <code>bower install psd-reader</code></li>
+<li>Git using HTTPS: <code>git clone https://github.com/epistemex/psd-reader.git</code></li>
+<li>Git using SSH: <code>git clone git@github.com:epistemex/psd-reader.git</code></li>
+<li>Download <a href="https://github.com/epistemex/psd-reader/archive/master.zip">zip archive</a> and extract.</li>
+<li>Right-click and download <a href="https://raw.githubusercontent.com/epistemex/psd-reader/master/psd-reader.min.js">psd-reader.min.js</a></li>
+</ul>
+<h2>Usage</h2><p>It's simple to use, create a new instance, provide an URL and callback:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;path/to.psd&quot;, onLoad: myCallback});</code></pre><p>In your callback you can access the RGBA data:</p>
+<pre class="prettyprint source"><code>function myCallback(e) {
+    var bitmap = this.rgba;
+}</code></pre><p>If you want a canvas version, a single call will do it:</p>
+<pre class="prettyprint source"><code>function myCallback(e) {
+    var canvas = psd.toCanvas();
+    ...
+}</code></pre><p>You have additional access to the original channel data in it´s native
+format (ie. 8-bit, 16-bit etc.) as well as an info object.</p>
+<pre class="prettyprint source"><code>var info     = psd.info:
+var width    = info.width;
+var height   = info.height;
+var depth    = info.depth;
+var channel0 = info.bitmaps[0];        // in native format
+...</code></pre><p>It's possible to use an already existing ArrayBuffer loaded from a
+different source (ie. FileReader API, XHR):</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({buffer: myArrayBuffer, onLoad: myCallback});</code></pre><h2>Requirements</h2><p>A modern &quot;evergreen&quot; browser with support for HTML5.</p>
+<h2>Limitations</h2><p>We consider these generally non-problematic, but for convenience:</p>
+<ul>
+<li>The PSD file must be saved in <em>compatibility mode</em> (the typical save mode)</li>
+<li>Does not apply ICC to the color data (affects CMYK files in particular).</li>
+<li>DuoTone is included for preview purpose only as it targets print more than screen.</li>
+</ul>
+<p>Please note that the goal and purpose of this project is not to parse and
+render individual layers and masks, just to allow browsers to display a
+flat version of the image.</p>
+<h2>Issues</h2><p>See the <a href="https://github.com/epistemex/psd-reader/issues">issue tracker</a> for details.</p>
+<p>Please do report issues if you find any.</p>
+<h2>License</h2><p>Released under <a href="http://choosealicense.com/licenses/mit/">MIT license</a>. You may use this class in both commercial and non-commercial projects provided that full header (minified and developer versions) is included.</p>
+<p><em>&copy; 2015 Epistmex</em></p>
+<p><img src="http://i.imgur.com/YxO8CtB.png" alt="Epistemex"></p></article>
+    </section>
+
+
+
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					<p><b><a href='https://github.com/epistemex/'>Epistemex at GitHib</a></b></p>
+					<br />
+					
+					
+		<span class="copyright">
+		Copyright &copy; 2015 Epistemex
+		</span>
+					<br />
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha10</a>
+		on Sat Mar 14th 2015 using the <a
+			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<div class="span3">
+				<div id="toc"></div>
+			</div>
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+	<script>
+		$( function () {
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
+
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
+				selectors   : "h1,h2,h3,h4",
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : false,
+				showMenu : true,
+				enableDoclinks : true
+			} );
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
+	
+
+</body>
+</html>
