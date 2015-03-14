@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>psd-reader gamma demo</title>
+	<style>
+		body {background:#555; color:#aaa; font:14px sans-serif}
+		.cont {
+			border:1px solid #999;background:#777;border-radius:4px;
+			width:180px;padding:7px 12px;display:inline-block;margin:0 2px
+			}
+		p {color:#ddd}
+	</style>
+</head>
+<body>
+
+<h1>Gamma can be set through options:</h1>
+
+<div id="cont"></div>
+<br>
+
+<h1>Separate gamma setting for 32-bit mode:</h1>
+<h2>Auto-detects and auto-corrects - can be overridden with option.</h2>
+<div id="cont2"></div>
+
+<script src="psd-reader.min.js"></script>
+<script>
+
+	var cnt = 10,
+	    psd04 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/0.8, onload: count}),
+	    psd08 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1, onload: count}),
+	    psd10 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/1.2, onload: count}),
+	    psd18 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/1.8, onload: count}),
+	    psd22 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/2.2, onload: count}),
+
+		psd3204 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/0.8, onload: count}),
+		psd3208 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1, onload: count}),
+		psd3210 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/1.2, onload: count}),
+		psd3218 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/1.8, onload: count}),
+		psd3222 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/2.2, onload: count});
+
+	function count() {cnt--; if(!cnt) showGamma()}
+	function showGamma() {
+		Tile("cont", psd04);
+		Tile("cont", psd08);
+		Tile("cont", psd10);
+		Tile("cont", psd18);
+		Tile("cont", psd22);
+
+		Tile("cont2", psd3204, true);
+		Tile("cont2", psd3208, true);
+		Tile("cont2", psd3210, true);
+		Tile("cont2", psd3218, true);
+		Tile("cont2", psd3222, true);
+	}
+
+	function Tile(id, psd, is32) {
+		var canvas = psd.toCanvas(),
+		    div = document.createElement("div"),
+		    p = document.createElement("p"),
+		    cont = document.getElementById(id),
+		    guess = (1/PsdReader.guessGamma()).toFixed(1),
+			gamma = (1/(is32 ? psd._cfg.gamma32 : psd._cfg.gamma)).toFixed(1);
+
+		p.innerHTML = "Gamma: " + gamma +
+			(gamma === "1.0" ? " (none)" : "") +
+			(gamma === guess && is32 ? " (guess)" : "");
+
+		div.className = "cont";
+
+		div.appendChild(p);
+		div.appendChild(canvas);
+		cont.appendChild(div);
+	}
+
+</script>
+</body>
+</html>
