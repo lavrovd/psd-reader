@@ -16,7 +16,7 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 		var channel = new Uint8Array(info.channelSize);
 		info.bitmaps.push(channel);
 
-		doChannel(uint8view, channel);
+		doChannel(uint8view, channel, fileEnd);
 		block -= channel.length;
 
 		if (--i) {
@@ -29,27 +29,24 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 		else callback();
 	})();
 
-	function doChannel(uint8, channel) {
+	function doChannel(uint8, channel, fileEnd) {
 
-		var p = 0, h = info.height;
+		var p = 0, len, v, lineEnd, h = info.height, goal;
 
 		while(h--) {
-			var	len, v, lineEnd = Math.min(pos + byteCounts[count++], fileEnd);
+			lineEnd = Math.min(pos + byteCounts[count++], fileEnd);
 
 			while(pos < lineEnd) {
-				len = uint8[pos++];						//todo error check "buffer overflow"
+				len = uint8[pos++];
 				if (len > 128) {
 					len = 257 - len;
 					v = uint8[pos++];
-					//channel.fill(v, p, (p += len));		// don't use, slower... fill() in FF only for now, polyfill in core module
-					while(len--) channel[p++] = v;
+					goal = p + len;
+					while(p < goal) channel[p++] = v;
 				}
 				else if (len < 128) {
-					len++;
-					while(len--) channel[p++] = uint8[pos++];
-					//channel.set(new Uint8Array(uint8.buffer, pos, ++len), p);	// don't use, 2x slower
-					//p += len;
-					//pos += len;
+					goal = p + ++len;
+					while(p < goal) channel[p++] = uint8[pos++];
 				}
 			}
 		}

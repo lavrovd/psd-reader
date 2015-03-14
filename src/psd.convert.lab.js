@@ -1,5 +1,5 @@
 
-PsdReader.prototype._lab = function(bmp) {
+PsdReader.prototype._lab = function(dst) {
 
 	var	bmps = this.info.bitmaps,
 		L = bmps[0],
@@ -8,15 +8,15 @@ PsdReader.prototype._lab = function(bmp) {
 		alpha = bmps[3] || null,
 		bw = this.info.byteWidth,
 		hasAlpha = !!alpha,
-		len = bmp.length,
+		len = dst.length,
 		col, i = 0, p = 0;
 
 	for(; i < len; p += bw) {
 		col = lab2rgb(L[p], a[p], b[p]);
-		bmp[i++] = col[0];
-		bmp[i++] = col[1];
-		bmp[i++] = col[2];
-		bmp[i++] = hasAlpha ? alpha[p] : 255;
+		dst[i++] = col[0];
+		dst[i++] = col[1];
+		dst[i++] = col[2];
+		dst[i++] = hasAlpha ? alpha[p] : 255;
 	}
 
 	function lab2rgb(L, a, b) {

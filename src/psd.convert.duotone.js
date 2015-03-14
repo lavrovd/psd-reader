@@ -1,5 +1,5 @@
 
-PsdReader.prototype._duotone = function(bmp) {
+PsdReader.prototype._duotone = function(dst) {
 
 	var bmps = this.info.bitmaps,
 		src = bmps[0],
@@ -11,10 +11,10 @@ PsdReader.prototype._duotone = function(bmp) {
 
 	while(i < len) {
 		grey = src[i];
-		bmp[p++] = ((grey * r) / 255 + 0.5)|0;
-		bmp[p++] = ((grey * g) / 255 + 0.5)|0;
-		bmp[p++] = ((grey * b) / 255 + 0.5)|0;
-		bmp[p++] = hasAlpha ? alpha[i] : 255;
+		dst[p++] = ((grey * r) / 255 + 0.5)|0;
+		dst[p++] = ((grey * g) / 255 + 0.5)|0;
+		dst[p++] = ((grey * b) / 255 + 0.5)|0;
+		dst[p++] = hasAlpha ? alpha[i] : 255;
 		i++;
 	}
 

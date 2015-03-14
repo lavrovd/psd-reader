@@ -1,36 +1,26 @@
 
-PsdReader.prototype._rgba = function(bmps, bmp, isGrey) {
+PsdReader.prototype._rgba = function(bmps, dst, isGrey) {
 
 	var me = this,
 		info = me.info,
 		c2v = me._chanToDV.bind(me),
-		len = bmp.length,
 		mode = info.colorMode,
-		depth = info.depth,
-		alpha,
 		bw = info.byteWidth,
-		r, g, b, a, i = 0, p = 0, grey,
-		gamma, lut, f2i;
+		len = dst.length,
+		i = 0, p = 0,
+		r, g, b, a, grey, hasAlpha, gamma, lut, f2i;
 
-	if (isGrey) {
-		r = bmps[0];
-		a = bmps[1];
-	}
-	else {
-		r = bmps[0];
-		g = bmps[1];
-		b = bmps[2];
-		a = bmps[4] || bmps[3];
-	}
+	r = bmps[0];
+	g = bmps[1];
+	b = bmps[2];
+	a = bmps[4] || bmps[(isGrey ? 1 : 3)];
 
-	alpha = !!a;
+	hasAlpha = !!a;
 
-	if (depth === 32) {
+	if (info.depth === 32) {
 
 		r = c2v(r);
-		if (g) g = c2v(g);
-		if (b) b = c2v(b);
-		if (a) a = c2v(a);
+		if (hasAlpha) a = c2v(a);
 
 		// create gamma LUT
 		gamma = me._cfg.gamma32;
@@ -38,21 +28,25 @@ PsdReader.prototype._rgba = function(bmps, bmp, isGrey) {
 		f2i = me.floatToComp;
 
 		if (mode === 3) {
+
+			if (g) g = c2v(g);
+			if (b) b = c2v(b);
+
 			while(i < len) {
-				bmp[i++] = lut[f2i(r, p)];
-				bmp[i++] = lut[f2i(g, p)];
-				bmp[i++] = lut[f2i(b, p)];
-				bmp[i++] = alpha ? lut[f2i(a, p)] : 255;
+				dst[i++] = lut[f2i(r, p)];
+				dst[i++] = lut[f2i(g, p)];
+				dst[i++] = lut[f2i(b, p)];
+				dst[i++] = hasAlpha ? lut[f2i(a, p)] : 255;
 				p += bw
 			}
 		}
 		else {
 			while(i < len) {
-				grey = lut[(r.getFloat32(p) * 255 + 0.5) | 0];
-				bmp[i++] = grey;
-				bmp[i++] = grey;
-				bmp[i++] = grey;
-				bmp[i++] = alpha ? a.getFloat32(p) * 255 : 255;
+				grey = lut[f2i(r, p)];
+				dst[i++] = grey;
+				dst[i++] = grey;
+				dst[i++] = grey;
+				dst[i++] = hasAlpha ? f2i(a, p) : 255;
 				p += bw
 			}
 		}
@@ -61,19 +55,19 @@ PsdReader.prototype._rgba = function(bmps, bmp, isGrey) {
 		if (mode === 1) {
 			while(i < len) {
 				grey = r[p];
-				bmp[i++] = grey;
-				bmp[i++] = grey;
-				bmp[i++] = grey;
-				bmp[i++] = alpha ? a[p] : 255;
+				dst[i++] = grey;
+				dst[i++] = grey;
+				dst[i++] = grey;
+				dst[i++] = hasAlpha ? a[p] : 255;
 				p += bw
 			}
 		}
 		else {
 			while(i < len) {
-				bmp[i++] = r[p];
-				bmp[i++] = g[p];
-				bmp[i++] = b[p];
-				bmp[i++] = alpha ? a[p] : 255;
+				dst[i++] = r[p];
+				dst[i++] = g[p];
+				dst[i++] = b[p];
+				dst[i++] = hasAlpha ? a[p] : 255;
 				p += bw
 			}
 		}

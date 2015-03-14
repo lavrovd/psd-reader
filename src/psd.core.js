@@ -88,9 +88,7 @@ function PsdReader(options) {
 	 * through XHR.
 	 * @type {ArrayBuffer|null}
 	 */
-	this.buffer = config.buffer ?
-				  	(ArrayBuffer.isView(config.buffer) ? config.buffer.buffer : config.buffer)
-					: null;
+	this.buffer = config.buffer || null;
 
 	/**
 	 * Holds the converted PSD as a 8-bit RGBA bitmap compatible with
@@ -148,7 +146,7 @@ function PsdReader(options) {
 
 	// check that we have a data source
 	if ((!config.url || typeof config.url !== "string" || (config.url && !config.url.length)) && !me.buffer) {
-		error("Buffer or URL not specified.", "core");
+		error("Buffer nor URL specified.", "core");
 		return
 	}
 	else if (config.url && me.buffer) {
