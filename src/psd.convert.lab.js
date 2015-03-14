@@ -21,10 +21,12 @@ PsdReader.prototype._lab = function(bmp) {
 
 	function lab2rgb(L, a, b) {
 
-		// todo values from the buffer may have to be scaled/offset ... check buffer content
+		// Photoshop buffers are scaled to [0, 255] but needs to be:
+		// L   [0, 100]
+		// a,b [-110, 110]
 		L /= 2.55;
-		a = 128 - a;
-		b = 128 - b;
+		a = (a - 128) / 1.16;
+		b = (b - 128) / 1.16;
 
 		var y = (L + 16) / 116,
 			x = a / 500 + y,
@@ -34,7 +36,6 @@ PsdReader.prototype._lab = function(bmp) {
 			z3 = Math.pow(z, 3),
 			R, G, B;
 
-		// todo - here...
 		y = (y3 > 0.008856 ? y3 : (y - 16 / 116) / 7.787);
 		x = (x3 > 0.008856 ? x3 : (x - 16 / 116) / 7.787) * 0.950456;
 		z = (z3 > 0.008856 ? z3 : (z - 16 / 116) / 7.787) * 1.088754;
@@ -45,14 +46,14 @@ PsdReader.prototype._lab = function(bmp) {
 		B = x *  0.0557 + y * -0.2040 + z *  1.0570;
 
 		// double check
-		R = R > 0.0031308 ? 1.055 * Math.pow(R, 1 / 2.4) - 0.055 : 12.92 * R;
-		G = G > 0.0031308 ? 1.055 * Math.pow(G, 1 / 2.4) - 0.055 : 12.92 * G;
-		B = B > 0.0031308 ? 1.055 * Math.pow(B, 1 / 2.4) - 0.055 : 12.92 * B;
+		R = R > 0.0031308 ? 1.055 * Math.pow(R, 0.41667) - 0.055 : 12.92 * R;
+		G = G > 0.0031308 ? 1.055 * Math.pow(G, 0.41667) - 0.055 : 12.92 * G;
+		B = B > 0.0031308 ? 1.055 * Math.pow(B, 0.41667) - 0.055 : 12.92 * B;
 
 		return [
-			(B * 255 + 0.5)|0,	//todo ..it's an experiment (the track from Jaws plays in the background...)
-			(G * 255 + 0.5)|0,
-			(R * 255 + 0.5)|0
+			R * 255 + 0.5,	// will be made integer by arraybuffer
+			G * 255 + 0.5,
+			B * 255 + 0.5
 		]
 	}
 
