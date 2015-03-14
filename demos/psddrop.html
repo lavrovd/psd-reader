@@ -35,7 +35,7 @@
 				  duotone: [255, 255, 255]  // mix color for duotone formats
 			  });
 
-			  function show() {
+			  function show(e) {
 
 				  var img = this.toCanvas(),
 				      canvas = document.querySelector("canvas"),
@@ -77,7 +77,8 @@
 				  add("Size      : " + i.width + " x " + i.height);
 				  add("Colors    : " + i.colorDesc + "/" + i.depth + (i.indexes ? " (" + i.indexes + ")" : ""));
 				  add("Channels  : " + i.channels);
-				  add("Compressed? " + (i.compression ? "No" : "Yes (RLE)"));
+				  add("Compressed: " + (i.compression ? "No" : "Yes (RLE)"));
+				  add("Parse time: " + e.elapsed.toFixed(2) + "ms");
 
 				  info.innerHTML = txt;
 				  info.style.display = "block";

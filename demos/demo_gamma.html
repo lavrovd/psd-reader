@@ -26,35 +26,47 @@
 <script src="../psd-reader.min.js"></script>
 <script>
 
-	var cnt = 10,
-	    psd04 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/0.8, onload: count}),
-	    psd08 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1, onload: count}),
-	    psd10 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/1.2, onload: count}),
-	    psd18 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/1.8, onload: count}),
-	    psd22 = new PsdReader({url: "gfx/epistemex_RGB8.psd", gamma: 1/2.2, onload: count}),
+	var cnt = 2, buffer8, buffer32,
+	    url8 = "gfx/epistemex_RGB8.psd",
+	    url32 = "gfx/epistemex_RGB32.psd";
 
-		psd3204 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/0.8, onload: count}),
-		psd3208 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1, onload: count}),
-		psd3210 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/1.2, onload: count}),
-		psd3218 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/1.8, onload: count}),
-		psd3222 = new PsdReader({url: "gfx/epistemex_RGB32.psd", gamma32: 1/2.2, onload: count});
+	load(url8, count);
+	load(url32, count);
 
-	function count() {cnt--; if(!cnt) showGamma()}
+	function load(url, callback) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		xhr.responseType = "arraybuffer";
+		xhr.onerror = function() {console.error("Network error")};
+		xhr.onload = function() {
+			if (xhr.status === 200) callback({url: url, buffer: xhr.response});
+		};
+		xhr.send();
+	}
+
+	function count(e) {
+		if (e.url === url8) buffer8 = e.buffer;
+		else buffer32 = e.buffer;
+		if(!--cnt) showGamma()
+	}
+
 	function showGamma() {
-
 		document.getElementById("cont").innerHTML = "";
 
-		Tile("cont", psd04);
-		Tile("cont", psd08);
-		Tile("cont", psd10);
-		Tile("cont", psd18);
-		Tile("cont", psd22);
+		new PsdReader({buffer: buffer8, gamma: 1/0.8, onload: addTile});
+		new PsdReader({buffer: buffer8, gamma: 1, onload: addTile});
+		new PsdReader({buffer: buffer8, gamma: 1/1.2, onload: addTile});
+		new PsdReader({buffer: buffer8, gamma: 1/1.8, onload: addTile});
+		new PsdReader({buffer: buffer8, gamma: 1/2.2, onload: addTile});
 
-		Tile("cont2", psd3204, true);
-		Tile("cont2", psd3208, true);
-		Tile("cont2", psd3210, true);
-		Tile("cont2", psd3218, true);
-		Tile("cont2", psd3222, true);
+		new PsdReader({buffer: buffer32, gamma32: 1/0.8, onload: addTile32});
+		new PsdReader({buffer: buffer32, gamma32: 1, onload: addTile32});
+		new PsdReader({buffer: buffer32, gamma32: 1/1.2, onload: addTile32});
+		new PsdReader({buffer: buffer32, gamma32: 1/1.8, onload: addTile32});
+		new PsdReader({buffer: buffer32, gamma32: 1/2.2, onload: addTile32});
+
+		function addTile() {Tile("cont", this)}
+		function addTile32() {Tile("cont2", this, true)}
 	}
 
 	function Tile(id, psd, is32) {
