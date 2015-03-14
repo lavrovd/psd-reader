@@ -1,7 +1,7 @@
 ﻿psd-reader
 ==========
 
-Read Photoshop PSD files so they can be shown in the web browser. That's it! :-)
+Read Adobe&reg; Photoshop&reg; PSD files so they can be shown in the web browser. That's it! :-)
 
 
 Features
@@ -26,11 +26,15 @@ Features
 - It's an original implementation created from scratch.
 - Fully documented (see docs folder)
 
-###➜ [Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)
 
-###➜ [PSD file drop demo](https://epistemex.github.io/psd-reader/psddrop.html)
+Demos
+-----
 
-###➜ [Gamma correction](https://epistemex.github.io/psd-reader/demo_gamma.html)
+**➜ [Acid-testing various color modes, format and combinations](https://epistemex.github.io/psd-reader/)**
+
+**➜ [Drop your own PSD files into the browser](https://epistemex.github.io/psd-reader/psddrop.html)**
+
+**➜ [Gamma correction](https://epistemex.github.io/psd-reader/demo_gamma.html)**
 
 
 Install
@@ -90,17 +94,20 @@ A modern "evergreen" browser with support for HTML5.
 Limitations
 -----------
 
-We consider these non-problematic, but for convenience:
+We consider these generally non-problematic, but for convenience:
 
 - The PSD file must be saved in *compatibility mode* (the typical save mode)
 - Does not apply ICC to the color data (affects CMYK files in particular).
-- DuoTone and L*ab is included for preview only.
+- DuoTone and L*ab are included for preview purpose only.
+- The goal and purpose of this project is not to parse and render individual layers and masks.
 
 
 Issues
 ------
 
 See the [issue tracker](https://github.com/epistemex/psd-reader/issues) for details.
+
+Please do report issues if you find any.
 
 
 License
