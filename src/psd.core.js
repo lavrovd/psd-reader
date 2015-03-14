@@ -22,6 +22,7 @@
  * @param {number} [options.gamma32] - use this gamma for 32-bits conversion. Defaults to guessed system value (1/1.8 for Mac, 1/2.2 for others)
  * @param {Array} [options.duotone=[255,255,255]] - color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].
  * @param {boolean} [options.passive] - load data but don't parse and decode. use parse() to invoke manually.
+ * @param {boolean} [options.ignoreAlpha=false] - ignore alpha channel if any.
  * @constructor
  */
 function PsdReader(options) {
