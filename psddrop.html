@@ -32,6 +32,7 @@
 				  buffer: e.target.result,
 				  onload: show,
 				  onerror: error,
+				  ignoreAlpha: false,
 				  duotone: [255, 255, 255]  // mix color for duotone formats
 			  });
 
@@ -55,8 +56,9 @@
 
 				  // fits the canvas?
 				  if (img.width < w && img.height < h) {
-					  checker(-img.width * 0.5, -img.height * 0.5, img.width, img.height);
-					  ctx.drawImage(img, -img.width * 0.5, -img.height * 0.5);
+					  ctx.translate(-img.width * 0.5, -img.height * 0.5);
+					  checker(img.width, img.height);
+					  ctx.drawImage(img, 0, 0);
 				  }
 				  else {
 					  var fx = w / img.width,
@@ -65,15 +67,17 @@
 					      iw = img.width * r,
 					      ih = img.height * r;
 
-					  checker(-iw * 0.5, -ih * 0.5, iw, ih);
-					  ctx.drawImage(img, -iw * 0.5, -ih * 0.5, iw, ih);
+					  ctx.translate(-iw * 0.5, -ih * 0.5);
+					  checker(iw, ih);
+					  ctx.drawImage(img, 0, 0, iw, ih);
 				  }
 
 				  // show some details
 				  var info = document.getElementById("info"),
 				      txt = "", i = this.info;
 
-				  add("<b>" + file.name + "</b><br>");
+				  add("<b>" + file.name + "</b>");
+				  add((file.size / 1024).toFixed(0) + " KB<br>");
 				  add("Size      : " + i.width + " x " + i.height);
 				  add("Colors    : " + i.colorDesc + "/" + i.depth + (i.indexes ? " (" + i.indexes + ")" : ""));
 				  add("Channels  : " + i.channels);
@@ -86,16 +90,15 @@
 				  function add(t) {txt += t + "<br>"}
 
 				  // create checker pattern to show transparency
-				  function checker(clx, cly, clw, clh) {
+				  function checker(w, h) {
 
-					  var cx = 16, cy = 16, x, y, toggle = true;
+					  var cx = 16, cy = 16, x, y, toggle = false;
 
 					  ctx.save();
 					  ctx.beginPath();
-					  ctx.rect(clx, cly, clw, clh);
+					  ctx.rect(0, 0, w, h);
 					  ctx.clip();
 					  ctx.beginPath();
-					  ctx.setTransform(1,0,0,1,0,0);
 
 					  for(y = 0; y < h; y += cy) {
 						  for(x = toggle ? cx : 0; x < w; x += cx<<1) {
@@ -104,7 +107,7 @@
 						  toggle = !toggle;
 					  }
 
-					  ctx.fillStyle = "#090909";
+					  ctx.fillStyle = "#0a0a0a";
 					  ctx.fill();
 					  ctx.restore();
 				  }

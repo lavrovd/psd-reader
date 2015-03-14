@@ -6,7 +6,7 @@ body {
 	}
 
 body {
-	background : #444;
+	background : #333;
 	color      : #fff;
 	}
 
@@ -58,7 +58,7 @@ a {
 	bottom:24px;
 	color:#22a;
 	font:bold 18px sans-serif;
-	background:rgba(255, 255, 255, 0.75);
+	background:rgba(255, 255, 255, 0.7);
 	padding:10px 16px;
 	border-radius: 6px
 	}
