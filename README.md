@@ -1,9 +1,9 @@
 ﻿psd-reader
 ==========
 
-Read Adobe&reg; Photoshop&reg; PSD files so they can be shown in the web browser.
+Read Adobe&reg; Photoshop&reg; PSD files to show them in the web browser.
 
-That's it! :-)
+Extract additional information and meta data.
 
 
 Features
@@ -50,11 +50,18 @@ Install
 - Download [zip archive](https://github.com/epistemex/psd-reader/archive/master.zip) and extract.
 - Right-click and download [psd-reader.min.js](https://raw.githubusercontent.com/epistemex/psd-reader/master/psd-reader.min.js)
 
+Documentation
+-------------
+
+The sources are fully documented.
+
+**➜ [You can also view the docs online](https://epistemex.github.io/psd-reader/docs/)**
+
 
 Usage
 -----
 
-It's simple to use, create a new instance, provide an URL and callback:
+It's simple to use, create a new instance, pass in an URL (or buffer) and a callback:
 
     var psd = new PsdReader({url: "path/to.psd", onLoad: myCallback});
 
