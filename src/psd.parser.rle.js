@@ -1,7 +1,8 @@
 
 PsdReader.prototype._rle = function(view, pos, info, callback) {
 
-	var count = 0, i = info.channels, block = PsdReader._blockSize,
+	var count = 0, i = info.channels,
+		block = PsdReader._blockSize,
 		uint8view = new Uint8Array(view.buffer),
 		fileEnd = view.buffer.byteLength,
 		counts = info.height * info.channels,
@@ -14,8 +15,8 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 	(function decode() {
 		var channel = new Uint8Array(info.channelSize);
 		info.bitmaps.push(channel);
-		doChannel(uint8view, channel);
 
+		doChannel(uint8view, channel);
 		block -= channel.length;
 
 		if (--i) {
@@ -36,7 +37,7 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 			var	len, v, lineEnd = Math.min(pos + byteCounts[count++], fileEnd);
 
 			while(pos < lineEnd) {
-				len = uint8[pos++];						//todo error checks "buffer overflow"
+				len = uint8[pos++];						//todo error check "buffer overflow"
 				if (len > 128) {
 					len = 257 - len;
 					v = uint8[pos++];

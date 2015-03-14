@@ -1,7 +1,9 @@
 ﻿psd-reader
 ==========
 
-Read Adobe&reg; Photoshop&reg; PSD files so they can be shown in the web browser. That's it! :-)
+Read Adobe&reg; Photoshop&reg; PSD files so they can be shown in the web browser.
+
+That's it! :-)
 
 
 Features
@@ -9,7 +11,7 @@ Features
 
 - Fast and lightweight
 - Asynchronous and block-based decoding (no UI-blocking when reading large files)
-- Reads greyscale, bitmap, indexed, RGB, CMYK, DuoTone, multi-channel and Lab
+- Reads greyscale, bitmap, indexed, RGB, CMYK, DuoTone, multi-channel and L*ab
 - Support alpha channel as well as transparency for indexed mode
 - All color depths (1/8/16/32 bits) are supported
 - Support uncompressed and RLE compressed image data
@@ -98,8 +100,11 @@ We consider these generally non-problematic, but for convenience:
 
 - The PSD file must be saved in *compatibility mode* (the typical save mode)
 - Does not apply ICC to the color data (affects CMYK files in particular).
-- DuoTone and L*ab are included for preview purpose only.
-- The goal and purpose of this project is not to parse and render individual layers and masks.
+- DuoTone is included for preview purpose only as it targets print more than screen.
+
+Please note that the goal and purpose of this project is not to parse and
+render individual layers and masks, just to allow browsers to display a
+flat version of the image.
 
 
 Issues

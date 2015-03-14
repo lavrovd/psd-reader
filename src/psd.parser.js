@@ -132,7 +132,7 @@ PsdReader.prototype._parser = function(buffer) {
 			chunk to chunk, map position, size, type and name.
 			Then have findResource looking up that array instead.
 			Currently only used for indexed mode transparency index
-			which is ok, and it's fast with short chunks, but if we
+			which is ok, and it's fast with short sections, but if we
 			need to access more chunks (ICC etc.) we should fix this..
 		 */
 
@@ -141,8 +141,8 @@ PsdReader.prototype._parser = function(buffer) {
 
 		if (!chunk.length) return null;
 
-		idLSB = ((id & 0xff00)>>>8) | ((id & 0xff)<<8);					// reverse byte-order of id
-		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>>1);	// reads little-endian
+		idLSB = ((id & 0xff00)>>>8) | ((id & 0xff)<<8);					// reverse byte-order of id, because:
+		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>>1);	// reads data as LSB
 		l = u16.length;
 
 		// - scan first for: 0x3842 (MSB) (first part of 8BIM header), always evenly aligned
@@ -157,9 +157,8 @@ PsdReader.prototype._parser = function(buffer) {
 					// we got a 8BIM header, check id
 					v = u16[p++];
 					if (v === idLSB) {
-						pos = u16.byteOffset + (p<<1);
+						pos = u16.byteOffset + (p<<1) - 4;	// fixed, forgot prev. header
 						return {
-							offset: pos,
 							id: id,
 							name: getString2(),
 							len: getUint32(),

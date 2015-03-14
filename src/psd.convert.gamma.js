@@ -15,6 +15,7 @@ PsdReader.prototype._gamma = function(bmp) {
 
 	if (gamma && gamma !== 1 && depth < 32) {
 		lut = this.getGammaLUT(gamma);
+		i = 0;
 
 		while(i < len) {
 			bmp[i] = lut[bmp[i++]];

@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.1 BETA
+	psd-reader version 0.4.5 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com

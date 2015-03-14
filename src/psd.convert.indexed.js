@@ -16,8 +16,7 @@ PsdReader.prototype._indexed = function(src, dst) {
 
 	while(i < len) {
 		index = src[i];
-		col = getCol(tbl, index);
-		if (index === tIndex) col &= 0xffffff;
+		col = getCol(tbl, index, index === tIndex);
 		u32[i++] = col;
 		if (index > max) max = index;
 	}

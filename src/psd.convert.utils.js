@@ -16,11 +16,15 @@ PsdReader.prototype.getIndexTable = function() {
  * directly on an Uin32Array view for a canvas buffer.
  * @param {Uint8Array} tbl - the table holding the color indexes
  * @param {number} index - value from [0, 255]. Max depends on how many indexes the image contains.
+ * @param {boolean} [alpha=false] - if true ANDs out the alpha.
  * @return {number} unsigned 32-bit integer in little-endian format (ABGR).
  */
-PsdReader.prototype.indexToInt = function(tbl, index) {
-	return 0xff000000 + (tbl[index + 512]<<16) + (tbl[index + 256]<<8) + tbl[index]
+PsdReader.prototype.indexToInt = function(tbl, index, alpha) {
+	var v = 0xff000000 + (tbl[index + 512]<<16) + (tbl[index + 256]<<8) + tbl[index];
+	if (alpha) v &= 0xffffff;
+	return v;
 };
+
 /* no use for these (yet.. ?)
 PsdReader.prototype.channelTo16 = function(bmp) {
 	return new Uint16Array(bmp.buffer, bmp.byteOffset, bmp.byteLength>>1);
@@ -31,7 +35,13 @@ PsdReader.prototype.channelTo32 = function(bmp) {
 };
 */
 
-PsdReader.prototype.channelToDataView = function(bmp) {
+/**
+ * Converts a Uint8Array/view region to DataView for the same region.
+ * @param {*} bmp - a view representing a region of a ArrayBuffer
+ * @return {DataView}
+ * @private
+ */
+PsdReader.prototype._chanToDV = function(bmp) {
 	return new DataView(bmp.buffer, bmp.byteOffset, bmp.byteLength);
 };
 

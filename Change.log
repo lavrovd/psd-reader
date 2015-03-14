@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.4.5 BETA
+FIX: L*ab colors now shows correctly
+CHG: Internal changes
+
 0.4.1 BETA
 REM: removing crossOrigin option (was a little too caught up in how CORS works with Image...).
 CHG: Internal changes/code trimming/optimizations/minimize tricks
