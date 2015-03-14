@@ -16,7 +16,7 @@
 
 <h1>Gamma can be set through options:</h1>
 
-<div id="cont"></div>
+<div id="cont">Loading files from server...</div>
 <br>
 
 <h1>Separate gamma setting for 32-bit mode:</h1>
@@ -41,6 +41,9 @@
 
 	function count() {cnt--; if(!cnt) showGamma()}
 	function showGamma() {
+
+		document.getElementById("cont").innerHTML = "";
+
 		Tile("cont", psd04);
 		Tile("cont", psd08);
 		Tile("cont", psd10);
