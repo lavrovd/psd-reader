@@ -13,9 +13,10 @@
 			left:0;
 			top:0;
 			width:100%;
-			height:7px;
 			padding:10px 0;
 			box-sizing: border-box;
+			font:10px sans-serif;
+			color:#fff;
 			z-index:1000;
 			}
 		#loader>div {
@@ -24,9 +25,7 @@
 			border:#99f;
 			background:#77f;
 			width:0;
-			padding:4px 0;
-			font:10px sans-serif;
-			color:#fff;
+			padding:3px 0;
 			}
 		a {
 			display:block;
@@ -43,7 +42,7 @@
 </head>
 <body>
 
-<div id="loader"><div id="prog">Loading files from the network before parsing...</div></div>
+<div id="loader"><div id="prog"></div>Loading files from the network before parsing...</div>
 <div id="files"></div>
 <a href="https://github.com/epistemex/psd-reader">Download at GitHub</a>
 
@@ -62,7 +61,7 @@ var files = [
 	    "epistemex_CMYK16.psd",
 		"epistemex_CMYKA8.psd",
 	    "epistemex_CMYKA16.psd",
-	    "epistemex_DUO8.psd",
+	    "epistemex_DUO8A.psd",
 		"epistemex_G8.psd",
 	    "epistemex_G16.psd",
 	    "epistemex_G32.psd",
@@ -71,7 +70,7 @@ var files = [
 	    "epistemex_GA32.psd",
 		"epistemex_indexed32.psd",
 		"epistemex_indexed32A.psd",
-		"epistemex_indexed256.psd",
+		"epistemex_indexed256A.psd",
 	    "epistemex_LAB8.psd",
 	    "epistemex_LAB16.psd",
 		"epistemex_LABA8.psd",
@@ -92,7 +91,6 @@ var files = [
 		if (i < count) psds.push(new LoadPSD(files[i++]));
 		if (i < count) psds.push(new LoadPSD(files[i++]));
 		if (i < count) psds.push(new LoadPSD(files[i++]));
-		prog.style.width = (i / count * 100) + "%";
 	}
 	next(); // invoke first bulk
 
@@ -103,6 +101,7 @@ var files = [
 	 */
 	function onready() {
 		loaded++;
+		prog.style.width = (loaded / count * 100) + "%";
 		if (loaded === count) {                 // start parsing when all files has loaded
 			var t = 0, len = psds.length;
 			progCont.style.display = "none";
