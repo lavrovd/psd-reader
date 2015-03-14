@@ -1,37 +1,36 @@
 ﻿psd-reader
 ==========
 
-Read and show Photoshop PSD files in the browser.
-
-This project's only goal is to read the merged bitmap of the file so its
-data can be used with canvas or for displaying.
-
-It does not have the goal of parsing layers, masks, resources and so forth
-(although, we do work on another project for this).
+Read Photoshop PSD files so they can be shown in the web browser. That's it! :-)
 
 
 Features
 --------
 
-- Fast and lightweight!
+- Fast and lightweight
 - Asynchronous and block-based decoding (no UI-blocking when reading large files)
-- Reads greyscale, indexed, RGB, CMYK, DuoTone, multi-channel and Lab
-- Any supported depth 1/8/16/32 bits including alpha-channel
+- Reads greyscale, bitmap, indexed, RGB, CMYK, DuoTone, multi-channel and Lab
+- Support alpha channel as well as transparency for indexed mode
+- All color depths (1/8/16/32 bits) are supported
 - Support uncompressed and RLE compressed image data
 - Converts all formats to RGBA so it can be used directly with canvas
 - Canvas support with dedicated method supporting scaling and high-quality down-sampling
 - Optional gamma correction (with separate gamma values for 32-bits and one for all others)
-- Auto-corrects display gamma for 32-bits files
-- Access to original individual channel bitmaps
+- Auto-corrects display gamma for 32-bit mode
+- Access to the original channel bitmaps
 - Access to meta and header data
-- Validates and error checks
-- Passive load mode for file data allowing parsing to be invoked manually later
+- Validates and performs error checks
+- Passive load mode allowing parsing to be invoked manually later
+- Event driven (onready, onload, onerror).
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
-- It's an original implementation, created from scratch.
+- It's an original implementation created from scratch.
+- Fully documented (see docs folder)
 
-###➜ [Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)<br>
+###➜ [Click here to see psd-reader in action](https://epistemex.github.io/psd-reader/)
 
 ###➜ [PSD file drop demo](https://epistemex.github.io/psd-reader/psddrop.html)
+
+###➜ [Gamma correction](https://epistemex.github.io/psd-reader/demo_gamma.html)
 
 
 Install
@@ -82,14 +81,20 @@ different source (ie. FileReader API, XHR):
 
     var psd = new PsdReader({buffer: myArrayBuffer, onLoad: myCallback});
 
+Requirements
+------------
+
+A modern "evergreen" browser with support for HTML5.
+
 
 Limitations
 -----------
 
-- The original Photoshop PSD file must be saved in *compatibility mode* (the typical save mode)
-- Does not apply ICC to color data (you get the raw channel bitmaps - affects CMYK/L*ab files in particular).
-- DuoTone is included for preview only. This targets printing more than screen and there is currently
-only support for mixing a custom color with the tone data in 2-color mode.
+We consider these non-problematic, but for convenience:
+
+- The PSD file must be saved in *compatibility mode* (the typical save mode)
+- Does not apply ICC to the color data (affects CMYK files in particular).
+- DuoTone and L*ab is included for preview only.
 
 
 Issues
