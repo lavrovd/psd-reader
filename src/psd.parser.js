@@ -14,6 +14,13 @@ PsdReader.prototype._parser = function(buffer) {
 
 	me._isParsing = true;
 
+	/**
+	 * Locate a resource in the resource chunk using the ID of it.
+	 * If none is found, null is returned. The object returned otherwise
+	 * contains a `pos` reference to position in buffer, `length` for length
+	 * of resource data and a `name` if any.
+	 * @type {number}
+	 */
 	this.findResource = findResource;
 
 	// check magic header keyword
@@ -109,7 +116,9 @@ PsdReader.prototype._parser = function(buffer) {
 			break;
 	}
 
-	function convert() {me._toRGBA(cbLoad)}
+	function convert() {
+		me._cfg.noRGBA ? cbLoad(null) : me._toRGBA(cbLoad);
+	}
 	function cbLoad(bmp) {
 
 		me._gamma(bmp);

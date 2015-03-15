@@ -1,38 +1,38 @@
 ﻿psd-reader
 ==========
 
-Read Adobe&reg; Photoshop&reg; PSD files to show them in the web browser.
+Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,
 
-Extract additional information and meta data.
+Use PSD as an image source for canvas.
 
 
 Features
 --------
 
 - Fast and lightweight
-- Asynchronous and block-based decoding (no UI-blocking when reading large files)
-- Reads greyscale, bitmap, indexed, RGB, CMYK, DuoTone, multi-channel and L*ab
-- Support alpha channel as well as transparency for indexed mode
-- All color depths (1/8/16/32 bits) are supported
-- Support uncompressed and RLE compressed image data
-- Converts all formats to RGBA so it can be used directly with canvas
-- Canvas support with dedicated method supporting scaling and high-quality down-sampling
+- Asynchronous and block-based decoding
+- Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and L*ab
+- Support alpha channel, and transparency for indexed mode
+- All color depths are supported (1 / 8 / 16 / 32 bits)
+- Supports uncompressed and RLE compressed image data
+- Converts all formats to RGBA so it can be used directly with canvas (can be turned off)
+- Canvas helper methods with optional scaling and high-quality down-sampling
 - Optional gamma correction (with separate gamma values for 32-bits and one for all others)
 - Auto-corrects display gamma for 32-bit mode
-- Access to the original channel bitmaps
-- Access to meta and header data
-- Validates and performs error checks
+- Access to the original channel bitmaps (uncompressed if needed)
+- Access to raw meta and header data
 - Passive load mode allowing parsing to be invoked manually later
 - Event driven (onready, onload, onerror).
+- Validates and performs error checks
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 - It's an original implementation created from scratch.
-- Fully documented (see docs folder)
+- Fully documented (see docs folder or [this link](https://epistemex.github.io/psd-reader/docs/))
 
 
 Demos
 -----
 
-**➜ [Acid-testing various color modes, format and combinations](https://epistemex.github.io/psd-reader/)**
+**➜ [Acid-testing various color modes, formats and combinations](https://epistemex.github.io/psd-reader/)**
 
 **➜ [Drop your own PSD files into the browser](https://epistemex.github.io/psd-reader/psddrop.html)**
 
@@ -53,15 +53,15 @@ Install
 Documentation
 -------------
 
-The sources are fully documented.
+The project is fully documented and is available as html in the `docs` folder
 
-**➜ [You can also view the docs online](https://epistemex.github.io/psd-reader/docs/)**
+**➜ [The documentation can be viewed online](https://epistemex.github.io/psd-reader/docs/)**
 
 
 Usage
 -----
 
-It's simple to use, create a new instance, pass in an URL (or buffer) and a callback:
+Create a new instance, pass in an URL (or an array buffer), and a callback:
 
     var psd = new PsdReader({url: "path/to.psd", onLoad: myCallback});
 
@@ -71,28 +71,28 @@ In your callback you can access the RGBA data:
         var bitmap = this.rgba;
     }
 
-If you want a canvas version, a single call will do it:
+To get a canvas version of the data:
 
     function myCallback(e) {
         var canvas = psd.toCanvas();
         ...
     }
 
+An already existing ArrayBuffer can be used instead of an URL:
 
-You have additional access to the original channel data in it´s native
-format (ie. 8-bit, 16-bit etc.) as well as an info object.
+    var psd = new PsdReader({buffer: psdArrayBuffer, onLoad: myCallback});
 
-    var info     = psd.info:
-    var width    = info.width;
-    var height   = info.height;
-    var depth    = info.depth;
-    var channel0 = info.bitmaps[0];		// in native format
+There is additional access to the original channel bitmap data in it´s native
+format (ie. 8-bit, 16-bit etc.). The header information can be accessed
+through the info object:
+
+    var width     = psd.info.width;
+    var height    = psd.info.height;
+    var depth     = psd.info.depth;
+    var channel0  = psd.info.bitmaps[0];	// in native format
+    var resources = psd.info.chunks[1];		// the resource area
     ...
 
-It's possible to use an already existing ArrayBuffer loaded from a
-different source (ie. FileReader API, XHR):
-
-    var psd = new PsdReader({buffer: myArrayBuffer, onLoad: myCallback});
 
 Requirements
 ------------
@@ -103,15 +103,10 @@ A modern "evergreen" browser with support for HTML5.
 Limitations
 -----------
 
-We consider these generally non-problematic, but for convenience:
+These generally non-problematic, but for the sake of information:
 
-- The PSD file must be saved in *compatibility mode* (the typical save mode)
-- Does not apply ICC to the color data (affects CMYK files in particular).
-- DuoTone is included for preview purpose only as it targets print more than screen.
-
-Please note that the goal and purpose of this project is not to parse and
-render individual layers and masks, just to allow browsers to display a
-flat version of the image.
+- Compatibility mode (see tutorial section of the documentation for details)
+- ICC profiles are ignored
 
 
 Issues

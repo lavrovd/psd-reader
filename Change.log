@@ -1,6 +1,9 @@
 Change log for psd-reader
 -------------------------
 
+0.4.8 BETA
+ADD: New option: noRGBA with accompanying method toRGBA(). Loads and decompresses the data, but does not convert to RGBA.
+
 0.4.7 BETA
 ADD: Option to ignore alpha channel
 CHG: Optimized Lab conversion speed

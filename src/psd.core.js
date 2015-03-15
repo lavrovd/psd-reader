@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.7 BETA
+	psd-reader version 0.4.8 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -21,8 +21,9 @@
  * @param {number} [options.gamma=1] - use this gamma for conversion. Note: give inverse value, ie. 1/2.2 etc. 1 = no processing
  * @param {number} [options.gamma32] - use this gamma for 32-bits conversion. Defaults to guessed system value (1/1.8 for Mac, 1/2.2 for others)
  * @param {Array} [options.duotone=[255,255,255]] - color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].
- * @param {boolean} [options.passive] - load data but don't parse and decode. use parse() to invoke manually.
+ * @param {boolean} [options.passive=false] - load data but don't parse and decode. use parse() to invoke manually.
  * @param {boolean} [options.ignoreAlpha=false] - ignore alpha channel if any.
+ * @param {boolean} [options.noRGBA=false] - do not convert to RGBA format. If you only want to deal with the raw data. Channels are decompressed if needed.
  * @constructor
  */
 function PsdReader(options) {
@@ -40,7 +41,8 @@ function PsdReader(options) {
 			gamma32	   : +options.gamma32 || PsdReader.guessGamma(),
 			duotone	   : options.duotone || [255, 255, 255],
 			passive	   : !!options.passive,
-			ignoreAlpha: !!options.ignoreAlpha
+			ignoreAlpha: !!options.ignoreAlpha,
+			noRGBA	   : !!options.noRGBA
 		};
 
 	/**
@@ -226,6 +228,36 @@ PsdReader.prototype = {
 		var me = this;
 		if (!me.isParsed && !me._isParsing)
 			me._parser(me.buffer);
+	},
+
+	/**
+	 * If option noRGBA is used but you want to convert the data to RGBA
+	 * later, this method can be called.
+	 *
+	 * It is **asynchronous** and takes a callback argument. When the conversion
+	 * has finished, the instance.rgba property is set with the bitmap and
+	 * the callback is given an object containing a reference to the bitmap
+	 * (rgba) and a timeStamp. If the conversion was unsuccessful the
+	 * rgba property will be null.
+	 *
+	 * If the image was already converted, the callback is invoked right
+	 * away.
+	 *
+	 * @param {function} callback - required callback function
+	 */
+	toRGBA: function(callback) {
+
+		var me = this, cb = callback.bind(me);
+
+		if (me._cfg.noRGBA && !me.rgba) {
+			me._toRGBA(function(bmp) {
+				me.rgba = bmp;
+				send();
+			});
+		}
+		else send();
+
+		function send() {cb({rgba: me.bmp, timeStamp: Date.now()})}
 	},
 
 	/**

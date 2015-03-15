@@ -13,6 +13,9 @@
  * If a canvas could not be created an error is thrown (memory, size etc.).
  * If the instance wasn't able to decode the PSD file, a null is returned.
  *
+ * Note: if the option `noRGBA` was used you need to convert to RGBA first
+ * using the (asynchronous) `toRGBA()` method.
+ *
  * @param {object} [options] - options
  * @param {number} [options.scale] - Scale factor for both x and y directions, 1 = 100%. If result of size is fraction, the size will be rounded to nearest integer number.
  * @param {boolean} [options.hq=false] - High-quality down-sample. Use if you need large images scaled down to small sizes.
