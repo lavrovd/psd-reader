@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>psd-reader Classes</title>
+	<title>psd-reader tutorialCompatibility Mode</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -64,95 +64,37 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
-					
-
-
-	<h1 class="page-title">Classes</h1>
-<section>
+					<section class="tutorial-section">
 
 <header>
-    <h2>
     
-    </h2>
-    
+
+    <h2>Compatibility Mode</h2>
 </header>
 
 <article>
-    <div class="container-overview">
-    
-
-    
-        
-
-        
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="PsdReader.html">PsdReader</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <p>The PSD file must be saved in <em>compatibility mode</em> which is the typical
+save mode.</p>
+<p>Photoshop&reg; renders all layers, effects and masks into a single
+bitmap which is stored inside the PSD file as a &quot;flat&quot; bitmap when saved.
+This so that older application which does not support new features and ways
+to mix layers, or where some fonts are missing, can still show the image
+as it was intended.</p>
+<p>This bitmap is also what we use as image source. If for some reason the
+compatibility mode is turned off, this image is just a simple placeholder
+image and all layers has to be rendered manually which out of scope for this
+project, which sole purpose is to give a fast and simple way to display
+PSD files.</p>
+<p>We recommend therefor to always keep the default setting of the compatibility
+option enabled in Photoshop&reg;.</p>
+<p>The option is found in Preferences -&gt; File Handling, usually at the very bottom:</p>
+<p><img src="http://i.imgur.com/fYMneWd.png" alt="prefs"></p>
 </article>
 
 </section>
-
-
-
 
 				</div>
 
@@ -176,10 +118,6 @@
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>

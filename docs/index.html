@@ -35,6 +35,28 @@
 					</ul>
 				</li>
 				
+				<li class="dropdown">
+					<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="tutorial-Compatibility Mode.html">Compatibility Mode</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-ICC.html">ICC</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-Overview.html">Overview</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
 			</ul>
 		</div>
 	</div>
@@ -72,29 +94,29 @@
 
 
     <section class="readme-section">
-        <article><h1>﻿psd-reader</h1><p>Read Adobe&reg; Photoshop&reg; PSD files to show them in the web browser.</p>
-<p>Extract additional information and meta data.</p>
+        <article><h1>﻿psd-reader</h1><p>Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,</p>
+<p>Use PSD as an image source for canvas.</p>
 <h2>Features</h2><ul>
 <li>Fast and lightweight</li>
-<li>Asynchronous and block-based decoding (no UI-blocking when reading large files)</li>
-<li>Reads greyscale, bitmap, indexed, RGB, CMYK, DuoTone, multi-channel and L*ab</li>
-<li>Support alpha channel as well as transparency for indexed mode</li>
-<li>All color depths (1/8/16/32 bits) are supported</li>
-<li>Support uncompressed and RLE compressed image data</li>
-<li>Converts all formats to RGBA so it can be used directly with canvas</li>
-<li>Canvas support with dedicated method supporting scaling and high-quality down-sampling</li>
+<li>Asynchronous and block-based decoding</li>
+<li>Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and L*ab</li>
+<li>Support alpha channel, and transparency for indexed mode</li>
+<li>All color depths are supported (1 / 8 / 16 / 32 bits)</li>
+<li>Supports uncompressed and RLE compressed image data</li>
+<li>Converts all formats to RGBA so it can be used directly with canvas (can be turned off)</li>
+<li>Canvas helper methods with optional scaling and high-quality down-sampling</li>
 <li>Optional gamma correction (with separate gamma values for 32-bits and one for all others)</li>
 <li>Auto-corrects display gamma for 32-bit mode</li>
-<li>Access to the original channel bitmaps</li>
-<li>Access to meta and header data</li>
-<li>Validates and performs error checks</li>
+<li>Access to the original channel bitmaps (uncompressed if needed)</li>
+<li>Access to raw meta and header data</li>
 <li>Passive load mode allowing parsing to be invoked manually later</li>
 <li>Event driven (onready, onload, onerror).</li>
+<li>Validates and performs error checks</li>
 <li>Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).</li>
 <li>It's an original implementation created from scratch.</li>
-<li>Fully documented (see docs folder)</li>
+<li>Fully documented (see docs folder or <a href="https://epistemex.github.io/psd-reader/docs/">this link</a>)</li>
 </ul>
-<h2>Demos</h2><p><strong>➜ <a href="https://epistemex.github.io/psd-reader/">Acid-testing various color modes, format and combinations</a></strong></p>
+<h2>Demos</h2><p><strong>➜ <a href="https://epistemex.github.io/psd-reader/">Acid-testing various color modes, formats and combinations</a></strong></p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/psddrop.html">Drop your own PSD files into the browser</a></strong></p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/demo_gamma.html">Gamma correction</a></strong></p>
 <h2>Install</h2><p><strong>psd-reader</strong> can be installed in various ways:</p>
@@ -105,35 +127,31 @@
 <li>Download <a href="https://github.com/epistemex/psd-reader/archive/master.zip">zip archive</a> and extract.</li>
 <li>Right-click and download <a href="https://raw.githubusercontent.com/epistemex/psd-reader/master/psd-reader.min.js">psd-reader.min.js</a></li>
 </ul>
-<h2>Documentation</h2><p>The sources are fully documented.</p>
-<p><strong>➜ <a href="https://epistemex.github.io/psd-reader/docs/">You can also view the docs online</a></strong></p>
-<h2>Usage</h2><p>It's simple to use, create a new instance, pass in an URL (or buffer) and a callback:</p>
+<h2>Documentation</h2><p>The project is fully documented and is available as html in the <code>docs</code> folder</p>
+<p><strong>➜ <a href="https://epistemex.github.io/psd-reader/docs/">The documentation can be viewed online</a></strong></p>
+<h2>Usage</h2><p>Create a new instance, pass in an URL (or an array buffer), and a callback:</p>
 <pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;path/to.psd&quot;, onLoad: myCallback});</code></pre><p>In your callback you can access the RGBA data:</p>
 <pre class="prettyprint source"><code>function myCallback(e) {
     var bitmap = this.rgba;
-}</code></pre><p>If you want a canvas version, a single call will do it:</p>
+}</code></pre><p>To get a canvas version of the data:</p>
 <pre class="prettyprint source"><code>function myCallback(e) {
     var canvas = psd.toCanvas();
     ...
-}</code></pre><p>You have additional access to the original channel data in it´s native
-format (ie. 8-bit, 16-bit etc.) as well as an info object.</p>
-<pre class="prettyprint source"><code>var info     = psd.info:
-var width    = info.width;
-var height   = info.height;
-var depth    = info.depth;
-var channel0 = info.bitmaps[0];        // in native format
-...</code></pre><p>It's possible to use an already existing ArrayBuffer loaded from a
-different source (ie. FileReader API, XHR):</p>
-<pre class="prettyprint source"><code>var psd = new PsdReader({buffer: myArrayBuffer, onLoad: myCallback});</code></pre><h2>Requirements</h2><p>A modern &quot;evergreen&quot; browser with support for HTML5.</p>
-<h2>Limitations</h2><p>We consider these generally non-problematic, but for convenience:</p>
+}</code></pre><p>An already existing ArrayBuffer can be used instead of an URL:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({buffer: psdArrayBuffer, onLoad: myCallback});</code></pre><p>There is additional access to the original channel bitmap data in it´s native
+format (ie. 8-bit, 16-bit etc.). The header information can be accessed
+through the info object:</p>
+<pre class="prettyprint source"><code>var width     = psd.info.width;
+var height    = psd.info.height;
+var depth     = psd.info.depth;
+var channel0  = psd.info.bitmaps[0];    // in native format
+var resources = psd.info.chunks[1];        // the resource area
+...</code></pre><h2>Requirements</h2><p>A modern &quot;evergreen&quot; browser with support for HTML5.</p>
+<h2>Limitations</h2><p>These generally non-problematic, but for the sake of information:</p>
 <ul>
-<li>The PSD file must be saved in <em>compatibility mode</em> (the typical save mode)</li>
-<li>Does not apply ICC to the color data (affects CMYK files in particular).</li>
-<li>DuoTone is included for preview purpose only as it targets print more than screen.</li>
+<li>Compatibility mode (see tutorial section of the documentation for details)</li>
+<li>ICC profiles are ignored</li>
 </ul>
-<p>Please note that the goal and purpose of this project is not to parse and
-render individual layers and masks, just to allow browsers to display a
-flat version of the image.</p>
 <h2>Issues</h2><p>See the <a href="https://github.com/epistemex/psd-reader/issues">issue tracker</a> for details.</p>
 <p>Please do report issues if you find any.</p>
 <h2>License</h2><p>Released under <a href="http://choosealicense.com/licenses/mit/">MIT license</a>. You may use this class in both commercial and non-commercial projects provided that full header (minified and developer versions) is included.</p>
@@ -163,7 +181,7 @@ flat version of the image.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha10</a>
-		on Sat Mar 14th 2015 using the <a
+		on Sun Mar 15th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
