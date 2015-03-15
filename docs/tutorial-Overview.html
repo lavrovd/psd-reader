@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>psd-reader tutorialOverview</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top ">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">psd-reader</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="PsdReader.html">PsdReader</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="tutorial-Compatibility Mode.html">Compatibility Mode</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-ICC.html">ICC</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-Overview.html">Overview</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+			<div class="span12">
+				
+				<div id="main">
+					<section class="tutorial-section">
+
+<header>
+    
+
+    <h2>Overview</h2>
+</header>
+
+<article>
+    <p><sup>Revision 0</sup></p>
+<p>The psd-reader is simple to use if you need quick access to the bitmap
+data of a PSD file.</p>
+<p>You simply create a new instance, pass in the URL or an already loaded
+ArrayBuffer, and you have an RGBA version that can be converted to canvas:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;example.psd&quot;, onload: function(e) {
+    // we now have access to a RGBA version of the file regardless of original format:
+    var rgba = this.rgba;
+})</code></pre><p>If we don't intend to deal with the raw bitmap, we can simply convert it
+to a canvas and use for example a 2D context to add graphics, text etc.:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;example.psd&quot;, onload: function(e) {
+
+    var canvas = this.toCanvas();
+
+    // append canvas to DOM
+    document.body.appendChild(canvas);
+})</code></pre><p>We can even scale the bitmap first so the canvas is in the right size
+before we use it:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;example.psd&quot;, onload: function(e) {
+
+    // to always get a canvas 800 pixels in width:
+    var scale = 800 / this.info.width;
+    var canvas = this.toCanvas({scale: scale});
+    //...
+
+})</code></pre><h2>Active vs. Passive modes</h2><p>Normally, active mode is used. This will do the file loading and conversion.
+When done the <code>onload</code> handler will be called.</p>
+<p>Sometimes you might want to just load the resource and convert the data
+as some later point.</p>
+<p>For this, we can use <em>passive</em> mode. Important to note is that in order to
+know when data can be converted, which we need to do manually, you have
+to also provide a callback for the <code>onready</code> event.</p>
+<p>To parse the data you would call the <code>parse()</code> method on the instance. This
+call is safe to call several times, although discouraged, as it will check
+the internal status of the data and only parse if not previously parsed.</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;example.psd&quot;, passive: true, onready: onready, onload: onload});
+
+function onready(e) {
+    // here we can flag our program ready to parse the file.
+    this.parse();    // when done, onload will be called as normal.
+})
+
+function onload(e) {
+    // here we can access access rgba, or convert to canvas
+    var canvas = this.toCanvas();
+})</code></pre><p>The example above is of course somewhat contrived and unnecessary, but in
+a real world example you would for example keep track of a numerous files,
+count them in the <code>onready</code> handler, when all files had loaded then go to
+parsing them. This will allow you to do background loading and eventually
+provide a parse mechanism to the user or automatically.</p>
+<h2>Advanced usage</h2><p>But we can do a lot more before we create a canvas. We can process the
+RGBA data, or file data, directly if we want to.</p>
+<h2>Chunks</h2><p>PSD files are as many other graphics (and sound) files chunked, although
+in a little bit different way than a typical chunked file such as PNG.</p>
+<p>PSD files always have 5 chunks, header, color data, resource data, layers
+and mask, and finally the image data at the end. Even if there is no data
+in a chunk, it will always be present contrary to other graphic formats.</p>
+<p>There are disadvantages to this, but the advantage for us is that you
+will always find all the chunks in the file which allows us to address
+them with a fixed index.</p>
+<p>In psd-reader the chunk information can be found in the info object:</p>
+<pre class="prettyprint source"><code>var chunks = psd.info.chunks;</code></pre><p>and we can access each as an object as well:</p>
+<pre class="prettyprint source"><code>var header = chunks[0];
+var colorInfo = chunks[1];
+var resources = chunks[2];
+var layers = chunks[3];
+var image = chunks[4];</code></pre><p>Each object has a pos and length property which can be used to create
+a typed array for parsing:</p>
+<pre class="prettyprint source"><code>if (colorInfo.length) {
+    var buffer = new DataView(psd.buffer, colorInfo.pos, colorInfo.length)
+}</code></pre><p>We can now parse the chunk for the information we need. If the chunk is
+empty the length will be 0.</p>
+<p>Note that all data found through these objects are raw and compressed
+data (if originally compressed).</p>
+<p>For the resources chunk, we do provide a method to locate a resource with
+a certain ID. For example, to locate a thumbnail resource you could do:</p>
+<pre class="prettyprint source"><code>var thumb = psd.findResource(1036);  // ID 1036 = thumbnail PS ver > 4
+if (thumb) {
+    var buffer = new DataView(psd.buffer, thumb.pos, thumb.length);
+    // process the data here...
+}</code></pre><p>You will have to manually process the data though with psd-reader.</p>
+<h2>Channels and bitmaps</h2><p>To access the parsed channel bitmaps, which are always uncompressed but
+not processed, you can use the bitmaps property of the info object:</p>
+<pre class="prettyprint source"><code>var bitmaps = psd.info.bitmaps;</code></pre><p>Use the channels property to know how many bitmaps there are (or simply
+use the length property):</p>
+<pre class="prettyprint source"><code>var channels = bitmaps.info.channels;
+var channels = bitmaps.length;</code></pre><p>Each channel in a PSD file contain all data for it, there is no interleaving.</p>
+<p>To build a single pixel you would have to pick a byte (or word, float etc.)
+from each channel and interleave manually, for example, if we have 8-bit RGBA
+data in our channels we will have four channels. To create the first pixel
+we need to do:</p>
+<pre class="prettyprint source"><code> var dstBuffer = new Uint8Array(someLength);
+ dstBuffer[0] = bitmaps[0][0];        // first byte in red channel
+ dstBuffer[1] = bitmaps[1][0];        // first byte in green channel
+ dstBuffer[2] = bitmaps[2][0];        // first byte in blue channel
+ dstBuffer[3] = bitmaps[3][0[;        // first byte in alpha channel</code></pre><p>Note that with formats such as indexed, bitmap and so foerth, you need to
+process and convert the original formats manually. In addition with formats
+such as L*ab you will also have to do color space conversion.</p>
+<p>If you don't need the RGBA data you can turn off the conversion when
+creating the PsdReader instance:</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;example.psd&quot;, noRGBA: true, onload: function(e) {
+
+    // here we can access the header and channel data - we do not have RGBA here
+    var channelArray = this.info.channels;
+    var width = this.info.width;
+    var height = this.info.height;
+    var depth = this.info.depth;
+    var byteWidth = this.info.byteWidth;
+    var colorMode = this.info.colorMode;  // see also colorDesc
+
+    // if we want to manually convert to RGBA we can also do that here:
+    this.toRGBA(callback);
+})</code></pre><h2>The image data</h2><p>Unless the noRGBA option had been used, and the file is not corrupted or
+other errors occurred, the <code>rgba</code> property on the instance will always
+contain a processed bitmap in 8-bit RGBA format (ie. 4 bytes per pixel
+just as with Canvas).</p>
+<p>This bitmap can be useful if you don't need to add any graphics or text
+to the image but just need it for processing purposes.</p>
+<p>Process it as you would with data from a canvas through the getImageData()
+method. You can also set the data directly to a canvas ImageData object -
+just make sure they are of the same width and height:</p>
+<pre class="prettyprint source"><code>var idata = ctx.createImageData(psd.info.width, psd.info.height);
+idata.data.set(psd.rgba);
+ctx.putImageData(idata, 0, 0);</code></pre><p>The toCanvas() method can do this for you as well as scaling the image
+using direct scaling, or a high-quality mode when down-sampling the image
+from a large size to a much smaller size (&lt; 50% of original):</p>
+<pre class="prettyprint source"><code>var canvas = psd.toCanvas({scale: 0.25, hq: true});</code></pre><p>This is a relative slow process so be careful with really large images
+(at the time of writing this HQ down-sampling is not yet async and block
+based, only loading and decoding - you can of course do this manually or
+use other techniques).</p>
+</article>
+
+</section>
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					<p><b><a href='https://github.com/epistemex/'>Epistemex at GitHib</a></b></p>
+					<br />
+					
+					
+		<span class="copyright">
+		Copyright &copy; 2015 Epistemex
+		</span>
+					<br />
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha10</a>
+		on Sun Mar 15th 2015 using the <a
+			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+	<script>
+		$( function () {
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
+
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
+				selectors   : "h1,h2,h3,h4",
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : false,
+				showMenu : true,
+				enableDoclinks : true
+			} );
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
+	
+
+</body>
+</html>

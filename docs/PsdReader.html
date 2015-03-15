@@ -35,6 +35,28 @@
 					</ul>
 				</li>
 				
+				<li class="dropdown">
+					<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="tutorial-Compatibility Mode.html">Compatibility Mode</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-ICC.html">ICC</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-Overview.html">Overview</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
 			</ul>
 		</div>
 	</div>
@@ -446,6 +468,8 @@ asynchronous nature.</p>
             
                 <td class="default">
                 
+                    false
+                
                 </td>
             
 
@@ -489,6 +513,45 @@ asynchronous nature.</p>
             
 
             <td class="description last"><p>ignore alpha channel if any.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>noRGBA</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>do not convert to RGBA format. If you only want to deal with the raw data. Channels are decompressed if needed.</p></td>
         </tr>
 
 	
@@ -589,6 +652,70 @@ through XHR.</p>
 |
 
 <span class="param-type">null</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="findResource">
+    <h4><span class="type-signature"></span>findResource<span class="type-signature"> :number</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Locate a resource in the resource chunk using the ID of it.
+If none is found, null is returned. The object returned otherwise
+contains a <code>pos</code> reference to position in buffer, <code>length</code> for length
+of resource data and a <code>name</code> if any.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">number</span>
 
 
             </li>
@@ -1840,6 +1967,8 @@ was being produced.</p>
     ...
 }</code></pre><p>If a canvas could not be created an error is thrown (memory, size etc.).
 If the instance wasn't able to decode the PSD file, a null is returned.</p>
+<p>Note: if the option <code>noRGBA</code> was used you need to convert to RGBA first
+using the (asynchronous) <code>toRGBA()</code> method.</p>
     </div>
     
 
@@ -2083,6 +2212,129 @@ If the instance wasn't able to decode the PSD file, a null is returned.</p>
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="toRGBA"><span class="type-signature"></span>toRGBA<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>If option noRGBA is used but you want to convert the data to RGBA
+later, this method can be called.</p>
+<p>It is <strong>asynchronous</strong> and takes a callback argument. When the conversion
+has finished, the instance.rgba property is set with the bitmap and
+the callback is given an object containing a reference to the bitmap
+(rgba) and a timeStamp. If the conversion was unsuccessful the
+rgba property will be null.</p>
+<p>If the image was already converted, the callback is invoked right
+away.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>required callback function</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
         </dl>
     
 
@@ -2112,7 +2364,7 @@ If the instance wasn't able to decode the PSD file, a null is returned.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha10</a>
-		on Sat Mar 14th 2015 using the <a
+		on Sun Mar 15th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
