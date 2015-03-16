@@ -5,7 +5,7 @@ Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,
 
 Use PSD as an image source for canvas.
 
-![demo snapshot](http://i.imgur.com/Fcme1DR.png)
+![demo snapshot](http://i.imgur.com/zMyiX2b.png)
 
 
 Features
@@ -19,9 +19,9 @@ Features
 - Supports uncompressed and RLE compressed image data
 - Converts all formats to RGBA so it can be used directly with canvas (can be turned off)
 - Canvas helper methods with optional scaling and high-quality down-sampling
-- Optional gamma correction (with separate gamma values for 32-bits and one for all others)
-- Auto-corrects display gamma for 32-bit mode
-- Access to the original channel bitmaps (uncompressed if needed)
+- Optional gamma correction (with separate gamma value for 32-bits - see gamma demo for why)
+- Auto-corrects display gamma for 32-bit mode (can be turned off)
+- Access to the original channel bitmaps (decompressed if needed)
 - Access to raw meta and header data
 - Passive load mode allowing parsing to be invoked manually later
 - Validates and performs error checks
@@ -32,6 +32,13 @@ Features
 
 Demos
 -----
+
+Some demo demonstrating capabilities of psd-reader. Note that PSD files
+aren't exactly the most web-friendly format size-wise, so please be
+patient when downloading the test images.
+
+Normally a PSD would be dropped in or loaded from the client side, but
+for the sake of demo images here are loaded from server side:
 
 **➜ [Acid-testing various color modes, formats and combinations](https://epistemex.github.io/psd-reader/)**
 
