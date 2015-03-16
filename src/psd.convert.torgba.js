@@ -39,5 +39,5 @@ PsdReader.prototype._toRGBA = function(cb) {
 	}
 
 	info.hasAlpha = iAlpha;
-	(iAlpha && !me._cfg.noDematte && mode !== 2) ? me._dematte(dst, cb) : cb(dst);
+	(iAlpha && !me._cfg.noDematte && info.depth < 32) ? me._dematte(dst, cb) : cb(dst);
 };

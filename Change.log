@@ -1,11 +1,15 @@
 Change log for psd-reader
 -------------------------
 
+0.5.2 BETA
+CHG: Prevent 32-bit depth images to be de-matted (currently a rounding error problem exist with this mode)
+CHG: Indexed mode no longer sets hasAlpha in info object despite it has transparency, as there is no actual channel for alpha.
+
 0.5.1 BETA
 CHG: Prevent indexed images to be de-matted as they don't suffer from this problem.
 
 0.5.0 BETA
-ADD: Dematter - removes the halo in images with alpha channel.
+ADD: De-matter - removes the halo in images with alpha channel.
 ADD: New option "noDematte"
 
 0.4.10 BETA

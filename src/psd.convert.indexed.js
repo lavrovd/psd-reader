@@ -19,5 +19,5 @@ PsdReader.prototype._indexed = function(src, dst, iAlpha) {
 
 	me.info.indexes = ++max;	// same info as in res id 1046
 
-	return tIndex > -1
+	return false; //tIndex > -1 - there is no actual channel for this, so return false
 };

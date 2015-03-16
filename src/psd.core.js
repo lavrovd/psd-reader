@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.5.1 BETA
+	psd-reader version 0.5.2 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -14,8 +14,8 @@
  * asynchronous nature.
  *
  * @param {object} options - option object (required: url or buffer)
- * @param {string} [options.url] - URl to a PSD file (if not URL is provided, a buffer must be)
- * @param {ArrayBuffer} [options.buffer] - ArrayBuffer containing data for a PSD file (if not buffer is provided, an URL must be)
+ * @param {string} [options.url] - URl to a PSD file (if not URL is provided, a buffer must be, but never both)
+ * @param {ArrayBuffer} [options.buffer] - ArrayBuffer containing data for a PSD file (if not buffer is provided, an URL must be, but never both)
  * @param {function} [options.onLoad] - callback function when image has been loaded and parsed to RGBA. Optionally use `onload`
  * @param {function} [options.onError] - callback function to handle errors. Optionally use `onerror`
  * @param {number} [options.gamma=1] - use this gamma for conversion. Note: give inverse value, ie. 1/2.2 etc. 1 = no processing
@@ -24,7 +24,7 @@
  * @param {boolean} [options.passive=false] - load data but don't parse and decode. use parse() to invoke manually.
  * @param {boolean} [options.ignoreAlpha=false] - ignore alpha channel if any.
  * @param {boolean} [options.noRGBA=false] - do not convert to RGBA format. If you only want to deal with the raw data. Channels are decompressed if needed.
- * @param {boolean} [options.noDematte=false] - do not dematte images with alpha channels
+ * @param {boolean} [options.noDematte=false] - do not de-matte images with alpha channels (indexed images are never processed)
  * @constructor
  */
 function PsdReader(options) {
@@ -317,7 +317,7 @@ PsdReader.prototype = {
 	 * @return {number} converted integer value in the range [0, 255]
 	 */
 	floatToComp: function(channel, pos) {
-		return (channel.getFloat32(pos) * 255 + 0.5)|0
+		return (channel.getFloat32(pos) * 255)|0
 	},
 
 	/**
