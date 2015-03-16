@@ -106,10 +106,10 @@ A modern "evergreen" browser with support for HTML5.
 Limitations
 -----------
 
-These generally non-problematic, but for the sake of information:
+These are generally non-problematic:
 
-- Compatibility mode (see tutorial section of the documentation for details)
-- ICC profiles are ignored
+- PSD must be saved in the typical compatibility mode (see tutorial section of the documentation for details)
+- ICC profiles are not parsed/applied
 
 
 Issues
