@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.8 BETA
+	psd-reader version 0.4.9 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -46,7 +46,7 @@ function PsdReader(options) {
 		};
 
 	/**
-	 * Expose public reference for prototyped methods.
+	 * Expose public reference to config for prototyped methods.
 	 * @type {*}
 	 * @private
 	 */
@@ -59,11 +59,12 @@ function PsdReader(options) {
 	this.isParsed = false;
 
 	/**
+	 * isParsing -> isp
 	 * To lock parse() while waiting for server response when using ajax.
 	 * @type {boolean}
 	 * @private
 	 */
-	this._isParsing = false;
+	this._isp = false;
 
 	/**
 	 * onready handler points to a function that will be called once
@@ -148,21 +149,36 @@ function PsdReader(options) {
 		bitmaps         : []
 	};
 
-	// check that we have a data source
-	if ((!config.url || typeof config.url !== "string" || (config.url && !config.url.length)) && !me.buffer) {
-		error("Buffer nor URL specified.", "core");
-		return
-	}
-	else if (config.url && me.buffer) {
-		error("Both URL and buffer specified.", "core");
-		return
-	}
-
 	/**
 	 * Expose reference to common error handler
 	 * @private
 	 */
-	this._err = error;
+	this._err = function(msg, src) {
+		me._isp = false;
+
+		if (me.onerror) setTimeout(sendErr.bind(me), 1);
+		else throw new TypeError(msg);
+
+		function sendErr() {
+			me.onerror({
+				message: msg,
+				source: src,
+				timeStamp: Date.now()
+			});
+		}
+	};
+
+	function _err(msg) {me._err(msg, "core")}
+
+	// check that we have a data source
+	if ((!config.url || typeof config.url !== "string" || (config.url && !config.url.length)) && !me.buffer) {
+		_err("Buffer nor URL specified");
+		return
+	}
+	else if (config.url && me.buffer) {
+		_err("Both URL and buffer specified");
+		return
+	}
 
 	try {
 		// invoke loader or parser
@@ -173,7 +189,7 @@ function PsdReader(options) {
 					if (me.onready) me.onready({timeStamp: Date.now()});
 					if (!me._cfg.passive) me._parser(me.buffer);
 				},
-				error); 	// won't provide source
+				_err);
 		}
 		else {
 			if (me.onready) me.onready({timeStamp: Date.now()});
@@ -181,24 +197,9 @@ function PsdReader(options) {
 		}
 	}
 	catch(err) {
-		error(err.message, "core");
+		_err(err.message);
 	}
 
-	// common error handler
-	function error(msg, src) {
-		me._isParsing = false;
-
-		if (me.onerror) setTimeout(_err.bind(me), 1);
-		else throw new TypeError(msg);
-
-		function _err() {
-			me.onerror({
-				message: msg,
-				source: src,
-				timeStamp: Date.now()
-			});
-		}
-	}
 }
 
 PsdReader.prototype = {
@@ -226,7 +227,7 @@ PsdReader.prototype = {
 	 */
 	parse: function() {
 		var me = this;
-		if (!me.isParsed && !me._isParsing)
+		if (!me.isParsed && !me._isp)
 			me._parser(me.buffer);
 	},
 

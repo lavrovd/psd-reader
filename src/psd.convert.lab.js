@@ -1,13 +1,11 @@
 
-PsdReader.prototype._lab = function(dst) {
+PsdReader.prototype._lab = function(bmps, dst, bw, iAlpha) {
 
-	var	bmps = this.info.bitmaps,
-		L = bmps[0],
+	var	L = bmps[0],
 		a = bmps[1],
 		b = bmps[2],
-		alpha = bmps[3] || null,
-		bw = this.info.byteWidth,
-		hasAlpha = !!alpha,
+		alpha = bmps[3],
+		hasAlpha = !!alpha & !iAlpha,
 		len = dst.length,
 		col, i = 0, p = 0;
 
@@ -21,9 +19,9 @@ PsdReader.prototype._lab = function(dst) {
 		var y = (L + 16) / 116,
 			x = a / 500 + y,
 			z = y - b / 200,
-			x3 = Math.pow(x, 3),
-			y3 = Math.pow(y, 3),
-			z3 = Math.pow(z, 3),
+			x3 = Math.pow(x, 3),	// x*x*x is sliiightly faster in FF, but slower in Chrome
+			y3 = Math.pow(y, 3),	// FF is 2x faster than chrome here, so we keep this
+			z3 = Math.pow(z, 3),	// to squeeze out what we can in Chrome..
 			R, G, B;
 
 		y = (y3 > 0.008856 ? y3 : (y - 0.137931) / 7.787);				//0.13... from 16/116
@@ -38,8 +36,8 @@ PsdReader.prototype._lab = function(dst) {
 		G = G > 0.0031308 ? 1.055 * Math.pow(G, 0.41667) - 0.055 : 12.92 * G;
 		B = B > 0.0031308 ? 1.055 * Math.pow(B, 0.41667) - 0.055 : 12.92 * B;
 
-		dst[i++] = R * 255;
+		dst[i++] = R * 255;		// leave rounding to the browser (note: ES perc. 0.5 != up, >= 0.5000001 == up..)
 		dst[i++] = G * 255;
-		dst[i] = B * 255;
+		dst[i]   = B * 255;
 	}
 };

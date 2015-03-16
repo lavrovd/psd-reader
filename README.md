@@ -5,6 +5,8 @@ Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,
 
 Use PSD as an image source for canvas.
 
+![demo snapshot](http://i.imgur.com/Fcme1DR.png)
+
 
 Features
 --------
@@ -22,7 +24,6 @@ Features
 - Access to the original channel bitmaps (uncompressed if needed)
 - Access to raw meta and header data
 - Passive load mode allowing parsing to be invoked manually later
-- Event driven (onready, onload, onerror).
 - Validates and performs error checks
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 - It's an original implementation created from scratch.
@@ -56,6 +57,8 @@ Documentation
 The project is fully documented and is available as html in the `docs` folder
 
 **➜ [The documentation can be viewed online](https://epistemex.github.io/psd-reader/docs/)**
+
+Tutorials and general information is included in the docs.
 
 
 Usage

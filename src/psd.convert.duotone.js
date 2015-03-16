@@ -1,10 +1,9 @@
 
-PsdReader.prototype._duotone = function(dst) {
+PsdReader.prototype._duotone = function(bmps, dst, iAlpha) {
 
-	var bmps = this.info.bitmaps,
-		src = bmps[0],
+	var src = bmps[0],
 		alpha = bmps[1],
-		hasAlpha = !!alpha,
+		hasAlpha = !!alpha && !iAlpha,
 		tone = this._cfg.duotone,
 		grey, r = tone[0], g = tone[1], b = tone[2],
 		i = 0, p = 0, len = src.length;

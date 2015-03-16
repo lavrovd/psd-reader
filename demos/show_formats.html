@@ -119,7 +119,8 @@ var files = [
 			    passive: true,                  // use passive mode so we get loaded in order
 			    onload: onload,
 				onready: onready,               // to keep track of loads before manual parsing
-			    onerror: error
+			    onerror: error,
+				ignoreAlpha: false
 		    }),
 		    div = document.createElement("div");
 

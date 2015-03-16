@@ -6,13 +6,13 @@ PsdReader.prototype._parser = function(buffer) {
 		pos = 0,
 		magic = getFourCC(),
 		version = getUint16(),
-		reserved, i, channels, compression,
+		channels, compression,
 		width, height, depth, mode, modeDesc,
 		colChunk, iresChunk, layersChunk,
 		startTime = performance ? performance.now() : Date.now(),
 		info = this.info;
 
-	me._isParsing = true;
+	me._isp = true;
 
 	/**
 	 * Locate a resource in the resource chunk using the ID of it.
@@ -23,42 +23,42 @@ PsdReader.prototype._parser = function(buffer) {
 	 */
 	this.findResource = findResource;
 
-	// check magic header keyword
+	// check magic keyword and version (should be 1)
 	if (magic !== "8BPS" && version !== 1) {
-		me._err("Not PSD file.", "parser");
+		_err("Not a PSD file");
 		return
 	}
 
-	// check reserved space
-	for(reserved = getChars(6), i = 0; i < 6; i++) if (reserved[i]) {
-		me._err("Not a valid PSD file.", "parser");
+	// check reserved space (6 bytes should be 0)
+	if (getUint32() || getUint16()) {
+		_err("Not a valid PSD file");
 		return
 	}
 
 	addChunk("Header", 14);
 
 	channels = getUint16();
-	if (channels < 1 || channels > 56) {
-		me._err("Invalid channel count.", "parser");
+	if (!channels || channels > 56) {
+		_err("Invalid channel count");
 		return
 	}
 
 	height = getUint32();		// note: height comes before width
 	width = getUint32();
-	if (width < 1 || width > 30000 || height < 1 || height > 30000) {
-		me._err("Invalid size.", "parser");
+	if (!width || width > 30000 || !height || height > 30000) {
+		_err("Invalid size");
 		return
 	}
 
 	depth = getUint16();
 	if ([1,8,16,32].indexOf(depth) < 0) {
-		me._err("Invalid depth.", "parser");
+		_err("Invalid depth");
 		return
 	}
 
 	mode = getUint16();
-	if (mode < 0 || mode > 15) {
-		me._err("Invalid color mode.", "parser");
+	if (mode > 15) {
+		_err("Invalid color mode");
 		return
 	}
 	modeDesc = ["Bitmap", "Greyscale", "Indexed", "RGB", "CMYK", "HSL", "HSB",
@@ -82,7 +82,7 @@ PsdReader.prototype._parser = function(buffer) {
 	pos += colChunk;
 
 	if ((mode === 2 || mode === 8) && colChunk === 0) {
-		me._err("Invalid data for mode.", "parser");
+		_err("Invalid data for mode.");
 		return
 	}
 
@@ -112,19 +112,17 @@ PsdReader.prototype._parser = function(buffer) {
 			break;
 		case 2:	// zip no-prediction - possibly LZ77 stream.. no test files to be found...
 		case 3:	// zip
-			console.warn("Not supported.");
+			_err("Unsupported compression");
 			break;
 	}
 
-	function convert() {
-		me._cfg.noRGBA ? cbLoad(null) : me._toRGBA(cbLoad);
-	}
+	function convert() {me._cfg.noRGBA ? cbLoad(null) : me._toRGBA(cbLoad)}
 	function cbLoad(bmp) {
 
 		me._gamma(bmp);
 		me.rgba = bmp;
 		me.isParsed = true;
-		me._isParsing = false;
+		me._isp = false;
 
 		if (me.onload) me.onload({
 			timeStamp: Date.now(),
@@ -150,7 +148,7 @@ PsdReader.prototype._parser = function(buffer) {
 		if (!chunk.length) return null;
 
 		idLSB = (id>>>8) | ((id & 0xff)<<8);							// reverse byte-order of id, because:
-		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>>1);	// reads data as LSB
+		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>1);	// reads data as LSB
 		l = u16.length;
 
 		// - scan first for: 0x3842 (MSB) (first part of 8BIM header), always evenly aligned
@@ -168,7 +166,7 @@ PsdReader.prototype._parser = function(buffer) {
 						pos = u16.byteOffset + (p<<1);
 						return {
 							id: id,
-							name: getString2(512),
+							name: getString2(99),
 							len: getUint32(),
 							pos: pos
 						}
@@ -205,12 +203,6 @@ PsdReader.prototype._parser = function(buffer) {
 		return v>>>0;
 	}
 
-	function getChars(len) {
-		var chars = new Uint8Array(buffer, pos, len);
-		pos += len;
-		return chars
-	}
-
 	/**
 	 * Parse string from pos. pos will end on even boundary.
 	 * If 0-length pos will be moved 2 byte positions
@@ -237,4 +229,6 @@ PsdReader.prototype._parser = function(buffer) {
 		var v = getUint32(), c = String.fromCharCode;
 		return c((v & 0xff000000)>>>24) + c((v & 0xff0000)>>>16) + c((v & 0xff00)>>>8) + c((v & 0xff)>>>0)
 	}
+
+	function _err(msg) {me._err(msg, "parser")}
 };

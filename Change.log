@@ -1,6 +1,11 @@
 Change log for psd-reader
 -------------------------
 
+0.4.9 BETA
+CHG: optimized bitmap decoder++
+CHG: Refactored rgb/grey
+FIX: ignoreAlpha was ignored for some color modes
+
 0.4.8 BETA
 ADD: New option: noRGBA with accompanying method toRGBA(). Loads and decompresses the data, but does not convert to RGBA.
 
