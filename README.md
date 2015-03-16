@@ -5,7 +5,7 @@ Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,
 
 Use PSD as an image source for canvas.
 
-![demo snapshot](http://i.imgur.com/zMyiX2b.png)
+![demo snapshot](http://i.imgur.com/hEXhlrW.png)
 
 
 Features
@@ -19,7 +19,7 @@ Features
 - Supports uncompressed and RLE compressed image data
 - Converts all formats to RGBA so it can be used directly with canvas (can be turned off)
 - Canvas helper methods with optional scaling and high-quality down-sampling
-- Optional gamma correction (with separate gamma value for 32-bits - see gamma demo for why)
+- Optional gamma correction (with separate gamma value for 32-bits - see gamma demo as to why)
 - Auto-corrects display gamma for 32-bit mode (can be turned off)
 - Access to the original channel bitmaps (decompressed if needed)
 - Access to raw meta and header data

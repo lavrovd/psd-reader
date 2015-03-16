@@ -61,10 +61,16 @@ PsdReader.prototype._parser = function(buffer) {
 		_err("Invalid color mode");
 		return
 	}
-	modeDesc = ["Bitmap", "Greyscale", "Indexed", "RGB", "CMYK", "HSL", "HSB",
-				"Multichannel", "Duotone", "Lab", "Greyscale16", "RGB48","LAB48",
-				"CMYK64","DeepMultichannel","Duotone16"][mode];
 
+	if ([5,6,11,12,13,14,15].indexOf(mode) > -1) {
+		_err("Unsupported color mode");
+		return
+	}
+
+	modeDesc = [
+		"Bitmap", "Greyscale", "Indexed", "RGB", "CMYK", "HSL", "HSB",
+		"Multichannel", "Duotone", "Lab", "Greyscale16", "RGB48","LAB48",
+		"CMYK64","DeepMultichannel","Duotone16"][mode];
 
 	// store as public info object
 	info.channels = channels;

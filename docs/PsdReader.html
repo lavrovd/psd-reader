@@ -1563,7 +1563,9 @@ from the given channel at position pos.</p>
     <div class="description">
         <p>Returns the indexed color table if present, or null. The number of
 entries is always 256. The indexed color values are not interleaved,
-but hold first the reds, greens then blue.</p>
+but hold first the reds, greens then blue. To find number of actual
+used indexes, use findResource() with ID 1046 (if converted to RGBA
+the number of actual indexes can be found in psd.info.indexes).</p>
     </div>
     
 

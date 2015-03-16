@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.4.10 BETA
+CHG: Minor optimization with gamma LUT if gamma = 1 (for 32-bits mode)
+FIX: Event for toRGBA() did not link rgba bitmap correctly as reference inside event object
+
 0.4.9 BETA
 CHG: optimized bitmap decoder++
 CHG: Refactored rgb/grey

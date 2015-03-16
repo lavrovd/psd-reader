@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.9 BETA
+	psd-reader version 0.4.10 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -31,6 +31,7 @@ function PsdReader(options) {
 	options = options || {};
 
 	var me = this,
+		onready,
 		config = {
 			url        : options.url || "",
 			buffer     : options.buffer || null,
@@ -72,7 +73,7 @@ function PsdReader(options) {
 	 * with passive mode when an file is loaded asynchronously.
 	 * @type {function|null}
 	 */
-	this.onready = config.onReady ? config.onReady.bind(me) : null;
+	this.onready = onready = config.onReady ? config.onReady.bind(me) : null;
 
 	/**
 	 * onload handler points to a function that will be called once
@@ -186,13 +187,13 @@ function PsdReader(options) {
 			me._fetch(config.url, function(buffer) {
 					me.buffer = buffer;
 					me.view = new DataView(buffer);
-					if (me.onready) me.onready({timeStamp: Date.now()});
+					if (onready) onready({url: config.url, timeStamp: Date.now()});
 					if (!me._cfg.passive) me._parser(me.buffer);
 				},
 				_err);
 		}
 		else {
-			if (me.onready) me.onready({timeStamp: Date.now()});
+			if (onready) onready({url: null, timeStamp: Date.now()});
 			if (!me._cfg.passive) me._parser(me.buffer);
 		}
 	}
@@ -258,13 +259,15 @@ PsdReader.prototype = {
 		}
 		else send();
 
-		function send() {cb({rgba: me.bmp, timeStamp: Date.now()})}
+		function send() {cb({rgba: me.rgba, timeStamp: Date.now()})}
 	},
 
 	/**
 	 * Returns the indexed color table if present, or null. The number of
 	 * entries is always 256. The indexed color values are not interleaved,
-	 * but hold first the reds, greens then blue.
+	 * but hold first the reds, greens then blue. To find number of actual
+	 * used indexes, use findResource() with ID 1046 (if converted to RGBA
+	 * the number of actual indexes can be found in psd.info.indexes).
 	 * @return {Uint8Array|null}
 	 */
 	getIndexTable: function() {
@@ -293,8 +296,13 @@ PsdReader.prototype = {
 	 * @return {Uint8ClampedArray}
 	 */
 	getGammaLUT: function(gamma) {
-		for(var lut = new Uint8ClampedArray(256), i = 0; i < 256; i++)
-			lut[i] = (Math.pow(i / 255, gamma) * 255 + 0.5)|0;
+		var lut = new Uint8ClampedArray(256), i = 0;
+		if (gamma === 1) {
+			while(i < 256) lut[i] = i++;
+		}
+		else {
+			for(; i < 256; i++) lut[i] = (Math.pow(i / 255, gamma) * 255 + 0.5)|0;
+		}
 		return lut
 	},
 

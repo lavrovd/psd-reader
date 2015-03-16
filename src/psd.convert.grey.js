@@ -1,8 +1,7 @@
 
 PsdReader.prototype._grey = function(bmps, dst, bw, gamma, iAlpha, c2v, gLUT, f2i) {
 
-	var me = this,
-		len = dst.length,
+	var	len = dst.length,
 		i = 0, p = 0, g, a, grey, hasAlpha, lut;
 
 	g = bmps[0];
@@ -10,20 +9,20 @@ PsdReader.prototype._grey = function(bmps, dst, bw, gamma, iAlpha, c2v, gLUT, f2
 
 	hasAlpha = !!a && !iAlpha;
 
-	if (me.info.depth === 32) {
+	if (this.info.depth === 32) {
 
 		g = c2v(g);
 		if (hasAlpha) a = c2v(a);
 
 		// create gamma LUT
-		lut = gLUT(gamma);
+		lut = gLUT(gamma);								// not needed if gamma=1
 
 		while(i < len) {
 			grey = lut[f2i(g, p)];
 			dst[i++] = grey;
 			dst[i++] = grey;
 			dst[i++] = grey;
-			dst[i++] = hasAlpha ? f2i(a, p) : 255;
+			dst[i++] = hasAlpha ? f2i(a, p) : 255;		// this one... size vs. micro-opt
 			p += bw
 		}
 	}

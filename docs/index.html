@@ -96,7 +96,7 @@
     <section class="readme-section">
         <article><h1>﻿psd-reader</h1><p>Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,</p>
 <p>Use PSD as an image source for canvas.</p>
-<p><img src="http://i.imgur.com/Fcme1DR.png" alt="demo snapshot"></p>
+<p><img src="http://i.imgur.com/zMyiX2b.png" alt="demo snapshot"></p>
 <h2>Features</h2><ul>
 <li>Fast and lightweight</li>
 <li>Asynchronous and block-based decoding</li>
@@ -106,9 +106,9 @@
 <li>Supports uncompressed and RLE compressed image data</li>
 <li>Converts all formats to RGBA so it can be used directly with canvas (can be turned off)</li>
 <li>Canvas helper methods with optional scaling and high-quality down-sampling</li>
-<li>Optional gamma correction (with separate gamma values for 32-bits and one for all others)</li>
-<li>Auto-corrects display gamma for 32-bit mode</li>
-<li>Access to the original channel bitmaps (uncompressed if needed)</li>
+<li>Optional gamma correction (with separate gamma value for 32-bits - see gamma demo as to why)</li>
+<li>Auto-corrects display gamma for 32-bit mode (can be turned off)</li>
+<li>Access to the original channel bitmaps (decompressed if needed)</li>
 <li>Access to raw meta and header data</li>
 <li>Passive load mode allowing parsing to be invoked manually later</li>
 <li>Validates and performs error checks</li>
@@ -116,7 +116,12 @@
 <li>It's an original implementation created from scratch.</li>
 <li>Fully documented (see docs folder or <a href="https://epistemex.github.io/psd-reader/docs/">this link</a>)</li>
 </ul>
-<h2>Demos</h2><p><strong>➜ <a href="https://epistemex.github.io/psd-reader/">Acid-testing various color modes, formats and combinations</a></strong></p>
+<h2>Demos</h2><p>Some demo demonstrating capabilities of psd-reader. Note that PSD files
+aren't exactly the most web-friendly format size-wise, so please be
+patient when downloading the test images.</p>
+<p>Normally a PSD would be dropped in or loaded from the client side, but
+for the sake of demo images here are loaded from server side:</p>
+<p><strong>➜ <a href="https://epistemex.github.io/psd-reader/">Acid-testing various color modes, formats and combinations</a></strong></p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/psddrop.html">Drop your own PSD files into the browser</a></strong></p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/demo_gamma.html">Gamma correction</a></strong></p>
 <h2>Install</h2><p><strong>psd-reader</strong> can be installed in various ways:</p>
@@ -148,10 +153,10 @@ var depth     = psd.info.depth;
 var channel0  = psd.info.bitmaps[0];    // in native format
 var resources = psd.info.chunks[1];        // the resource area
 ...</code></pre><h2>Requirements</h2><p>A modern &quot;evergreen&quot; browser with support for HTML5.</p>
-<h2>Limitations</h2><p>These generally non-problematic, but for the sake of information:</p>
+<h2>Limitations</h2><p>These are generally non-problematic:</p>
 <ul>
-<li>Compatibility mode (see tutorial section of the documentation for details)</li>
-<li>ICC profiles are ignored</li>
+<li>PSD must be saved in the typical compatibility mode (see tutorial section in docs for details)</li>
+<li>ICC profiles are not parsed/applied</li>
 </ul>
 <h2>Issues</h2><p>See the <a href="https://github.com/epistemex/psd-reader/issues">issue tracker</a> for details.</p>
 <p>Please do report issues if you find any.</p>
