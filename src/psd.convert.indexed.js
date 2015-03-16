@@ -18,4 +18,6 @@ PsdReader.prototype._indexed = function(src, dst, iAlpha) {
 	}
 
 	me.info.indexes = ++max;	// same info as in res id 1046
+
+	return tIndex > -1
 };

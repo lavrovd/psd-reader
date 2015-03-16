@@ -17,4 +17,5 @@ PsdReader.prototype._duotone = function(bmps, dst, iAlpha) {
 		i++;
 	}
 
+	return hasAlpha
 };

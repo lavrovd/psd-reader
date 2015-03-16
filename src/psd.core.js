@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.4.10 BETA
+	psd-reader version 0.5.0 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -24,6 +24,7 @@
  * @param {boolean} [options.passive=false] - load data but don't parse and decode. use parse() to invoke manually.
  * @param {boolean} [options.ignoreAlpha=false] - ignore alpha channel if any.
  * @param {boolean} [options.noRGBA=false] - do not convert to RGBA format. If you only want to deal with the raw data. Channels are decompressed if needed.
+ * @param {boolean} [options.noDematte=false] - do not dematte images with alpha channels
  * @constructor
  */
 function PsdReader(options) {
@@ -43,7 +44,8 @@ function PsdReader(options) {
 			duotone	   : options.duotone || [255, 255, 255],
 			passive	   : !!options.passive,
 			ignoreAlpha: !!options.ignoreAlpha,
-			noRGBA	   : !!options.noRGBA
+			noRGBA	   : !!options.noRGBA,
+			noDematte  : !!options.noDematte
 		};
 
 	/**
@@ -140,6 +142,7 @@ function PsdReader(options) {
 		channels        : 0,
 		depth           : 0,
 		indexes			: 0,
+		hasAlpha		: false,
 		byteWidth       : 0,
 		colorMode       : 0,
 		colorDesc       : "",

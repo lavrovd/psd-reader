@@ -40,4 +40,6 @@ PsdReader.prototype._lab = function(bmps, dst, bw, iAlpha) {
 		dst[i++] = G * 255;
 		dst[i]   = B * 255;
 	}
+
+	return hasAlpha
 };

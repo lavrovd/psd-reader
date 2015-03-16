@@ -1,7 +1,7 @@
 ﻿psd-reader
 ==========
 
-Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,
+Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser.
 
 Use PSD as an image source for canvas.
 
@@ -16,6 +16,7 @@ Features
 - Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and L*ab
 - Support alpha channel, and transparency for indexed mode
 - All color depths are supported (1 / 8 / 16 / 32 bits)
+- De-mattes images with alpha-channel (no "halo" problems)
 - Supports uncompressed and RLE compressed image data
 - Converts all formats to RGBA so it can be used directly with canvas (can be turned off)
 - Canvas helper methods with optional scaling and high-quality down-sampling
@@ -33,12 +34,10 @@ Features
 Demos
 -----
 
-Some demo demonstrating capabilities of psd-reader. Note that PSD files
-aren't exactly the most web-friendly format size-wise, so please be
-patient when downloading the test images.
+Demos demonstrating capabilities of **psd-reader**.
 
-Normally a PSD would be dropped in or loaded from the client side, but
-for the sake of demo images here are loaded from server side:
+Note that PSD files aren't exactly the most web-friendly format, size-wise :-],
+so please be patient when downloading the test images for the demos.
 
 **➜ [Acid-testing various color modes, formats and combinations](https://epistemex.github.io/psd-reader/)**
 

@@ -22,7 +22,7 @@ PsdReader.prototype._grey = function(bmps, dst, bw, gamma, iAlpha, c2v, gLUT, f2
 			dst[i++] = grey;
 			dst[i++] = grey;
 			dst[i++] = grey;
-			dst[i++] = hasAlpha ? f2i(a, p) : 255;		// this one... size vs. micro-opt
+			dst[i++] = hasAlpha ? f2i(a, p) : 255;		// these ones... size (sep. loops) vs. micro-opt
 			p += bw
 		}
 	}
@@ -36,4 +36,6 @@ PsdReader.prototype._grey = function(bmps, dst, bw, gamma, iAlpha, c2v, gLUT, f2
 			p += bw
 		}
 	}
+
+	return hasAlpha
 };

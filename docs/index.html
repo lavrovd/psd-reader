@@ -94,15 +94,16 @@
 
 
     <section class="readme-section">
-        <article><h1>﻿psd-reader</h1><p>Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser,</p>
+        <article><h1>﻿psd-reader</h1><p>Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser.</p>
 <p>Use PSD as an image source for canvas.</p>
-<p><img src="http://i.imgur.com/zMyiX2b.png" alt="demo snapshot"></p>
+<p><img src="http://i.imgur.com/hEXhlrW.png" alt="demo snapshot"></p>
 <h2>Features</h2><ul>
 <li>Fast and lightweight</li>
 <li>Asynchronous and block-based decoding</li>
 <li>Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and L*ab</li>
 <li>Support alpha channel, and transparency for indexed mode</li>
 <li>All color depths are supported (1 / 8 / 16 / 32 bits)</li>
+<li>Demattes images with alpha-channel (no &quot;halo&quot;)</li>
 <li>Supports uncompressed and RLE compressed image data</li>
 <li>Converts all formats to RGBA so it can be used directly with canvas (can be turned off)</li>
 <li>Canvas helper methods with optional scaling and high-quality down-sampling</li>
@@ -116,11 +117,9 @@
 <li>It's an original implementation created from scratch.</li>
 <li>Fully documented (see docs folder or <a href="https://epistemex.github.io/psd-reader/docs/">this link</a>)</li>
 </ul>
-<h2>Demos</h2><p>Some demo demonstrating capabilities of psd-reader. Note that PSD files
-aren't exactly the most web-friendly format size-wise, so please be
-patient when downloading the test images.</p>
-<p>Normally a PSD would be dropped in or loaded from the client side, but
-for the sake of demo images here are loaded from server side:</p>
+<h2>Demos</h2><p>Demos demonstrating capabilities of <strong>psd-reader</strong>.</p>
+<p>Note that PSD files aren't exactly the most web-friendly format, size-wise,
+so please be patient when downloading the test images for the demos.</p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/">Acid-testing various color modes, formats and combinations</a></strong></p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/psddrop.html">Drop your own PSD files into the browser</a></strong></p>
 <p><strong>➜ <a href="https://epistemex.github.io/psd-reader/demo_gamma.html">Gamma correction</a></strong></p>

@@ -17,20 +17,19 @@ PsdReader.prototype._dematte = function(bmp, callback) {
 
 	(function dematte() {
 
-		var r, g, b, a;
+		var r, g, b, a, aa;
 
 		while(i < len && block--) {
 
-			r = bmp[i];
-			g = bmp[i+1];
-			b = bmp[i+2];
 			a = bmp[i+3];
 
-			if (a < 255) {
+			if (a && a < 255) {
 				a /= 255;
-				r -= 255 * (1 - a);
-				g -= 255 * (1 - a);
-				b -= 255 * (1 - a);
+				aa = 255 * (1 - a);
+
+				r = bmp[i] - aa;
+				g = bmp[i+1] - aa;
+				b = bmp[i+2] - aa;
 
 				bmp[i  ] = r / a + 0.5;
 				bmp[i+1] = g / a + 0.5;

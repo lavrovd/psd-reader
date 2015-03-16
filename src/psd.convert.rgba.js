@@ -39,4 +39,6 @@ PsdReader.prototype._rgba = function(bmps, dst, bw, gamma, iAlpha, c2v, gLUT, f2
 			p += bw
 		}
 	}
+
+	return hasAlpha
 };

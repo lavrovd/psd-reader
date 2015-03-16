@@ -25,4 +25,6 @@ PsdReader.prototype._bitmap = function(src, dst, w) {
 		var b = src[i|0], bitIndex = (i - (i|0)) / 0.125;
 		return (b & (0x80>>bitIndex)) ? 0xff000000 : 0xffffffff;
 	}
+
+	return false
 };

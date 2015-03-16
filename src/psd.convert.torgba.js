@@ -16,27 +16,28 @@ PsdReader.prototype._toRGBA = function(cb) {
 	// delegate color mode handler -
 	switch(mode) {
 		case 0:		// bitmap
-			me._bitmap(bmps[0], dst, info.width);
+			iAlpha = me._bitmap(bmps[0], dst, info.width);
 			break;
 		case 1:		// Grey
-			me._grey(bmps, dst, bw, gamma32, iAlpha, c2v, gLUT, f2i);
+			iAlpha = me._grey(bmps, dst, bw, gamma32, iAlpha, c2v, gLUT, f2i);
 			break;
 		case 2:		// indexed
-			me._indexed(bmps[0], dst, iAlpha);
+			iAlpha = me._indexed(bmps[0], dst, iAlpha);
 			break;
 		/*case 4:		// cmyk
 			me._cmyk(bmps, dst);
 			break;*/
 		case 8:		// Duotone
-			me._duotone(bmps, dst, iAlpha);
+			iAlpha = me._duotone(bmps, dst, iAlpha);
 			break;
 		case 9:		// Lab
-			me._lab(bmps, dst, bw, iAlpha);
+			iAlpha = me._lab(bmps, dst, bw, iAlpha);
 			break;
 		default:	// RGB, CMYK, Multichannel (HSL/HSB not supported)
-			me._rgba(bmps, dst, bw, gamma32, iAlpha, c2v, gLUT, f2i);
+			iAlpha = me._rgba(bmps, dst, bw, gamma32, iAlpha, c2v, gLUT, f2i);
 			break;
 	}
 
-	cb(dst);
+	info.hasAlpha = iAlpha;
+	iAlpha && !me._cfg.noDematte ? me._dematte(dst, cb) : cb(dst);
 };
