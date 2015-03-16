@@ -1,6 +1,9 @@
 Change log for psd-reader
 -------------------------
 
+0.5.1 BETA
+CHG: Prevent indexed images to be de-matted as they don't suffer from this problem.
+
 0.5.0 BETA
 ADD: Dematter - removes the halo in images with alpha channel.
 ADD: New option "noDematte"
