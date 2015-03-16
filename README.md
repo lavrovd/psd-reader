@@ -108,7 +108,7 @@ Limitations
 
 These are generally non-problematic:
 
-- PSD must be saved in the typical compatibility mode (see tutorial section of the documentation for details)
+- PSD must be saved in the typical compatibility mode (see tutorial section in docs for details)
 - ICC profiles are not parsed/applied
 
 
