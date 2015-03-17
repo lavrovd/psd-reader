@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.5.3 BETA
+	psd-reader version 0.6.0 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -150,6 +150,7 @@ function PsdReader(options) {
 		compressionDesc : "",
 		channelSize     : 0,
 		chunks          : [],
+		resources		: [],
 		bitmaps         : []
 	};
 

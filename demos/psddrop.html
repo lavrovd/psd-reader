@@ -9,7 +9,7 @@
 	<canvas></canvas>
 	<div id="info"></div>
 	<div id="container" class="pre">Drop a Photoshop PSD file here</div>
-	<a href="https://github.com/epistemex/psd-reader">Download at GitHub</a>
+	<a href="https://github.com/epistemex/psd-reader">Download from GitHub</a>
 <script src="../psd-reader.min.js"></script>
 <script>
 
@@ -101,9 +101,7 @@
 					  ctx.beginPath();
 
 					  for(y = 0; y < h; y += cy) {
-						  for(x = toggle ? cx : 0; x < w; x += cx<<1) {
-							  ctx.rect(x, y, cx, cy);
-						  }
+						  for(x = toggle ? cx : 0; x < w; x += cx<<1) ctx.rect(x, y, cx, cy);
 						  toggle = !toggle;
 					  }
 

@@ -7,7 +7,7 @@
  * black mattes are also very common so we might need an option for this
  * if PSD files shows up with this.
  *
- * @param {Uint8Array} bmp - reference to the bitmap, will adjust in-place
+ * @param {Uint8Array|Uint8ClampedArray} bmp - reference to the bitmap, will adjust in-place
  * @param {function} callback - callback function when done
  * @private
  */

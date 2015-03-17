@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>psd-reader tutorialICC</title>
+	<title>psd-reader tutorialResources</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -80,16 +80,23 @@
 <header>
     
 
-    <h2>ICC</h2>
+    <h2>Resources</h2>
 </header>
 
 <article>
-    <p>We do not extract or apply ICC to the bitmap.</p>
-<p>Lack of such processing may affect the resulting colors in various degrees
-depending on what color profile was used when creating the PSD file.</p>
-<p>For general use this is typically not an issue, but you need to be aware
-of this if you intend to use the loaded PSD for print of professional
-photography.</p>
+    <p>You can iterate all resource chunks available in the PSD file by invoking
+the method <code>parseResources()</code>.</p>
+<p>This will scan the resources chunk and extract all resources and create an
+object for each added to the array. The object has properties:</p>
+<pre class="prettyprint source"><code>res.id   - id of resource (see Adobe&reg; file specification for details)
+res.name - name of resource if any
+res.size - size of resource in bytes
+res.pos  - start position of data for this resource in the buffer</code></pre><p>Now you can use the <code>info</code> object to scan through all resources:</p>
+<pre class="prettyprint source"><code>var res1 = psd.info.resources[0];</code></pre><p>Or instead, you can look up a resource by ID using the method <code>findResource(id)</code>.
+Invoking this method will also automatically invoke <code>parseResource()</code> if
+not called previously.</p>
+<p>Note that for indexed color mode file the <code>parseResources()</code> are automatically
+invoked in order to find the transparency index (if any).</p>
 </article>
 
 </section>

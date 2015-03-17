@@ -46,11 +46,19 @@
 						</li>
 						
 						<li>
+							<a href="tutorial-Gamma.html">Gamma</a>
+						</li>
+						
+						<li>
 							<a href="tutorial-ICC.html">ICC</a>
 						</li>
 						
 						<li>
 							<a href="tutorial-Overview.html">Overview</a>
+						</li>
+						
+						<li>
+							<a href="tutorial-Resources.html">Resources</a>
 						</li>
 						
 
@@ -1090,6 +1098,72 @@ with passive mode when an file is loaded asynchronously.</p>
 |
 
 <span class="param-type">null</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="parseResources">
+    <h4><span class="type-signature"></span>parseResources<span class="type-signature"> :function</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Parse the resource chunk and make the result available in the
+info.resources array. The parsed data is a list of all resources
+available in the file, with properties, <code>id</code>, <code>name</code>, <code>size</code> and byte
+position <code>pos</code> in the buffer for the beginning of the resource data.
+The data itself is not parsed.</p>
+<p>Use <code>findResource(id)</code> to look for a resource with id.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">function</span>
 
 
             </li>

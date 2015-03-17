@@ -2,7 +2,7 @@
 /**
  * Converts bitmap (1-bit) data to RGBA.
  * @param {*} src - a typed array view
- * @param {Uint8Array} dst
+ * @param {Uint8ClampedArray} dst
  * @param {number} w - scanline width (for padding)
  * @private
  */

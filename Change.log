@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.6.0 BETA
+ADD: Resource chunks parser and new property info.resources (+ parseResources(), findResource(id)).
+CHG: Internal changes, refactoring gamma processing
+
 0.5.3 BETA
 FIX: Cleaning up error handling in fetch method (private)
 

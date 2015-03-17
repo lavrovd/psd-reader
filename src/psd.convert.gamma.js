@@ -2,26 +2,20 @@
 /**
  * Applies gamma if bmp, gamma !== 0 and gamma !== 1 and depth < 32.
  * bmp has to be 8-bits RGBA raw buffer
- * @param {Uint8Array} bmp - bitmap the gamma will be applied to
+ * @param {Uint8Array|Uint8ClampedArray} bmp - bitmap the gamma will be applied to
+ * @param {number} gamma - inverse gamma to apply
  * @private
  */
-PsdReader.prototype._gamma = function(bmp) {
+PsdReader.prototype._gamma = function(bmp, gamma) {
 
-	if (!bmp) return;
+	if (!bmp || !gamma || gamma === 1) return;
 
-	var gamma = this._cfg.gamma,
-		depth = this.info.depth,
-		len = bmp.length, i = 0, lut;
+	var i = 0, len = bmp.length, lut = this.getGammaLUT(gamma);
 
-	if (gamma && gamma !== 1 && depth < 32) {
-		lut = this.getGammaLUT(gamma);
-		i = 0;
-
-		while(i < len) {
-			bmp[i] = lut[bmp[i++]];
-			bmp[i] = lut[bmp[i++]];
-			bmp[i] = lut[bmp[i++]];
-			i++;
-		}
+	while(i < len) {
+		bmp[i] = lut[bmp[i++]];
+		bmp[i] = lut[bmp[i++]];
+		bmp[i] = lut[bmp[i++]];
+		i++;
 	}
 };

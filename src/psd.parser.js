@@ -4,6 +4,7 @@ PsdReader.prototype._parser = function(buffer) {
 	var me = this,
 		view = new DataView(buffer),
 		pos = 0,
+		resParsed = false,
 		magic = getFourCC(),
 		version = getUint16(),
 		channels, compression,
@@ -22,6 +23,19 @@ PsdReader.prototype._parser = function(buffer) {
 	 * @type {number}
 	 */
 	this.findResource = findResource;
+
+	/**
+	 * Parse the resource chunk and make the result available in the
+	 * info.resources array. The parsed data is a list of all resources
+	 * available in the file, with properties, `id`, `name`, `size` and byte
+	 * position `pos` in the buffer for the beginning of the resource data.
+	 * The data itself is not parsed.
+	 *
+	 * Use `findResource(id)` to look for a resource with id.
+	 *
+	 * @type {function}
+	 */
+	this.parseResources = parseResources;
 
 	// check magic keyword and version (should be 1)
 	if (magic !== "8BPS" && version !== 1) {
@@ -88,7 +102,7 @@ PsdReader.prototype._parser = function(buffer) {
 	pos += colChunk;
 
 	if ((mode === 2 || mode === 8) && colChunk === 0) {
-		_err("Invalid data for mode.");
+		_err("Missing data for mode");
 		return
 	}
 
@@ -110,13 +124,13 @@ PsdReader.prototype._parser = function(buffer) {
 	info.compressionDesc = ["Uncompressed", "RLE", "ZIP", "ZIP"][compression];
 
 	switch(compression) {
-		case 0:	// _raw
+		case 0:	// raw
 			me._raw(view, pos, info, convert);
 			break;
 		case 1:	// rle
 			me._rle(view, pos, info, convert);
 			break;
-		case 2:	// zip no-prediction - possibly LZ77 stream.. no test files to be found...
+		case 2:	// zip no-prediction
 		case 3:	// zip
 			_err("Unsupported compression");
 			break;
@@ -125,7 +139,6 @@ PsdReader.prototype._parser = function(buffer) {
 	function convert() {me._cfg.noRGBA ? cbLoad(null) : me._toRGBA(cbLoad)}
 	function cbLoad(bmp) {
 
-		me._gamma(bmp);
 		me.rgba = bmp;
 		me.isParsed = true;
 		me._isp = false;
@@ -136,52 +149,37 @@ PsdReader.prototype._parser = function(buffer) {
 		})
 	}
 
-	// temp: find a resource of a certain ID,
-	// returns abs. position in buffer to start of data
 	function findResource(id) {
 
-		/* todo This do a brute-force scan of resource chunks.
-			will be rewritten to use chunk mode, stepping from
-			chunk to chunk, map position, size, type and name.
-			Then have findResource looking up that array instead.
-			Currently only used for indexed mode transparency index
-			which is ok, and it's fast with short sections, but if we
-			need to access more chunks (ICC etc.) we should fix this..
-		 */
+		var resources = info.resources, i = 0, res;
+		if (!resParsed) parseResources();
 
-		var chunk = info.chunks[2], u16, p = 0, l, v, idLSB;
-
-		if (!chunk.length) return null;
-
-		idLSB = (id>>>8) | ((id & 0xff)<<8);							// reverse byte-order of id, because:
-		u16 = new Uint16Array(me.buffer, chunk.pos, chunk.length>>1);	// reads data as LSB
-		l = u16.length;
-
-		// - scan first for: 0x3842 (MSB) (first part of 8BIM header), always evenly aligned
-		// - when found check that next is 0x494D (MSB) (..IM).
-		// - then check next for resource ID (use global view for that)
-
-		while(p < l) {
-			v = u16[p++];
-			if (v === 0x4238) {
-				v = u16[p++];
-				if (v === 0x4d49) {
-					// we got a 8BIM header, check id
-					v = u16[p++];
-					if (v === idLSB) {
-						pos = u16.byteOffset + (p<<1);
-						return {
-							id: id,
-							name: getString2(99),
-							len: getUint32(),
-							pos: pos
-						}
-					}
-				}
-			}
-		}
-
+		while(res = resources[i++]) if (res.id === id) return res;
 		return null
+	}
+
+	function parseResources() {
+
+		var chunk = info.chunks[2], l, res = info.resources, size;
+
+		if (!chunk.length) return;
+
+		pos = chunk.pos;
+		l = pos + chunk.length;
+		resParsed = true;
+
+		while(pos < l) {
+			if (getFourCC() === "8BIM") {
+				res.push({
+					id: getUint16(),
+					name: getString2(256),
+					size: (size = getUint32()),
+					pos: pos
+				});
+				pos += size % 2 === 0 ? size : size + 1;
+			}
+			else return;
+		}
 	}
 
 	/*
