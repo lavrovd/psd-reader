@@ -2,7 +2,7 @@
 PsdReader.prototype._rle = function(view, pos, info, callback) {
 
 	var count = 0, i = info.channels,
-		block = PsdReader._blockSize,
+		block = PsdReader._bSz,
 		uint8view = new Uint8Array(view.buffer),
 		fileEnd = view.buffer.byteLength,
 		counts = info.height * info.channels,
@@ -22,7 +22,7 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 		if (--i) {
 			if (block > 0) decode();
 			else {
-				block = PsdReader._blockSize;
+				block = PsdReader._bSz;
 				setTimeout(decode, PsdReader._delay)
 			}
 		}

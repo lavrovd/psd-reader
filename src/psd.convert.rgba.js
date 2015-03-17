@@ -26,7 +26,7 @@ PsdReader.prototype._rgba = function(bmps, dst, bw, gamma, iAlpha, c2v, gLUT, f2
 			dst[i++] = lut[f2i(r, p)];
 			dst[i++] = lut[f2i(g, p)];
 			dst[i++] = lut[f2i(b, p)];
-			dst[i++] = hasAlpha ? lut[f2i(a, p)] : 255;
+			dst[i++] = hasAlpha ? f2i(a, p) : 255;
 			p += bw
 		}
 	}

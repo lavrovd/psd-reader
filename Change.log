@@ -1,6 +1,9 @@
 Change log for psd-reader
 -------------------------
 
+0.5.3 BETA
+FIX: Cleaning up error handling in fetch method (private)
+
 0.5.2 BETA
 CHG: Prevent 32-bit depth images to be de-matted (currently a rounding error problem exist with this mode)
 CHG: Indexed mode no longer sets hasAlpha in info object despite it has transparency, as there is no actual channel for alpha.

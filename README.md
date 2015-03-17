@@ -5,7 +5,7 @@ Display Adobe&reg; Photoshop&reg; PSD files directly in the web browser.
 
 Use PSD as an image source for canvas.
 
-![demo snapshot](http://i.imgur.com/hEXhlrW.png)
+[![demo snapshot](http://i.imgur.com/yQ4Irq2.png)](https://epistemex.github.io/psd-reader/psddrop.html)
 
 
 Features
@@ -13,7 +13,7 @@ Features
 
 - Fast and lightweight
 - Asynchronous and block-based decoding
-- Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and L*ab
+- Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and Lab
 - Support alpha channel, and transparency for indexed mode
 - All color depths are supported (1 / 8 / 16 / 32 bits)
 - De-mattes images with alpha-channel (no "halo" problems)

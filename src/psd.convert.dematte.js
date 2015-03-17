@@ -13,11 +13,11 @@
  */
 PsdReader.prototype._dematte = function(bmp, callback) {
 
-	var i = 0, len = bmp.length, bs = PsdReader._blockSize, block = bs;
+	var i = 0, len = bmp.length, bSize = PsdReader._bSz, block = bSize;
 
 	(function dematte() {
 
-		var r, g, b, a, aa;
+		var a, aa;
 
 		while(i < len && block--) {
 
@@ -25,22 +25,18 @@ PsdReader.prototype._dematte = function(bmp, callback) {
 
 			if (a && a < 255) {
 				a /= 255;
-				aa = 255 * (1 - a);
+				aa = 255 * (1 - a);		// white matte assumed
 
-				r = bmp[i] - aa;
-				g = bmp[i+1] - aa;
-				b = bmp[i+2] - aa;
-
-				bmp[i  ] = r / a + 0.5;
-				bmp[i+1] = g / a + 0.5;
-				bmp[i+2] = b / a + 0.5;
+				bmp[i] = (bmp[i++] - aa) / a + 0.5;
+				bmp[i] = (bmp[i++] - aa) / a + 0.5;
+				bmp[i] = (bmp[i++] - aa) / a + 0.5;
+				i++;
 			}
-
-			i +=4
+			else i += 4
 		}
 
 		if (i < len) {
-			block = bs;
+			block = bSize;
 			setTimeout(dematte, PsdReader._delay);
 		}
 		else callback(bmp);

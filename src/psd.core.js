@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.5.2 BETA
+	psd-reader version 0.5.3 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -128,7 +128,7 @@ function PsdReader(options) {
 	 *	{number} byteWidth - byte step to iterate a decompressed buffer
 	 *	{number} colorMode - color mode value [0,15]
 	 *	{string} colorDesc - textual description of color mode
-	 *	{number} compression - compression type used (0,1,2,3 are valid values, although 2,3 are very rare, if any)
+	 *	{number} compression - compression type used (0-3 are valid values, 2 and 3 (zip) not supported as there are no zip-compressed files produced)
 	 *	{string} compressionDesc - textual description of compression type
 	 *	{number} channelSize - number of bytes per channel
 	 *	{array}  chunks - list of main "chunks". Should total 5.
@@ -281,9 +281,9 @@ PsdReader.prototype = {
 	/**
 	 * Convert a color index (when indexed mode) to little-endian unsigned
 	 * 32-bit integer including full opaque for alpha channel. Can be set
-	 * directly on an Uin32Array view for a canvas buffer.
+	 * directly on an Uint32Array view for a canvas buffer.
 	 * @param {Uint8Array} tbl - the table holding the color indexes
-	 * @param {number} index - value from [0, 255]. Max depends on how many indexes the image contains.
+	 * @param {number} index - value from [0, 255].
 	 * @param {boolean} [alpha=false] - if true ANDs out the alpha.
 	 * @return {number} unsigned 32-bit integer in little-endian format (ABGR).
 	 */
@@ -317,11 +317,11 @@ PsdReader.prototype = {
 	 * @return {number} converted integer value in the range [0, 255]
 	 */
 	floatToComp: function(channel, pos) {
-		return (channel.getFloat32(pos) * 255)|0
+		return (channel.getFloat32(pos) * 255 + 0.5)|0
 	},
 
 	/**
-	 * Load a file as ArrayBuffer through HTTPXML request.
+	 * Load a file as ArrayBuffer through HTTP-XML request.
 	 * @param {string} url - valid URL to PSD file
 	 * @param {function} callback - callback function invoked when loaded
 	 * @param {function} error - callback function invoked in case of any error
@@ -329,18 +329,18 @@ PsdReader.prototype = {
 	 */
 	_fetch: function(url, callback, error) {
 
-		var me = this, xhr = new XMLHttpRequest();
+		var xhr = new XMLHttpRequest();
 		try {
 			xhr.open("GET", url);
 			xhr.responseType = "arraybuffer";
-			xhr.onerror = function() {me._err("Network error", "fetch/err")};
+			xhr.onerror = function() {error("Network error")};
 			xhr.onload = function() {
 				if (xhr.status === 200) callback(xhr.response);
-				else me.error("Loading error: " + xhr.statusText, "fetch/load");
+				else error(xhr.statusText);
 			};
 			xhr.send();
 		}
-		catch(err) {me.error(err.message, "fetch/c")}
+		catch(err) {error(err.message)}
 	},
 
 	/**
@@ -361,8 +361,8 @@ PsdReader.prototype = {
  * @return {number}
  */
 PsdReader.guessGamma = function() {
-	return 1 / ((navigator.userAgent.indexOf("Mac OS") > -1) ? 1.8 : 2.2)
+	return 1 / ((navigator.userAgent.indexOf("Mac OS") < 0) ? 2.2 : 1.8)
 };
 
-PsdReader._blockSize = 2048 * 1024;		// async block size
+PsdReader._bSz = 1<<21;			// async block size (2 mb)
 PsdReader._delay = 7;					// async delay in milliseconds
