@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>psd-reader tutorialICC</title>
+	<title>psd-reader tutorialGamma</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -80,16 +80,36 @@
 <header>
     
 
-    <h2>ICC</h2>
+    <h2>Gamma</h2>
 </header>
 
 <article>
-    <p>We do not extract or apply ICC to the bitmap.</p>
-<p>Lack of such processing may affect the resulting colors in various degrees
-depending on what color profile was used when creating the PSD file.</p>
-<p>For general use this is typically not an issue, but you need to be aware
-of this if you intend to use the loaded PSD for print of professional
-photography.</p>
+    <p><strong>psd-reader</strong> can optionally gamma-correct the images for the screen
+during the loading and decoding process.</p>
+<p>It comes with two separate settings, one for 32-bit color mode, and one
+for all others.</p>
+<p>By default the gamma is 1, ie. no processing, for all formats, except
+for 32-bit mode which by default try to detect the system and applies
+the detected gamma automatically. This can of course be overridden.</p>
+<p>As we don't have access to the host system from JavaScript we have to
+make a guess. If Mac is detected the guessed gamma for 32-bit mode is
+1.8, otherwise 2.2 (one for Linux may be included if it turns out to be
+necessary). You can always supply static values through the options.</p>
+<p>Gamma is defined by options when the psd-reader instance is created.
+The gamma is given as inverse value (ie. 1/gamma):</p>
+<pre class="prettyprint source"><code>var psd = new PsdReader({
+  ...
+  gamma  : 1/2.2,    // defaults to 1
+  gamma32: 1/2.2,    // defaults to system detected gamma
+  ...
+  });</code></pre><p>Set both to 1 to disable gamma correction.</p>
+<p>PSD files appear to be saved with no gamma when in 32-bit mode. This is
+likely due to 32-bit being floating point and has a high dynamic range
+and is intended for HDR use, although there is no official documentation
+for why this is.</p>
+<p>Note that applying gamma will alter the output values for RGBA format only.
+Gamma is not applied on the internal original format which also can be
+accessed.</p>
 </article>
 
 </section>
