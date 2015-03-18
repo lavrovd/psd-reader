@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>psd-reader Classes</title>
+	<title>psd-reader tutorialDematting</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -76,95 +76,42 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
-					
-
-
-	<h1 class="page-title">Classes</h1>
-<section>
+					<section class="tutorial-section">
 
 <header>
-    <h2>
     
-    </h2>
-    
+
+    <h2>Dematting</h2>
 </header>
 
 <article>
-    <div class="container-overview">
-    
-
-    
-        
-
-        
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="PsdReader.html">PsdReader</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <p>When PSD compatibility images are flattened and saved out, they are saved
+composited onto a white background as well as keeping the alpha channel
+(if there where non-opaque levels in the image).</p>
+<p>This, however, creates a problem if you want to use that image to composite
+onto something else as the white part of the background matte would leak
+into the alpha channel so to speak, and create a white &quot;halo&quot; around the
+image.</p>
+<p>To deal with this problem, <strong>psd-reader</strong> uses a de-matte process to
+remove the original white background from the image, so that the image
+can be properly composited.</p>
+<p>The result of this process is as follows:</p>
+<p><img src="http://i.imgur.com/WCHvP54.jpg" alt="Imgur"><br>
+<sup><b>Left</b>: Unprocessed original data with background and alpha,
+<strong>Right</strong>: de-matting the data produces a proper compositable image with no &quot;halo&quot;.</sup></p>
+<p>This option is enabled by default as this affects all images with an
+alpha-channel. <strong>psd-reader</strong> is smart enough not to invoke any processing
+if no alpha-channel is present and the option can be disabled using the
+<code>noDematte</code> option set to true.</p>
+<p>For indexed images this is not a problem as there is no alpha channel,
+just a transparency index if any.</p>
+<p>It does not currently work with 32-bit (floating point) color depth images.</p>
 </article>
 
 </section>
-
-
-
 
 				</div>
 
@@ -188,10 +135,6 @@
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>
