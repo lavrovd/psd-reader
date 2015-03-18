@@ -531,7 +531,7 @@ asynchronous nature.</p>
 
         <tr>
             
-                <td class="name"><code>noRGBA</code></td>
+                <td class="name"><code>toRGBA</code></td>
             
 
             <td class="type">
@@ -558,19 +558,19 @@ asynchronous nature.</p>
             
                 <td class="default">
                 
-                    false
+                    true
                 
                 </td>
             
 
-            <td class="description last"><p>do not convert to RGBA format. If you only want to deal with the raw data. Channels are decompressed if needed.</p></td>
+            <td class="description last"><p>convert to RGBA format. If you only want to deal with the raw data set this option to false.</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>noDematte</code></td>
+                <td class="name"><code>dematte</code></td>
             
 
             <td class="type">
@@ -597,12 +597,12 @@ asynchronous nature.</p>
             
                 <td class="default">
                 
-                    false
+                    true
                 
                 </td>
             
 
-            <td class="description last"><p>do not de-matte images with alpha channels (indexed images are never processed)</p></td>
+            <td class="description last"><p>de-matte images with alpha channels (indexed images are never processed)</p></td>
         </tr>
 
 	
@@ -2342,7 +2342,7 @@ using the (asynchronous) <code>toRGBA()</code> method.</p>
     
     
     <div class="description">
-        <p>If option noRGBA is used but you want to convert the data to RGBA
+        <p>If option toRGBA is used but you want to convert the data to RGBA
 later, this method can be called.</p>
 <p>It is <strong>asynchronous</strong> and takes a callback argument. When the conversion
 has finished, the instance.rgba property is set with the bitmap and

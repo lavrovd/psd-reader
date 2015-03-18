@@ -104,8 +104,8 @@ can be properly composited.</p>
 <strong>Right</strong>: de-matting the data produces a proper compositable image with no &quot;halo&quot;.</sup></p>
 <p>This option is enabled by default as this affects all images with an
 alpha-channel. <strong>psd-reader</strong> is smart enough not to invoke any processing
-if no alpha-channel is present and the option can be disabled using the
-<code>noDematte</code> option set to true.</p>
+if no alpha-channel is present, and the option can be disabled setting the
+<code>dematte</code> option to false.</p>
 <p>For indexed images this is not a problem as there is no alpha channel,
 just a transparency index if any.</p>
 <p>It does not currently work with 32-bit (floating point) color depth images.</p>
