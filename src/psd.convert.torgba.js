@@ -29,7 +29,7 @@ PsdReader.prototype._toRGBA = function(cb) {
 			break;
 
 		case 4:		// CMYK
-			iAlpha = me._cmyk(bmps, dst, bw, iAlpha, c2v, gLUT, f2i);
+			iAlpha = me._cmyk(bmps, dst, bw, iAlpha);
 			break;
 
 		case 8:		// Duotone
@@ -50,5 +50,5 @@ PsdReader.prototype._toRGBA = function(cb) {
 	me._gamma(dst, info.depth === 32 ? cfg.gamma32 : cfg.gamma);
 
 	// dematte if alpha
-	(iAlpha && !cfg.noDematte) ? me._dematte(dst, cb) : cb(dst);
+	(iAlpha && cfg.dematte) ? me._dematte(dst, cb) : cb(dst);
 };

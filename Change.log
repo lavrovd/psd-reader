@@ -1,6 +1,12 @@
 Change log for psd-reader
 -------------------------
 
+0.7.0 BETA
+ADD: Improved CMYK handling using K-component for adjustment (no replacement for ICC, but improves the result)
+CHG: IMPORTANT: noDematte option changed (sorry!) to dematte, default is true
+CHG: IMPORTANT: noRGBA option changed (sorry!) to toRGBA, default is true
+FIX: K-channel of CMYK accidentally used as alpha if none was present (obsolete in any case, replaced with separate CMYK handler)
+
 0.6.0 BETA
 ADD: Resource chunks parser and new property info.resources (+ parseResources(), findResource(id)).
 CHG: Internal changes, refactoring gamma processing

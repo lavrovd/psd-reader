@@ -1,8 +1,7 @@
 
-PsdReader.prototype._cmyk = function(bmps, dst, bw, iAlpha, c2v, gLUT, f2i) {
+PsdReader.prototype._cmyk = function(bmps, dst, bw, iAlpha) {
 
-	var me = this,
-		len = dst.length,
+	var len = dst.length,
 		i = 0, p = 0,
 		r = bmps[0],
 		g = bmps[1],
@@ -14,9 +13,9 @@ PsdReader.prototype._cmyk = function(bmps, dst, bw, iAlpha, c2v, gLUT, f2i) {
 
 	while(i < len) {
 		kk = k[p] / 255;
-		dst[i++] = r[p] * kk;
-		dst[i++] = g[p] * kk;
-		dst[i++] = b[p] * kk;
+		dst[i++] = r[p] * kk + 0.5;
+		dst[i++] = g[p] * kk + 0.5;
+		dst[i++] = b[p] * kk + 0.5;
 		dst[i++] = hasAlpha ? a[p] : 255;
 		p += bw
 	}

@@ -136,7 +136,7 @@ PsdReader.prototype._parser = function(buffer) {
 			break;
 	}
 
-	function convert() {me._cfg.noRGBA ? cbLoad(null) : me._toRGBA(cbLoad)}
+	function convert() {me._cfg.toRGBA ? me._toRGBA(cbLoad) : cbLoad(null)}
 	function cbLoad(bmp) {
 
 		me.rgba = bmp;

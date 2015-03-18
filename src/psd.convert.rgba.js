@@ -7,7 +7,7 @@ PsdReader.prototype._rgba = function(bmps, dst, bw, iAlpha, c2v, gLUT, f2i) {
 		r = bmps[0],
 		g = bmps[1],
 		b = bmps[2],
-		a = bmps[4] || bmps[3],		// CMYK || RGB/MC alpha
+		a = bmps[3],		// RGB/MC alpha
 		hasAlpha = !!a && !iAlpha;
 
 	if (me.info.depth === 32) {

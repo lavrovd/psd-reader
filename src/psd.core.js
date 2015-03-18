@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.6.0 BETA
+	psd-reader version 0.7.0 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -23,8 +23,8 @@
  * @param {Array} [options.duotone=[255,255,255]] - color to mix with duotone data, defaults to an array representing RGB for white [255, 255, 255].
  * @param {boolean} [options.passive=false] - load data but don't parse and decode. use parse() to invoke manually.
  * @param {boolean} [options.ignoreAlpha=false] - ignore alpha channel if any.
- * @param {boolean} [options.noRGBA=false] - do not convert to RGBA format. If you only want to deal with the raw data. Channels are decompressed if needed.
- * @param {boolean} [options.noDematte=false] - do not de-matte images with alpha channels (indexed images are never processed)
+ * @param {boolean} [options.toRGBA=true] - convert to RGBA format. If you only want to deal with the raw data set this option to false.
+ * @param {boolean} [options.dematte=true] - de-matte images with alpha channels (indexed images are never processed)
  * @constructor
  */
 function PsdReader(options) {
@@ -44,8 +44,8 @@ function PsdReader(options) {
 			duotone	   : options.duotone || [255, 255, 255],
 			passive	   : !!options.passive,
 			ignoreAlpha: !!options.ignoreAlpha,
-			noRGBA	   : !!options.noRGBA,
-			noDematte  : !!options.noDematte
+			toRGBA	   : isBool(options.toRGBA) ? !!options.toRGBA : true,
+			dematte    : isBool(options.dematte) ? !!options.dematte : true
 		};
 
 	/**
@@ -205,6 +205,7 @@ function PsdReader(options) {
 		_err(err.message);
 	}
 
+	function isBool(b) {return typeof b == "boolean"}
 }
 
 PsdReader.prototype = {
@@ -237,7 +238,7 @@ PsdReader.prototype = {
 	},
 
 	/**
-	 * If option noRGBA is used but you want to convert the data to RGBA
+	 * If option toRGBA is used but you want to convert the data to RGBA
 	 * later, this method can be called.
 	 *
 	 * It is **asynchronous** and takes a callback argument. When the conversion
@@ -255,7 +256,7 @@ PsdReader.prototype = {
 
 		var me = this, cb = callback.bind(me);
 
-		if (me._cfg.noRGBA && !me.rgba) {
+		if (me._cfg.toRGBA && !me.rgba) {
 			me._toRGBA(function(bmp) {
 				me.rgba = bmp;
 				send();
@@ -366,4 +367,4 @@ PsdReader.guessGamma = function() {
 };
 
 PsdReader._bSz = 1<<21;			// async block size (2 mb)
-PsdReader._delay = 7;					// async delay in milliseconds
+PsdReader._delay = 7;			// async delay in milliseconds
