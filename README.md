@@ -15,7 +15,7 @@ Features
 
 - Fast and lightweight
 - No dependencies
-- Asynchronous and block-based decoding
+- Asynchronous decoding (no UI blocking)
 - Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and Lab
 - Supports alpha channel, and transparency for indexed mode
 - All color depths supported (1 / 8 / 16 / 32 bits)
