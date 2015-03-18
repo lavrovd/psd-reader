@@ -28,6 +28,10 @@ PsdReader.prototype._toRGBA = function(cb) {
 			iAlpha = me._indexed(bmps[0], dst, iAlpha);
 			break;
 
+		case 4:		// CMYK
+			iAlpha = me._cmyk(bmps, dst, bw, iAlpha, c2v, gLUT, f2i);
+			break;
+
 		case 8:		// Duotone
 			iAlpha = me._duotone(bmps, dst, iAlpha);
 			break;
@@ -36,7 +40,7 @@ PsdReader.prototype._toRGBA = function(cb) {
 			iAlpha = me._lab(bmps, dst, bw, iAlpha);
 			break;
 
-		default:	// RGB, CMYK, Multichannel
+		default:	// RGB, Multichannel
 			iAlpha = me._rgba(bmps, dst, bw, iAlpha, c2v, gLUT, f2i);
 	}
 
