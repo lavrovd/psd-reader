@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.7.0 BETA
+	psd-reader version 0.7.1 BETA
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -49,11 +49,30 @@ function PsdReader(options) {
 		};
 
 	/**
-	 * Expose public reference to config for prototyped methods.
-	 * @type {*}
-	 * @private
+	 * Expose public reference to config for prototyped methods. If
+	 * you make changes, call toRGBA() to apply them. The `url` and `buffer`
+	 * as well as `passive` and `toRGBA` (when `toRGBA()` is called the file will
+	 * already be loaded) cannot be changed.
+	 *
+	 * These fields are stored in the config:
+	 *
+	 *     {string}      url - url to PSD file (if not buffer is provided)
+	 *     {ArrayBuffer} buffer - ArrayBuffer containing PSD file if not url is provided
+	 *     {function}    onError - callback function for errors
+	 *     {function}    onLoad - callback function when file is loaded and parsed
+	 *     {function}    onReady - callback function when file is loaded and ready to be parsed
+	 *     {number}      gamma - gamma setting, if 1 no processing is applied. Use inverse value (ie. 1/2.2 etc.)
+	 *     {number}      gamma32 - gamma setting for 32-bit color mode images
+	 *     {Array}       duotone - array with three entries for RGB values to mix with duotone images. Default is [255, 255, 255]
+	 *     {boolean}     passive - use passive mode, load file but don't parse.
+	 *     {boolean}     ignoreAlpha - ignore alpha channel and use original matte
+	 *     {boolean}     toRGBA - automatically convert to rgba when file is loaded and parsed
+	 *     {boolean}     dematte - dematte the image data if an alpha channel is present
+	 *
+	 * @type {object}
+	 *
 	 */
-	this._cfg = config;
+	this.config = config;
 
 	/**
 	 * Indicate if a file has been parsed. Useful with passive mode.
@@ -192,13 +211,13 @@ function PsdReader(options) {
 					me.buffer = buffer;
 					me.view = new DataView(buffer);
 					if (onready) onready({url: config.url, timeStamp: Date.now()});
-					if (!me._cfg.passive) me._parser(me.buffer);
+					if (!me.config.passive) me._parser(me.buffer);
 				},
 				_err);
 		}
 		else {
 			if (onready) onready({url: null, timeStamp: Date.now()});
-			if (!me._cfg.passive) me._parser(me.buffer);
+			if (!me.config.passive) me._parser(me.buffer);
 		}
 	}
 	catch(err) {
@@ -239,13 +258,15 @@ PsdReader.prototype = {
 
 	/**
 	 * If option toRGBA is used but you want to convert the data to RGBA
-	 * later, this method can be called.
+	 * later, this method can be called. It can also be used to reconvert
+	 * a bitmap with new config settings such as gamma, alpha, dematting etc.
 	 *
-	 * It is **asynchronous** and takes a callback argument. When the conversion
-	 * has finished, the instance.rgba property is set with the bitmap and
+	 * It's **asynchronous** and takes a callback argument. When the conversion
+	 * has finished, the `rgba` property is set with the bitmap and
 	 * the callback is given an object containing a reference to the bitmap
-	 * (rgba) and a timeStamp. If the conversion was unsuccessful the
-	 * rgba property will be null.
+	 * (rgba) and a timeStamp.
+	 *
+	 * If the conversion was unsuccessful the `rgba` property will be null.
 	 *
 	 * If the image was already converted, the callback is invoked right
 	 * away.
@@ -256,15 +277,10 @@ PsdReader.prototype = {
 
 		var me = this, cb = callback.bind(me);
 
-		if (me._cfg.toRGBA && !me.rgba) {
-			me._toRGBA(function(bmp) {
-				me.rgba = bmp;
-				send();
-			});
-		}
-		else send();
-
-		function send() {cb({rgba: me.rgba, timeStamp: Date.now()})}
+		me._toRGBA(function(bmp) {
+			me.rgba = bmp;
+			cb({rgba: me.rgba, timeStamp: Date.now()})
+		})
 	},
 
 	/**

@@ -57,7 +57,7 @@
 				  // fits the canvas?
 				  if (img.width < w && img.height < h) {
 					  ctx.translate(-img.width * 0.5, -img.height * 0.5);
-					  checker(img.width, img.height);
+					  if (this.info.hasAlpha) checker(img.width, img.height);
 					  ctx.drawImage(img, 0, 0);
 				  }
 				  else {
@@ -68,7 +68,7 @@
 					      ih = img.height * r;
 
 					  ctx.translate(-iw * 0.5, -ih * 0.5);
-					  checker(iw, ih);
+					  if (this.info.hasAlpha) checker(iw, ih);
 					  ctx.drawImage(img, 0, 0, iw, ih);
 				  }
 

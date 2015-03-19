@@ -3,7 +3,7 @@ PsdReader.prototype._toRGBA = function(cb) {
 
 	var me = this,
 		info = me.info,
-		cfg = me._cfg,
+		cfg = me.config,
 		bmps = info.bitmaps,
 		bw = info.byteWidth,
 		c2v = me._chanToDV.bind(me),

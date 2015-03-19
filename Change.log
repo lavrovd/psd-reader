@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+0.7.1 BETA
+CHG: config property is now exposed and public. Changes can be made and used with toRGBA() to reconvert.
+CHG: toRGBA() will reconvert when called (reconverted only in passive mode)
+
 0.7.0 BETA
 ADD: Improved CMYK handling using K-component for adjustment (no replacement for ICC, but improves the result)
 CHG: IMPORTANT: noDematte option changed (sorry!) to dematte, default is true
