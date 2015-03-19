@@ -746,6 +746,83 @@ through XHR.</p>
 
         
             
+<dt class="name" id="config">
+    <h4><span class="type-signature"></span>config<span class="type-signature"> :object</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Expose public reference to config for prototyped methods. If
+you make changes, call toRGBA() to apply them. The <code>url</code> and <code>buffer</code>
+as well as <code>passive</code> and <code>toRGBA</code> (when <code>toRGBA()</code> is called the file will
+already be loaded) cannot be changed.</p>
+<p>These fields are stored in the config:</p>
+<pre class="prettyprint source"><code>{string}      url - url to PSD file (if not buffer is provided)
+{ArrayBuffer} buffer - ArrayBuffer containing PSD file if not url is provided
+{function}    onError - callback function for errors
+{function}    onLoad - callback function when file is loaded and parsed
+{function}    onReady - callback function when file is loaded and ready to be parsed
+{number}      gamma - gamma setting, if 1 no processing is applied. Use inverse value (ie. 1/2.2 etc.)
+{number}      gamma32 - gamma setting for 32-bit color mode images
+{Array}       duotone - array with three entries for RGB values to mix with duotone images. Default is [255, 255, 255]
+{boolean}     passive - use passive mode, load file but don't parse.
+{boolean}     ignoreAlpha - ignore alpha channel and use original matte
+{boolean}     toRGBA - automatically convert to rgba when file is loaded and parsed
+{boolean}     dematte - dematte the image data if an alpha channel is present</code></pre>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
 <dt class="name" id="findResource">
     <h4><span class="type-signature"></span>findResource<span class="type-signature"> :number</span></h4>
 
@@ -2343,12 +2420,13 @@ using the (asynchronous) <code>toRGBA()</code> method.</p>
     
     <div class="description">
         <p>If option toRGBA is used but you want to convert the data to RGBA
-later, this method can be called.</p>
-<p>It is <strong>asynchronous</strong> and takes a callback argument. When the conversion
-has finished, the instance.rgba property is set with the bitmap and
+later, this method can be called. It can also be used to reconvert
+a bitmap with new config settings such as gamma, alpha, dematting etc.</p>
+<p>It's <strong>asynchronous</strong> and takes a callback argument. When the conversion
+has finished, the <code>rgba</code> property is set with the bitmap and
 the callback is given an object containing a reference to the bitmap
-(rgba) and a timeStamp. If the conversion was unsuccessful the
-rgba property will be null.</p>
+(rgba) and a timeStamp.</p>
+<p>If the conversion was unsuccessful the <code>rgba</code> property will be null.</p>
 <p>If the image was already converted, the callback is invoked right
 away.</p>
     </div>
