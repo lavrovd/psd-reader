@@ -75,7 +75,7 @@
 		    p = document.createElement("p"),
 		    cont = document.getElementById(id),
 		    guess = (1/PsdReader.guessGamma()).toFixed(1),
-			gamma = (1/(is32 ? psd._cfg.gamma32 : psd._cfg.gamma)).toFixed(1);
+			gamma = (1/(is32 ? psd.config.gamma32 : psd.config.gamma)).toFixed(1);
 
 		p.innerHTML = "Gamma: " + gamma +
 			(gamma === "1.0" ? " (none)" : "") +
