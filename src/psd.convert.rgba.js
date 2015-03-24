@@ -1,4 +1,21 @@
+/*
+	psd-reader - RGBA converter
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Converts RGBA (32/16/8) to 8-bit RGBA
+ * @param bmps
+ * @param dst
+ * @param bw
+ * @param iAlpha
+ * @param c2v
+ * @param gLUT
+ * @param f2i
+ * @return {boolean}
+ * @private
+ */
 PsdReader.prototype._rgba = function(bmps, dst, bw, iAlpha, c2v, gLUT, f2i) {
 
 	var me = this,

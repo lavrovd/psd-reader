@@ -1,4 +1,21 @@
+/*
+	psd-reader - Greyscale converter
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Converts greyscale based image to RGBA
+ * @param bmps
+ * @param dst
+ * @param bw
+ * @param iAlpha
+ * @param c2v
+ * @param gLUT
+ * @param f2i
+ * @return {boolean}
+ * @private
+ */
 PsdReader.prototype._grey = function(bmps, dst, bw, iAlpha, c2v, gLUT, f2i) {
 
 	var	u32 = new Uint32Array(dst.buffer),

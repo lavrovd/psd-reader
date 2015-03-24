@@ -1,4 +1,17 @@
+/*
+	psd-reader - RLE decompress
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Decompress RLE compressed channels
+ * @param view
+ * @param pos
+ * @param info
+ * @param callback
+ * @private
+ */
 PsdReader.prototype._rle = function(view, pos, info, callback) {
 
 	var count = 0, i = info.channels,

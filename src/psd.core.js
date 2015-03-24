@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 0.7.1 BETA
+	psd-reader version 1.0.0
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -44,8 +44,8 @@ function PsdReader(options) {
 			duotone	   : options.duotone || [255, 255, 255],
 			passive	   : !!options.passive,
 			ignoreAlpha: !!options.ignoreAlpha,
-			toRGBA	   : isBool(options.toRGBA) ? !!options.toRGBA : true,
-			dematte    : isBool(options.dematte) ? !!options.dematte : true
+			toRGBA	   : ifBool(options.toRGBA, true),
+			dematte    : ifBool(options.dematte, true)
 		};
 
 	/**
@@ -70,7 +70,6 @@ function PsdReader(options) {
 	 *     {boolean}     dematte - dematte the image data if an alpha channel is present
 	 *
 	 * @type {object}
-	 *
 	 */
 	this.config = config;
 
@@ -185,8 +184,8 @@ function PsdReader(options) {
 
 		function sendErr() {
 			me.onerror({
-				message: msg,
-				source: src,
+				message  : msg,
+				source   : src,
 				timeStamp: Date.now()
 			});
 		}
@@ -224,7 +223,7 @@ function PsdReader(options) {
 		_err(err.message);
 	}
 
-	function isBool(b) {return typeof b == "boolean"}
+	function ifBool(b, def) {return typeof b == "boolean" ? b : def}
 }
 
 PsdReader.prototype = {

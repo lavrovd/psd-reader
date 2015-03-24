@@ -1,6 +1,10 @@
 Change log for psd-reader
 -------------------------
 
+1.0.0
+CHG: Bumped to version 1.0.0, and out of beta
+CHG: Optimized DuoTone converter
+
 0.7.1 BETA
 CHG: config property is now exposed and public. Changes can be made and used with toRGBA() to reconvert.
 CHG: toRGBA() will reconvert when called (reconverted only in passive mode)

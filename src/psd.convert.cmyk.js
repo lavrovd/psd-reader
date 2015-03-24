@@ -1,4 +1,18 @@
+/*
+	psd-reader - CMYK converter
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Non-ICC based conversion using K-channel.
+ * @param bmps
+ * @param dst
+ * @param bw
+ * @param iAlpha
+ * @return {boolean}
+ * @private
+ */
 PsdReader.prototype._cmyk = function(bmps, dst, bw, iAlpha) {
 
 	var len = dst.length,

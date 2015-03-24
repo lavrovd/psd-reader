@@ -1,3 +1,9 @@
+/*
+	psd-reader - To canvas
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
+
 /**
  * Converts already loaded and parsed PSD file to canvas. A canvas element
  * is returned with the bitmap at the original size, or null if no RGBA

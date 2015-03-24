@@ -50,32 +50,32 @@
 <script>
 
 var files = [
-	    "epistemex_RGB8.psd",
-	    "epistemex_RGB16.psd",
-	    "epistemex_RGB32.psd",
-	    "epistemex_RGBA8.psd",
-	    "epistemex_RGBA16.psd",
-	    "epistemex_RGBA32.psd",
-		"epistemex_bitmap.psd",
-	    "epistemex_CMYK8.psd",
-	    "epistemex_CMYK16.psd",
-		"epistemex_CMYKA8.psd",
-	    "epistemex_CMYKA16.psd",
-	    "epistemex_DUO8A.psd",
-		"epistemex_G8.psd",
-	    "epistemex_G16.psd",
-	    "epistemex_G32.psd",
-		"epistemex_GA8.psd",
-	    "epistemex_GA16.psd",
-	    "epistemex_GA32.psd",
-		"epistemex_indexed32.psd",
-		"epistemex_Indexed32T.psd",
-		"epistemex_Indexed256T.psd",
-	    "epistemex_LAB8.psd",
-	    "epistemex_LAB16.psd",
-		"epistemex_LABA8.psd",
-	    "epistemex_LABA16.psd",
-	    "epistemex_MultiChannel.psd"
+	    "RGB8",
+	    "RGB16",
+	    "RGB32",
+	    "RGBA8",
+	    "RGBA16",
+	    "RGBA32",
+		"bitmap",
+	    "CMYK8",
+	    "CMYK16",
+		"CMYKA8",
+	    "CMYKA16",
+	    "DUO8A",
+		"G8",
+	    "G16",
+	    "G32",
+		"GA8",
+	    "GA16",
+	    "GA32",
+		"indexed32",
+		"Indexed32T",
+		"Indexed256T",
+	    "LAB8",
+	    "LAB16",
+		"LABA8",
+	    "LABA16",
+	    "MultiChannel"
 	],
     psds = [],
 	count = files.length, i = 0, loaded = 0,
@@ -115,7 +115,7 @@ var files = [
 	function LoadPSD(url) {
 
 		var psd = new PsdReader({
-			    url:"gfx/" + url,
+			    url:"gfx/epistemex_" + url + ".psd",
 			    passive: true,                  // use passive mode so we get loaded in order
 			    onload: onload,
 				onready: onready,               // to keep track of loads before manual parsing
@@ -145,7 +145,7 @@ var files = [
 					"<br>Compr.  : " + psd.info.compressionDesc +
 					"<br>Channels: " + psd.info.channels;
 
-			p.innerHTML = url.substring(url.indexOf("_") + 1, url.indexOf(".psd"));
+			p.innerHTML = url;
 			div.appendChild(p);
 			div.appendChild(canvas);
 			div.appendChild(info);

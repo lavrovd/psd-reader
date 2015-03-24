@@ -1,3 +1,8 @@
+/*
+	psd-reader - Bitmap converter
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
 /**
  * Converts bitmap (1-bit) data to RGBA.

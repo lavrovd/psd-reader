@@ -1,4 +1,15 @@
+/*
+	psd-reader - toRGBA delegation
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+
+/**
+ * Delegate/dispatch conversion task based on source format
+ * @param {function} cb - callback function when completed. The rgba bitmap buffer is given as argument
+ * @private
+ */
 PsdReader.prototype._toRGBA = function(cb) {
 
 	var me = this,

@@ -1,4 +1,17 @@
+/*
+	psd-reader - Indexed converter
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Converts index format to RGBA
+ * @param src
+ * @param dst
+ * @param iAlpha
+ * @return {boolean}
+ * @private
+ */
 PsdReader.prototype._indexed = function(src, dst, iAlpha) {
 
 	var me = this,

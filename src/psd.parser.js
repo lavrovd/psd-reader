@@ -1,4 +1,14 @@
+/*
+	psd-reader - Fie buffer parser
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Parse given buffer as PSD file buffer
+ * @param buffer
+ * @private
+ */
 PsdReader.prototype._parser = function(buffer) {
 
 	var me = this,

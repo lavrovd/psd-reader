@@ -1,4 +1,18 @@
+/*
+	psd-reader - L*a*b converter
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
+/**
+ * Converts Lab to RGBA
+ * @param bmps
+ * @param dst
+ * @param bw
+ * @param iAlpha
+ * @return {number}
+ * @private
+ */
 PsdReader.prototype._lab = function(bmps, dst, bw, iAlpha) {
 
 	var	L = bmps[0],

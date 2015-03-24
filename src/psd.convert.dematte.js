@@ -1,3 +1,9 @@
+/*
+	psd-reader - Dematte process
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
+
 /**
  * "Demattes" the photoshop bitmap using white matte.
  * This method should only be called if an alpha channel is present.
@@ -27,9 +33,9 @@ PsdReader.prototype._dematte = function(bmp, callback) {
 				a /= 255;
 				aa = 255 * (1 - a);		// white matte assumed
 
-				bmp[i] = (bmp[i++] - aa) / a + 0.5;
-				bmp[i] = (bmp[i++] - aa) / a + 0.5;
-				bmp[i] = (bmp[i++] - aa) / a + 0.5;
+				bmp[i] = (bmp[i++] - aa) / a + .5;
+				bmp[i] = (bmp[i++] - aa) / a + .5;
+				bmp[i] = (bmp[i++] - aa) / a + .5;
 				i++;
 			}
 			else i += 4

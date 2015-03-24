@@ -1,14 +1,14 @@
 {
   "name": "pds-reader",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/epistemex/pds-reader",
   "authors": [
     "epistemex <github@epistemex.com>"
   ],
-  "description": "Fast and light Photoshop PSD file to RGBA for JavaScript",
+  "description": "Fast and light Photoshop® PSD file parser for JavaScript",
   "main": "pds-reader.min.js",
   "keywords": [
-    ""
+    "photoshop", "psd", "parser", "converter", "bitmap", "rgba"
   ],
   "license": "MIT",
   "ignore": [

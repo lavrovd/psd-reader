@@ -1,3 +1,8 @@
+/*
+	psd-reader - Gamma module
+	By Ken Fyrstenberg / Epistemex (c) 2015
+	www.epistemex.com
+*/
 
 /**
  * Applies gamma if bmp, gamma !== 0 and gamma !== 1 and depth < 32.

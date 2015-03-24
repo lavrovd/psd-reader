@@ -15,10 +15,10 @@ Features
 
 - Fast and lightweight
 - No dependencies
-- Asynchronous decoding (no UI blocking)
+- Asynchronous and segment-based decoding (no UI-blocking)
 - Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and Lab
+- All color depths supported (1/8/16/32 bits)
 - Supports alpha channel, and transparency for indexed mode
-- All color depths supported (1 / 8 / 16 / 32 bits)
 - De-matte of images with alpha-channel (no "halo" problems)
 - Supports RLE compressed and uncompressed image data
 - By default, converts all formats to RGBA so it can be used directly with canvas
@@ -32,7 +32,7 @@ Features
 - Validates and performs error checks
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
 - An original parser implementation built from scratch.
-- Fully documented (see docs folder or [this link](https://epistemex.github.io/psd-reader/docs/))
+- Full documentation (see docs/ folder or [online docs](https://epistemex.github.io/psd-reader/docs/))
 
 
 Demos
@@ -40,7 +40,7 @@ Demos
 
 Demos demonstrating capabilities of **psd-reader**.
 
-*Note that some PSD files can be relative large in size so please be
+*Note that PSD files can be relative large in size so please be
 patient when downloading the test images for the acid-test demo.*
 
 **➜ [Acid-test - various color modes, formats and depths](https://epistemex.github.io/psd-reader/)**
@@ -65,7 +65,7 @@ Install **psd-reader** in various ways:
 Documentation
 -------------
 
-The project is fully documented and is available as html in the `docs` folder
+The project is documented and is available as html in the `docs` folder
 
 **➜ [The documentation can be viewed online](https://epistemex.github.io/psd-reader/docs/)**
 
@@ -119,9 +119,10 @@ There are no dependencies.
 Limitations
 -----------
 
-These are generally non-problematic:
+These are generally non-problematic, but something to have in mind:
 
-- PSD must be saved in (the typical) compatibility mode (see [tutorial section](https://epistemex.github.io/psd-reader/docs/tutorial-Compatibility%20Mode.html) in docs for details)
+- Does not intend to parse individual layers (we will publish something for this later)
+- The PSD must be saved in (the typical) compatibility mode (see [tutorial section](https://epistemex.github.io/psd-reader/docs/tutorial-Compatibility%20Mode.html) in docs for details)
 - ICC profiles are [not parsed/applied](https://epistemex.github.io/psd-reader/docs/tutorial-ICC.html)
 
 
