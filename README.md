@@ -31,6 +31,7 @@ Features
 - Passive load mode allowing parsing to be invoked manually later
 - Validates and performs error checks
 - Works in all major browsers (Firefox, Chrome, IE, Opera, Safari).
+- For client-side use
 - An original parser implementation built from scratch.
 - Full documentation (see docs/ folder or [online docs](https://epistemex.github.io/psd-reader/docs/))
 

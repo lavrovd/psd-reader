@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 1.0.0
+	psd-reader version 1.0.1
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -10,8 +10,8 @@
 /**
  * Create a new instance of PSD (Photoshop graphic data file) providing
  * either an URL to a PSD file, or an ArrayBuffer with the file loaded
- * in already. Prove onLoad and onError handlers to handle the
- * asynchronous nature.
+ * into it already. Provide onLoad and onError handlers to handle the
+ * asynchronous callbacks.
  *
  * @param {object} options - option object (required: url or buffer)
  * @param {string} [options.url] - URl to a PSD file (if not URL is provided, a buffer must be, but never both)
@@ -267,9 +267,6 @@ PsdReader.prototype = {
 	 *
 	 * If the conversion was unsuccessful the `rgba` property will be null.
 	 *
-	 * If the image was already converted, the callback is invoked right
-	 * away.
-	 *
 	 * @param {function} callback - required callback function
 	 */
 	toRGBA: function(callback) {
@@ -329,6 +326,8 @@ PsdReader.prototype = {
 	/**
 	 * Converts a 32-bit floating point value to integer. It reads the value
 	 * from the given channel at position pos.
+	 * The value from the channel is assumed to be [0.0, 1.0], the returned
+	 * value is [0, 255] with rounding.
 	 * @param {DataView} channel - channel to read from
 	 * @param {number} pos - position to read from
 	 * @return {number} converted integer value in the range [0, 255]
@@ -362,7 +361,9 @@ PsdReader.prototype = {
 
 	/**
 	 * Converts a Uint8Array/view region to DataView for the same region.
-	 * @param {*} bmp - a view representing a region of a ArrayBuffer
+	 * @param {*} bmp - a view representing a region of a ArrayBuffer.
+	 * This is necessary if a buffer is not memory-aligned for 16/32 bit
+	 * buffers.
 	 * @return {DataView}
 	 * @private
 	 */

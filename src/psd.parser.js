@@ -14,6 +14,7 @@ PsdReader.prototype._parser = function(buffer) {
 	var me = this,
 		view = new DataView(buffer),
 		pos = 0,
+		conv,
 		resParsed = false,
 		magic = getFourCC(),
 		version = getUint16(),
@@ -69,7 +70,7 @@ PsdReader.prototype._parser = function(buffer) {
 
 	height = getUint32();		// note: height comes before width
 	width = getUint32();
-	if (!width || width > 30000 || !height || height > 30000) {
+	if (!width || width > 3e4 || !height || height > 3e4) {
 		_err("Invalid size");
 		return
 	}
@@ -131,20 +132,10 @@ PsdReader.prototype._parser = function(buffer) {
 	compression = getUint16();
 
 	info.compression = compression;
-	info.compressionDesc = ["Uncompressed", "RLE", "ZIP", "ZIP"][compression];
+	info.compressionDesc = ["Uncompressed", "RLE"][compression];	// zip is ignored (see below)
 
-	switch(compression) {
-		case 0:	// raw
-			me._raw(view, pos, info, convert);
-			break;
-		case 1:	// rle
-			me._rle(view, pos, info, convert);
-			break;
-		case 2:	// zip no-prediction
-		case 3:	// zip
-			_err("Unsupported compression");
-			break;
-	}
+	conv = compression ? me._raw : me._rle;		// we ignore zip modes (1,2) as no PSD is found with it...
+	conv(view, pos, info, convert);
 
 	function convert() {me.config.toRGBA ? me._toRGBA(cbLoad) : cbLoad(null)}
 	function cbLoad(bmp) {
