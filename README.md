@@ -16,10 +16,10 @@ Features
 - Fast and lightweight
 - No dependencies
 - Asynchronous and segment-based decoding (no UI-blocking)
-- Reads: Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and Lab
-- All color depths supported (1/8/16/32 bits)
-- Supports alpha channel, and transparency for indexed mode
-- De-matte of images with alpha-channel (no "halo" problems)
+- Reads all supported formats (Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and Lab)
+- Reads all color depths (1/8/16/32 bits)
+- Handles alpha channel, and transparency for indexed mode
+- De-matte (matte removal) processing of images with alpha-channel (eliminates "halo" problems)
 - Supports RLE compressed and uncompressed image data
 - By default, converts all formats to RGBA so it can be used directly with canvas
 - Canvas helper method with optional scaling and high-quality down-sampling
@@ -39,7 +39,7 @@ Features
 Demos
 -----
 
-Demos demonstrating capabilities of **psd-reader**.
+Demos demonstrating the capabilities of **psd-reader**.
 
 *Note that PSD files can be relative large in size so please be
 patient when downloading the test images for the acid-test demo.*

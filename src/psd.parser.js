@@ -134,7 +134,7 @@ PsdReader.prototype._parser = function(buffer) {
 	info.compression = compression;
 	info.compressionDesc = ["Uncompressed", "RLE"][compression];	// zip is ignored (see below)
 
-	conv = compression ? me._raw : me._rle;		// we ignore zip modes (1,2) as no PSD is found with it...
+	conv = compression ? me._rle : me._raw;		// we ignore zip modes (1,2) as no PSD is found with it...
 	conv(view, pos, info, convert);
 
 	function convert() {me.config.toRGBA ? me._toRGBA(cbLoad) : cbLoad(null)}
