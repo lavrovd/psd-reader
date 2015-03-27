@@ -88,7 +88,7 @@
 </header>
 
 <article>
-    <p><sup>Revision 0</sup></p>
+    <p><sup>Revision 1</sup></p>
 <p>The psd-reader is simple to use if you need quick access to the bitmap
 data of a PSD file.</p>
 <p>You simply create a new instance, pass in the URL or an already loaded
@@ -141,7 +141,8 @@ provide a parse mechanism to the user or automatically.</p>
 <h2>Advanced usage</h2><p>But we can do a lot more before we create a canvas. We can process the
 RGBA data, or file data, directly if we want to.</p>
 <h2>Chunks</h2><p>PSD files are as many other graphics (and sound) files chunked, although
-in a little bit different way than a typical chunked file such as PNG.</p>
+in a little bit different way than a typical chunked file such as PNG.
+This is often referred to as <em>tagged</em> image format.</p>
 <p>PSD files always have 5 chunks, header, color data, resource data, layers
 and mask, and finally the image data at the end. Even if there is no data
 in a chunk, it will always be present contrary to other graphic formats.</p>
@@ -168,7 +169,7 @@ a certain ID. For example, to locate a thumbnail resource you could do:</p>
 if (thumb) {
     var buffer = new DataView(psd.buffer, thumb.pos, thumb.length);
     // process the data here...
-}</code></pre><p>You will have to manually process the data though with psd-reader.</p>
+}</code></pre><p>You will have to manually process the data though.</p>
 <h2>Channels and bitmaps</h2><p>To access the parsed channel bitmaps, which are always uncompressed but
 not processed, you can use the bitmaps property of the info object:</p>
 <pre class="prettyprint source"><code>var bitmaps = psd.info.bitmaps;</code></pre><p>Use the channels property to know how many bitmaps there are (or simply
@@ -183,7 +184,7 @@ we need to do:</p>
  dstBuffer[0] = bitmaps[0][0];        // first byte in red channel
  dstBuffer[1] = bitmaps[1][0];        // first byte in green channel
  dstBuffer[2] = bitmaps[2][0];        // first byte in blue channel
- dstBuffer[3] = bitmaps[3][0[;        // first byte in alpha channel</code></pre><p>Note that with formats such as indexed, bitmap and so foerth, you need to
+ dstBuffer[3] = bitmaps[3][0];        // first byte in alpha channel</code></pre><p>Note that with formats such as indexed, bitmap and so forth, you need to
 process and convert the original formats manually. In addition with formats
 such as L*ab you will also have to do color space conversion.</p>
 <p>If you don't need the RGBA data you can turn off the conversion when
