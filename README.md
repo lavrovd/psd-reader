@@ -39,7 +39,7 @@ Features
 Demos
 -----
 
-Demos demonstrating the capabilities of **psd-reader**.
+Demos demonstrating **psd-reader**.
 
 *Note that PSD files can be relative large in size so please be
 patient when downloading the test images for the acid-test demo.*
@@ -48,7 +48,7 @@ patient when downloading the test images for the acid-test demo.*
 
 **➜ [Built-in gamma correction](https://epistemex.github.io/psd-reader/demo_gamma.html)**
 
-**➜ [Drop your own PSD files into the browser](https://epistemex.github.io/psd-reader/psddrop.html)**
+**➜ [Drop in your own PSD files](https://epistemex.github.io/psd-reader/psddrop.html)**
 
 
 Install
