@@ -91,7 +91,7 @@
     <p><sup>Revision 1</sup></p>
 <p>The psd-reader is simple to use if you need quick access to the bitmap
 data of a PSD file.</p>
-<p>You simply create a new instance, pass in the URL or an already loaded
+<p>Simply create a new instance, pass in the URL or an already loaded
 ArrayBuffer, and you have an RGBA version that can be converted to canvas:</p>
 <pre class="prettyprint source"><code>var psd = new PsdReader({url: &quot;example.psd&quot;, onload: function(e) {
     // we now have access to a RGBA version of the file regardless of original format:
@@ -119,7 +119,7 @@ When done the <code>onload</code> handler will be called.</p>
 as some later point.</p>
 <p>For this, we can use <em>passive</em> mode. Important to note is that in order to
 know when data can be converted, which we need to do manually, you have
-to also provide a callback for the <code>onready</code> event.</p>
+to provide a callback for the <code>onready</code> event.</p>
 <p>To parse the data you would call the <code>parse()</code> method on the instance. This
 call is safe to call several times, although discouraged, as it will check
 the internal status of the data and only parse if not previously parsed.</p>
@@ -134,9 +134,9 @@ function onload(e) {
     // here we can access access rgba, or convert to canvas
     var canvas = this.toCanvas();
 })</code></pre><p>The example above is of course somewhat contrived and unnecessary, but in
-a real world example you would for example keep track of a numerous files,
-count them in the <code>onready</code> handler, when all files had loaded then go to
-parsing them. This will allow you to do background loading and eventually
+a real world example you would for example keep track of a file batch,
+count them in the <code>onready</code> handler, when all files had loaded then
+parse them. This will allow you to do background loading and eventually
 provide a parse mechanism to the user or automatically.</p>
 <h2>Advanced usage</h2><p>But we can do a lot more before we create a canvas. We can process the
 RGBA data, or file data, directly if we want to.</p>

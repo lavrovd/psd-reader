@@ -11,12 +11,11 @@
  * @param bw
  * @param iAlpha
  * @param c2v
- * @param gLUT
  * @param f2i
  * @return {boolean}
  * @private
  */
-PsdReader.prototype._rgba = function(bmps, dst, bw, iAlpha, c2v, gLUT, f2i) {
+PsdReader.prototype._rgba = function(bmps, dst, bw, iAlpha, c2v, f2i) {
 
 	var	len = dst.length,
 		i = 0, p = 0,

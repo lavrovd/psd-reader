@@ -1,7 +1,10 @@
 Change log for psd-reader
 -------------------------
 
-1.0.2
+1.0.3
+FIX: Internal non-critical argument cleanup
+
+1.0.2 HOTFIX
 FIX: Mix-up in RAW/RLE criteria after code reduction.
 
 1.0.1

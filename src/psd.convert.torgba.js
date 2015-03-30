@@ -18,7 +18,6 @@ PsdReader.prototype._toRGBA = function(cb) {
 		bmps = info.bitmaps,
 		bw = info.byteWidth,
 		c2v = me._chanToDV.bind(me),
-		gLUT = me.getGammaLUT,
 		f2i = me.floatToComp,
 		w = info.width,
 		iAlpha = cfg.ignoreAlpha,
@@ -32,7 +31,7 @@ PsdReader.prototype._toRGBA = function(cb) {
 			break;
 
 		case 1:		// Grey
-			iAlpha = me._grey(bmps, dst, bw, iAlpha, c2v, gLUT, f2i);
+			iAlpha = me._grey(bmps, dst, bw, iAlpha, c2v, f2i);
 			break;
 
 		case 2:		// indexed
@@ -52,7 +51,7 @@ PsdReader.prototype._toRGBA = function(cb) {
 			break;
 
 		default:	// RGB, Multichannel
-			iAlpha = me._rgba(bmps, dst, bw, iAlpha, c2v, gLUT, f2i);
+			iAlpha = me._rgba(bmps, dst, bw, iAlpha, c2v, f2i);
 	}
 
 	info.hasAlpha = iAlpha;
