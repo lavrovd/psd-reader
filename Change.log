@@ -1,6 +1,11 @@
 Change log for psd-reader
 -------------------------
 
+1.1.0
+CHG: bitmaps array is moved from instance.info.bitmaps to instance.bitmap. Please update code that makes use of this. Temp. bridging.
+CHG: resources array is moved from instance.info.resources to instance.resources. Please update code that makes use of this. Temp. bridging.
+CHG: Longer delay between blocks for very large PSD files
+
 1.0.3
 FIX: Internal non-critical argument cleanup
 

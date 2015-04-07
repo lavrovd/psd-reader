@@ -14,8 +14,8 @@ Features
 --------
 
 - Fast and lightweight
-- No dependencies
 - Asynchronous and segment-based decoding (no UI-blocking)
+- No dependencies
 - Reads all supported formats (Greyscale, Bitmap, Indexed, RGB, CMYK, DuoTone, Multi-channel and Lab)
 - Reads all color depths (1/8/16/32 bits)
 - Handles alpha channel, and transparency for indexed mode
@@ -98,21 +98,26 @@ An already existing ArrayBuffer can be used instead of an URL:
     var psd = new PsdReader({buffer: psdArrayBuffer, onLoad: myCallback});
 
 There is additional access to the original channel bitmap data in it´s native
-format (ie. 8-bit, 16-bit etc.). The header information can be accessed
+format (8-bit, 16-bit etc.). The header information can be accessed
 through the info object:
 
     var width     = psd.info.width;
     var height    = psd.info.height;
     var depth     = psd.info.depth;
-    var channel0  = psd.info.bitmaps[0];	// in native format
-    var resources = psd.info.chunks[1];		// the resource area
+    var layers    = psd.info.chunks[3];		// the layers area
+    
+    var channel0  = psd.bitmaps[0];	        // in native format (but uncompressed)
     ...
 
+A method to locate resources is included:
+
+    var icc = psd.findResource(1039);       // find resource with resource ID
+    
 
 Requirements
 ------------
 
-A modern and up-to-date "evergreen" browser with support for HTML5 and typed arrays.
+A browser with support for HTML5 Canvas and typed arrays.
 
 There are no dependencies.
 

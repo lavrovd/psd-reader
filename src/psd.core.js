@@ -1,5 +1,5 @@
 /*!
-	psd-reader version 1.0.3
+	psd-reader version 1.1.0
 
 	By Epistemex (c) 2015
 	www.epistemex.com
@@ -150,7 +150,6 @@ function PsdReader(options) {
 	 *	{string} compressionDesc - textual description of compression type
 	 *	{number} channelSize - number of bytes per channel
 	 *	{array}  chunks - list of main "chunks". Should total 5.
-	 *	{array}  bitmaps - array with bitmap data (always uncompressed) in original order.
 	 *
 	 * @type {object}
 	 */
@@ -167,10 +166,20 @@ function PsdReader(options) {
 		compression     : 0,
 		compressionDesc : "",
 		channelSize     : 0,
-		chunks          : [],
-		resources		: [],
-		bitmaps         : []
+		chunks          : []
 	};
+
+	/**
+ 	 * Array with bitmap data (always uncompressed) in original order.
+	 * @type {Array}
+	 */
+	this.bitmaps = me.info.bitmaps = [];
+
+	/**
+	 * Array with resource chunk info objects (see findResource()).
+	 * @type {Array}
+	 */
+	this.resources = me.info.resources = [];
 
 	/**
 	 * Expose reference to common error handler
@@ -382,5 +391,5 @@ PsdReader.guessGamma = function() {
 	return 1 / ((navigator.userAgent.indexOf("Mac OS") < 0) ? 2.2 : 1.8)
 };
 
-PsdReader._bSz = 1<<21;			// async block size (2 mb)
-PsdReader._delay = 7;			// async delay in milliseconds
+PsdReader._bSz = 1<<21;			// async block size (2 mb) todo: change to time-based
+PsdReader._delay = 8;			// async delay in milliseconds

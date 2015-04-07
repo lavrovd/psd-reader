@@ -14,7 +14,8 @@
  */
 PsdReader.prototype._rle = function(view, pos, info, callback) {
 
-	var count = 0, i = info.channels,
+	var bitmaps = this.bitmaps,
+		count = 0, i = info.channels, cnt = 0,
 		block = PsdReader._bSz,
 		uint8view = new Uint8Array(view.buffer),
 		fileEnd = view.buffer.byteLength,
@@ -27,7 +28,7 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 
 	(function decode() {
 		var channel = new Uint8Array(info.channelSize);
-		info.bitmaps.push(channel);
+		bitmaps.push(channel);
 
 		doChannel(uint8view, channel, fileEnd);
 		block -= channel.length;
@@ -36,7 +37,7 @@ PsdReader.prototype._rle = function(view, pos, info, callback) {
 			if (block > 0) decode();
 			else {
 				block = PsdReader._bSz;
-				setTimeout(decode, PsdReader._delay)
+				setTimeout(decode, PsdReader._delay * (++cnt % 4 ? 1 : 2))
 			}
 		}
 		else callback();

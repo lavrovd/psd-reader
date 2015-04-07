@@ -134,7 +134,7 @@ PsdReader.prototype._parser = function(buffer) {
 	info.compression = compression;
 	info.compressionDesc = ["Uncompressed", "RLE"][compression];	// zip is ignored (see below)
 
-	conv = compression ? me._rle : me._raw;		// we ignore zip modes (1,2) as no PSD is found with it...
+	conv = (compression ? me._rle : me._raw).bind(me);		// we ignore zip modes (1,2) as no PSD is found with it...
 	conv(view, pos, info, convert);
 
 	function convert() {me.config.toRGBA ? me._toRGBA(cbLoad) : cbLoad(null)}
@@ -152,7 +152,7 @@ PsdReader.prototype._parser = function(buffer) {
 
 	function findResource(id) {
 
-		var resources = info.resources, i = 0, res;
+		var resources = me.resources, i = 0, res;
 		if (!resParsed) parseResources();
 
 		while(res = resources[i++]) if (res.id === id) return res;
@@ -161,7 +161,7 @@ PsdReader.prototype._parser = function(buffer) {
 
 	function parseResources() {
 
-		var chunk = info.chunks[2], l, res = info.resources, size;
+		var chunk = info.chunks[2], l, res = me.resources, size;
 
 		if (!chunk.length) return;
 
